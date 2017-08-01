@@ -1,2 +1,2 @@
-# RTIndustryData-
+# RTIndustryData
 RT Industry Data

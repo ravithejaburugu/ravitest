@@ -1,0 +1,22 @@
+###############RUNNING JAR IN DOCKER#########
+
+1. Keep jar file in Docker directory which also contains Dockerfile.
+2. if docker file not created yet , please create using below commands inside directory:-
+vi Dockerfile
+
+and paste below data:- 
+
+FROM anapsix/alpine-java
+MAINTAINER Anshul
+COPY UploadURLToBlobDataset.jar /C/Users/ADMIN/Downloads/UploadURLToBlobDataset.jar
+CMD ["java","-jar","/C/Users/ADMIN/Downloads/UploadURLToBlobDataset.jar"]
+
+
+3. Now build image using:
+
+docker build -t anshul/java .
+
+4. Run your program after successfully building above part.(Every time you run below coomand change myProgramName)
+
+docker run -i -t  --name myProgram anshul/java
+

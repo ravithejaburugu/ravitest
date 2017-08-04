@@ -1,15 +1,11 @@
 FROM alpine:3.6
 
-RUN  easy_install pip \
-  && pip install --upgrade pip \
-  && if [[ ! -e /usr/bin/pip ]]; then ln -sf /usr/bin/pip3.4 /usr/bin/pip; fi
+RUN apk add --update python py-pip
 
+RUN pip install -r requirements.txt
 
-ADD . /dbPedia
+COPY dbpedia.py /src/dbpedia.py
 
-WORKDIR /dbPedia
-
-RUN pip install --default-timeout=100 -r requirements.txt
 
 
 CMD ["python", “dbPedia.py"]

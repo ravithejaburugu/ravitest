@@ -1,4 +1,4 @@
 azure
 requests
 wget
-BeautifulSoup
+bs4

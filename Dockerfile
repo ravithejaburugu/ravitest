@@ -9,7 +9,7 @@ ADD . /dbPedia
 
 WORKDIR /dbPedia
 
-RUN pip install --default-timeout=100 -r requirements.txt
+RUN pip install --default-timeout=100 -r ./requirements.txt
 
 
 CMD ["python", “dbPedia.py"]

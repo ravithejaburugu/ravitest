@@ -10,6 +10,7 @@
 from azure.storage.blob import BlockBlobService, ContentSettings, PublicAccess, AppendBlobService
 import wget
 import requests
+import sys
 import os
 from os import path
 from bs4 import BeautifulSoup
@@ -21,9 +22,9 @@ import urllib
 
 # In[2]:
 
-account_name = str(input('Enter UserName for Azure :'))
-account_key  = str(input('Enter Key for Azure :'))
-container    = str(input('Enter the Container :'))
+account_name = str(sys.argv[1])
+account_key  = str(sys.argv[2])
+container    = str(sys.argv[3])
 block_blob_service = BlockBlobService(account_name = account_name,account_key  = account_key)
 append_blob_service = AppendBlobService(account_name = account_name,account_key  = account_key)
 

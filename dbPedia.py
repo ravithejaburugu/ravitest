@@ -48,17 +48,18 @@ else:
 
 # In[5]:
 
-urls = {'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
-           'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt']}
+urls = {
+#    'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
+#           'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt']
 #         'wikipedia' :['https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-pages-articles-multistream.xml.bz2',
 #             'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-pages-articles-multistream-index.txt.bz2',
 #              'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
 #             'http://www.gnu.org/copyleft/fdl.html'],
-#          'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],
+          'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/']
 #         'nlp' :['http://model.dbpedia-spotlight.org/latest_data/en.tar.gz'],
 #         'dataid':['http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.json',
 #          'http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.ttl']}
-
+}
 
 # In[12]:
 

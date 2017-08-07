@@ -11,4 +11,4 @@ WORKDIR /DBPedia
 
 RUN pip install -r requirements.txt
 
-CMD ["python", “dbPedia.py"]
+CMD ["python", “rtIndustryData1.py"]

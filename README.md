@@ -8,7 +8,7 @@ When deploying script, the command should be entered as below.
 
 `Docker run {image} python dbPedia.py {Azure host} {Azure key} {CKAN host} {CKAN key} {Dataset group}`
 
-When Once run the script should load data into Azure and CKAN storage. Please verify to make sure the data is loaded. 
+Once run, the script should load the data into Azure and CKAN storage. Please verify to make sure the data is loaded. 
 
-Note: Some of the larger dump file may take longer time to load. 
+..* Note: Some of the larger dump files may take longer to load. 
 

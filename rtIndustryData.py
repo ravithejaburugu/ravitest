@@ -24,15 +24,15 @@ import json
 
 # In[2]:
 
-#account_name = str(sys.argv[1])
-#account_key  = str(sys.argv[2])
-#container    = str(sys.argv[3])
-#dataset      = str(sys.argv[4])
+account_name = str(sys.argv[1])
+account_key  = str(sys.argv[2])
+container    = str(sys.argv[3])
+dataset      = str(sys.argv[4])
 
-account_name = str(raw_input ("Enter Azure account name:"))
-account_key  = str(raw_input("Enter Azure key:"))
-container    = str(raw_input("Enter the container name:"))
-dataset      = str(raw_input("enter the Data you want download:"))
+#account_name = str(raw_input ("Enter Azure account name:"))
+#account_key  = str(raw_input("Enter Azure key:"))
+#container    = str(raw_input("Enter the container name:"))
+#dataset      = str(raw_input("enter the Data you want download:"))
 
 block_blob_service = BlockBlobService(account_name = account_name, account_key = account_key)
 append_blob_service = AppendBlobService(account_name = account_name, account_key = account_key)

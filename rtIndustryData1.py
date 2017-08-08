@@ -48,11 +48,9 @@ def fetchUrls(dataset):
     urls_dict = {
         'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
                  'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
-         'wikipedia' :['https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-pages-articles-multistream-index.txt.bz2',
-                       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-pages-articles-multistream.xml.bz2'
-                      ],
-    #             'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
-     #            'http://www.gnu.org/copyleft/fdl.html'],
+         'wikipedia' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
+    	            'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
+     	            'http://www.gnu.org/copyleft/fdl.html'],
     #          'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],
              'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
 		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/lexicalizations_en.nq.bz2',

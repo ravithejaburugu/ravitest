@@ -42,6 +42,24 @@ def assignAzureContainer(block_blob_service, container):
     else:
         block_blob_service.create_container(container)
 
+archive_url = "http://downloads.dbpedia.org/2016-10/core-i18n/en/"
+def get_links():
+     
+    # create response object
+    r = requests.get(archive_url)
+     
+    # create beautiful-soup object
+    soup = BeautifulSoup(r.content,'html5lib')
+     
+    # find all links on web-page
+    links = soup.findAll('a')
+ 
+    # filter the link sending with .bz2
+    data_links = [archive_url + link['href'] for link in links if link['href'].endswith('bz2')]
+ 
+    return data_links
+data_links = get_links()
+
 
 # select the dataset based on dataset user input arguement.
 # for testing purpose, only limited URLs are provided.
@@ -52,9 +70,9 @@ def fetchUrls(dataset):
          'wikipedia' :['https://creativecommons.org/licenses/by-sa/3.0/legalcode',
                        'http://www.gnu.org/copyleft/fdl.html',
 		       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz'
-                       #'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
+                       'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
                        ],
-              'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],
+              'datasets' :data_links,
          'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
                      'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/lexicalizations_en.nq.bz2',
                      'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topic_signatures_en.tsv.bz2',
@@ -74,26 +92,10 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         
     for url in urls:
         print("Dataset URL -->> ", url)
-        
-        
-        r = requests.get(url,stream=True,timeout=None)
-        stream = io.BytesIO(r.content)
-        file_name = url.split("/")[-1]
-        with open(file_name, 'wb') as data:
-            for chunk in r.iter_content(chunk_size = 1024*1024):
-                if chunk:
-                    data.write(chunk)    
-        block_blob_service.create_blob_from_stream(path.join(container,dataset),
-                              file_name ,stream,max_connections =2,
-                              timeout = None,
-                              content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %file_name)[0]))
-    
+        file_name = url.split("/")[-1]  
+        block_blob_service.copy_blob(path.join(container,dataset),file_name,url)
         print('Uploading file to "'+dataset+'" '+'in Azure container "'+ container +'"')
-        os.remove(data.name)
-        download_url = ''
 	download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)
-        #for i in tqdm(download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)):
-        #    pass
         azure_urls.append(download_url)
 
     # Creating metadata of the uploaded files 

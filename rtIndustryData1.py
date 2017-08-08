@@ -1,7 +1,7 @@
 """
 Created on Mon Aug 07 18:13:49 2017
 
-@author: Ravitheja
+@author: Admin
 """
 
 
@@ -14,19 +14,21 @@ Created on Mon Aug 07 18:13:49 2017
 # In[1]:
 
 from azure.storage.blob import BlockBlobService, ContentSettings, PublicAccess, AppendBlobService
-#import wget
+import wget
 import requests
 import sys
 import os
 from os import path
-#from bs4 import BeautifulSoup
+from bs4 import BeautifulSoup
 import mimetypes
 from datetime import datetime
 mimetypes.init()
-#import urllib
+import urllib
 import ckanapi
 import json
+import io
 from pprint import pprint
+from tqdm import tqdm
 
 def assignAzureContainer(block_blob_service, container):
     try:
@@ -47,9 +49,10 @@ def fetchUrls(dataset):
     urls_dict = {
          'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
                       'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
-         'wikipedia' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
-                       'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
-                       'http://www.gnu.org/copyleft/fdl.html'],
+         'wikipedia' :['https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz'],
+                       # 'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
+                       #'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
+                       #'http://www.gnu.org/copyleft/fdl.html'],
     #          'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],
          'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
                      'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/lexicalizations_en.nq.bz2',
@@ -70,22 +73,25 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         
     for url in urls:
         print("Dataset URL -->> ", url)
-        r = requests.get(url,stream=True)
+        
+        
+        r = requests.get(url,stream=True,timeout=None)
+        stream = io.BytesIO(r.content)
         file_name = url.split("/")[-1]
         with open(file_name, 'wb') as data:
             for chunk in r.iter_content(chunk_size = 1024*1024):
                 if chunk:
-                    data.write(chunk)
-    
-        block_blob_service.create_blob_from_path(path.join(container,dataset),
-                              data.name,
-                              file_name ,
-                              content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %url.split("/")[-1])[0]),
-                              timeout = None)
+                    data.write(chunk)    
+        block_blob_service.create_blob_from_stream(path.join(container,dataset),
+                              file_name ,stream,max_connections =2,
+                              timeout = None,
+                              content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %file_name)[0]))
     
         print('Uploading file to "'+dataset+'" '+'in Azure container "'+ container +'"')
         os.remove(data.name)
-        download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)
+        download_url = ''
+        for i in tqdm(download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)):
+            pass
         azure_urls.append(download_url)
 
     # Creating metadata of the uploaded files 

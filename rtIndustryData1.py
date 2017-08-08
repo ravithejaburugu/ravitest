@@ -51,7 +51,7 @@ def fetchUrls(dataset):
                       'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
          'wikipedia' :['https://creativecommons.org/licenses/by-sa/3.0/legalcode',
                        'http://www.gnu.org/copyleft/fdl.html',
-		       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz'],
+		       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz'
                        #'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
                        ],
               'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],

@@ -54,7 +54,10 @@ def fetchUrls(dataset):
     #             'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
      #            'http://www.gnu.org/copyleft/fdl.html'],
     #          'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],
-             'nlp' :['http://model.dbpedia-spotlight.org/latest_data/en.tar.gz'],
+             'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
+		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/lexicalizations_en.nq.bz2',
+		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topic_signatures_en.tsv.bz2',
+		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topical_concepts.nt.bz2'],
              'dataid':['http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.json',
                        'http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.ttl']
     }

@@ -3,3 +3,4 @@ requests
 wget
 bs4
 ckanapi
+tqdm

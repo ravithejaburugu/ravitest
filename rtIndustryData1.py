@@ -135,7 +135,8 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, abso
         package = ckan.action.package_show(id=package_name)
 
 #        path = os.path.join('example_files', 'G:\\PC Data\\Software_G\\Ds train\\Ds projects\\data.json')        
-        path = os.path.join(os.path.dirname(__file__), 'data.json')
+       # path = os.path.join(os.path.dirname(__file__), 'data.json')
+	path = os.path.join(os.path.dirname(__file__), 'data.json')
         r = requests.post(ckan_host+'/api/action/resource_create',
                           data={'package_id': package['id'],
                                 'name': 'metadata',

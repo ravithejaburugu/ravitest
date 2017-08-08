@@ -1,7 +1,7 @@
 """
 Created on Mon Aug 07 18:13:49 2017
 
-@author: Admin
+@author: Ravitheja
 """
 
 
@@ -24,10 +24,9 @@ import mimetypes
 from datetime import datetime
 mimetypes.init()
 #import urllib
-
 import ckanapi
 import json
-
+from pprint import pprint
 
 def assignAzureContainer(block_blob_service, container):
     try:
@@ -46,17 +45,17 @@ def assignAzureContainer(block_blob_service, container):
 # for testing purpose, only limited URLs are provided.
 def fetchUrls(dataset):    
     urls_dict = {
-        'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
-                 'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
+         'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
+                      'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
          'wikipedia' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
-    	            'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
-     	            'http://www.gnu.org/copyleft/fdl.html'],
+                       'https://creativecommons.org/licenses/by-sa/3.0/legalcode',
+                       'http://www.gnu.org/copyleft/fdl.html'],
     #          'datasets' :['http://downloads.dbpedia.org/2016-10/core-i18n/en/'],
-             'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
-		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/lexicalizations_en.nq.bz2',
-		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topic_signatures_en.tsv.bz2',
-		    'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topical_concepts.nt.bz2'],
-             'dataid':['http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.json',
+         'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
+                     'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/lexicalizations_en.nq.bz2',
+                     'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topic_signatures_en.tsv.bz2',
+                     'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topical_concepts.nt.bz2'],
+         'dataid':['http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.json',
                        'http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.ttl']
     }
     urls = urls_dict[dataset]
@@ -68,7 +67,7 @@ def fetchUrls(dataset):
 def downloadToAzure(urls, block_blob_service, container,dataset):
     metadata ={}
     azure_urls=[]
-    
+        
     for url in urls:
         print("Dataset URL -->> ", url)
         r = requests.get(url,stream=True)
@@ -89,60 +88,75 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)
         azure_urls.append(download_url)
 
-
     # Creating metadata of the uploaded files 
-    #metadata[dataset]= azure_urls
+    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     metadata['Title'] = 'Dbpedia'+'-'+dataset
     metadata['Description'] = 'Dummy description for testing.'
-    metadata['Publisher'] = 'SiddarthaP'
-    metadata['Created'] = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    metadata['Publisher'] = 'RandomTrees'
+    metadata['Created'] = current_date
+    metadata['Last Updated'] = current_date
+    metadata['Sourcing_Date'] = current_date
     metadata['version'] = "2016-10"
-    metadata[ "Container"] = container
+    metadata['Container'] = container
     #metadata['SourceType'] = [url.split(".")[-1] for url in azure_urls]
-    print("METADATA ===>> ", metadata)
+    metadata['License'] = "Creative Common Attribution, GNU Free Documentation Licsensing."
 
     return metadata, azure_urls
 
 
 # Upload all the metadata details into CKAN
-def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, absolute_path):
+def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
     for azr_url in azure_urls:
-     
-        metadata[dataset]= azr_url
+
+        metadata['URL']= azr_url
         metadata['SourceType'] = azr_url.split(".")[-1]
         
         # write the metadata content to file in JSON format
-        with open('data.json', 'w') as fp:
+        with open(dataset+'data.json', 'w') as fp:
             json.dump(metadata, fp)
+
+        print("METADATA ===>> ", metadata)
+
+        # Connecting to CKAN
+        ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
         
-        # to upload Metadata information to CKAN
-        ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
+        with open('data.json') as data_file:
+            jsondata = json.load(data_file)
         
         timestmp = datetime.now().strftime("%Y%m%d_%H%M%S")
         package_name = dataset + timestmp
-        package_title = dataset + '_metadata_' + timestmp
+        package_title = jsondata["metadata"][dataset]["Title"] + '_Metadata_' + timestmp
+        
         try:
             print('Creating "{package_title}" package in CKAN'.format(**locals()))
-            package = ckan.action.package_create(name=package_name, title=package_title, 
-                                                 description=azr_url.split("/")[-1])
+            package = ckan_ckan.action.package_create(name=package_name, title=package_title, 
+                               description=azr_url.split("/")[-1])
+            #package = ckan.logic.action.package_create(True, metadata)
         except ckanapi.ValidationError as e:
             if (e.error_dict['__type'] == 'Validation Error' and
                e.error_dict['name'] == ['That URL is already in use.']):
                 print('"{package_title}" package already exists'.format(**locals()))
-                package = ckan.action.package_show(id=package_name)
+                package = ckan_ckan.action.package_show(id=package_name)
             else:
                 raise
                 
-        package = ckan.action.package_show(id=package_name)
+        package = ckan_ckan.action.package_show(id=package_name)
 
-#        path = os.path.join('example_files', 'G:\\PC Data\\Software_G\\Ds train\\Ds projects\\data.json')        
-       # path = os.path.join(os.path.dirname(__file__), 'data.json')
-	path = os.path.join(os.path.dirname(__file__), 'data.json')
+        path = os.path.join(os.path.dirname(__file__), dataset+'data.json')
+        file_data = file(path)
+                            
         r = requests.post(ckan_host+'/api/action/resource_create',
-                          data={'package_id': package['id'],
-                                'name': 'metadata',
-                              #  'format': 'json',
-                                'url': 'upload',  # Needed to pass validation
+                          data= {'Title':jsondata["metadata"][dataset]["Title"],
+                                  'Description':jsondata["metadata"][dataset]["Description"],
+                                  'version':jsondata["metadata"][dataset]["version"],
+                                  'Author':jsondata["metadata"][dataset]["Publisher"],
+                                  'package_id': package['id'],
+                                  'name': jsondata["metadata"][dataset]["Title"] + '_metadata_' + timestmp,
+                                  'Azure URL':azr_url,
+                                  'Source':jsondata["metadata"][dataset]["Source"],
+                                  'Source type':jsondata["metadata"][dataset]["Source_type"],
+                                  'License':jsondata["metadata"][dataset]["License"],
+                                  'url': 'upload'  # Needed to pass validation
                                 },
                           headers={'Authorization': api_key},
                           files=[('upload', file(path))])
@@ -202,18 +216,15 @@ def main():
     
     ckan_host = ''
     api_key = ''
-    absolute_path = ''
 
-    print(len(sys.argv))
+    #print(len(sys.argv))
     
     if len(sys.argv) > 5:
         ckan_host = str(sys.argv[5])
         api_key = str(sys.argv[6])
-        absolute_path = str(sys.argv[7])
     else:
         ckan_host = "http://40.71.214.191:80"
         api_key = "3474fcd0-2ebc-4036-a60a-8bf77eea161f"
-        absolute_path = 'G:\\PC Data\\Software_G\\Ds train\\Ds projects'
     
     print(account_name, account_key, container, dataset)
     
@@ -227,7 +238,7 @@ def main():
     
     metadata, azure_urls = downloadToAzure(urls, block_blob_service, container,dataset)
     
-    uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, absolute_path)
+    uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key)
     
 #    data_links = get_links()
 #    print(data_links)

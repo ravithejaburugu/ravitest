@@ -1,0 +1,79 @@
+{
+	"metadata": {
+		"ontology": {
+			"Title": "DBPedia Ontology",
+			"Description": "The DBpedia Ontology is a shallow, cross-domain ontology, which has been manually created based on the most commonly used infoboxes within Wikipedia.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "nt, owl",
+			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
+		},
+
+		"wikipedia": {
+			"Title": "Wikipedia Input files",
+			"Description": "The wiki input files are the xml source files that are extracted from the Wikipedia dump files",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "wikipedia",
+			"Source_type": "xml, txt",
+			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
+		},
+
+		"datasets": {
+			"Title": "DBPedia Datasets",
+			"Description": "The DBPedia datasets contain triples extracted from the respective Wikipedia, including the ones whose URIs do not have an equivalent Wikidata entry. These are available in two serializations - turtle(ttl) & quad-turtle(tql)",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "tql, ttl",
+			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
+		},
+
+		"nlp": {
+			"Title": "NLP Datasets",
+			"Description": "The NLP Datasets were created by the DBpedia Spotlight team to support entity recognition and disambiguation tasks, among others. There are four different DBPedia NLP Datasets namely Lexicalization, Topic Signatures, Thematic Concepts and People's Grammatical Genders",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "nt, nq, tsv",
+			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
+		},
+
+		"dataid": {
+			"Title": "DBPedia Dataset Metadata as DataIDs",
+			"Description": "The metadata for DBPedia datasets is provided in the form of DataIDs for all extracted languages to the respective language directories.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "json, ttl",
+			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
+		}
+
+	}
+}

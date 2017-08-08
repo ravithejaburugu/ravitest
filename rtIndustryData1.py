@@ -90,8 +90,9 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         print('Uploading file to "'+dataset+'" '+'in Azure container "'+ container +'"')
         os.remove(data.name)
         download_url = ''
-        for i in tqdm(download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)):
-            pass
+	download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)
+        #for i in tqdm(download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)):
+        #    pass
         azure_urls.append(download_url)
 
     # Creating metadata of the uploaded files 

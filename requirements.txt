@@ -4,3 +4,5 @@ wget
 bs4
 ckanapi
 tqdm
+BeautifulSoup
+urllib

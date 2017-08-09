@@ -6,3 +6,4 @@ ckanapi
 tqdm
 BeautifulSoup
 urllib
+html5lib

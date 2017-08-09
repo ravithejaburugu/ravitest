@@ -73,6 +73,21 @@
 			"Source": "DBPedia",
 			"Source_type": "json, ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
+		},
+		
+		"license": {
+			"Title": "License",
+			"Description": "The metadata for Licenses.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "json, ttl",
+			"License": "Creative Common Attribution, GNU Free Documentation Licsensing"
 		}
 
 	}

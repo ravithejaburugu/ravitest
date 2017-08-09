@@ -99,7 +99,7 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         if dataset == 'license':
             r = requests.get(url,stream=True)
             stream = io.BytesIO(r.content)
-            file_name = url.split("/")[-1]
+            #file_name = url.split("/")[-1]
             print("file_name-> "+file_name)
             block_blob_service.create_blob_from_stream(path.join(container,dataset),
                               file_name ,stream,max_connections =2,
@@ -134,6 +134,7 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
 def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
    urls = ''
    sourceTypes = ''
+   print("AZURE URLS>>> ")
    print(azure_urls)
    
    for azr_url in azure_urls:
@@ -143,7 +144,8 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
     
        srctyp = ''
        url_ext = azr_url.split("/")[-1]
-       if(url_ext.split(".")[-1] == 'bz2' or 'gz'):
+       
+       if(url_ext.split(".")[-1] == 'bz2' or url_ext.split(".")[-1] == 'gz'):
            srctyp += url_ext.split(".")[-2:-1][0]
        else:
            srctyp += url_ext.split(".")[-1]        

@@ -3,7 +3,6 @@ requests
 wget
 bs4
 ckanapi
-tqdm
 BeautifulSoup
-urllib
+lxml
 html5lib

@@ -31,15 +31,15 @@ from pprint import pprint
 from tqdm import tqdm
 
 def assignAzureContainer(block_blob_service, container):
+    # To check the connection is established sucessfully.
     try:
         if block_blob_service == True:
                 print('Connection successful!')
     except Exception as e:
                 print('Please make sure the account name and key are correct.', e)
-        
-    if block_blob_service.exists(container):
-        pass
-    else:
+    
+    # If container already exists with the given name in azure, it will create a new container     
+    if not block_blob_service.exists(container):
         block_blob_service.create_container(container)
 
 archive_url = "http://downloads.dbpedia.org/2016-10/core-i18n/en/"
@@ -117,66 +117,89 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
 
 # Upload all the metadata details into CKAN
 def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
-    for azr_url in azure_urls:
+   urls = ''
+   sourceTypes = ''
+   print(azure_urls)
+   
+   for azr_url in azure_urls:
+       if(len(urls)>1):
+           urls += ', '
+       urls += azr_url
+    
+       srctyp = ''
+       if(azr_url.split(".")[-1] == 'bz2'):
+           srctyp += azr_url.split(".")[-2:-1][0]
+       else:
+           srctyp += azr_url.split(".")[-1]        
+           
+       if srctyp not in sourceTypes:
+           if(len(sourceTypes)>1):
+               sourceTypes += ', '
+           sourceTypes += srctyp
+               
+   metadata['URL']= urls
+   metadata['SourceType'] = sourceTypes
+   print(urls)
+   print(sourceTypes)
+       
+   # write the metadata content to file in JSON format
+   with open(dataset+'data.json', 'w') as fp:
+       json.dump(metadata, fp)
 
-        metadata['URL']= azr_url
-        metadata['SourceType'] = azr_url.split(".")[-1]
-        
-        # write the metadata content to file in JSON format
-        with open(dataset+'data.json', 'w') as fp:
-            json.dump(metadata, fp)
+   print("METADATA ===>> ", metadata)
 
-        print("METADATA ===>> ", metadata)
+   # Connecting to CKAN
+   ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
 
-        # Connecting to CKAN
-        ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
-        
-        with open('data.json') as data_file:
-            jsondata = json.load(data_file)
-        
-        timestmp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        package_name = dataset + timestmp
-        package_title = jsondata["metadata"][dataset]["Title"] + '_Metadata_' + timestmp
-        
-        try:
-            print('Creating "{package_title}" package in CKAN'.format(**locals()))
-            package = ckan_ckan.action.package_create(name=package_name, title=package_title, 
-                               description=azr_url.split("/")[-1])
-            #package = ckan.logic.action.package_create(True, metadata)
-        except ckanapi.ValidationError as e:
-            if (e.error_dict['__type'] == 'Validation Error' and
-               e.error_dict['name'] == ['That URL is already in use.']):
-                print('"{package_title}" package already exists'.format(**locals()))
-                package = ckan_ckan.action.package_show(id=package_name)
-            else:
-                raise
-                
-        package = ckan_ckan.action.package_show(id=package_name)
+   with open('data.json') as data_file:
+       jsondata = json.load(data_file)
 
-        path = os.path.join(os.path.dirname(__file__), dataset+'data.json')
-        file_data = file(path)
-                            
-        r = requests.post(ckan_host+'/api/action/resource_create',
-                          data= {'Title':jsondata["metadata"][dataset]["Title"],
-                                  'Description':jsondata["metadata"][dataset]["Description"],
-                                  'version':jsondata["metadata"][dataset]["version"],
-                                  'Author':jsondata["metadata"][dataset]["Publisher"],
-                                  'package_id': package['id'],
-                                  'name': jsondata["metadata"][dataset]["Title"] + '_metadata_' + timestmp,
-                                  'Azure URL':azr_url,
-                                  'Source':jsondata["metadata"][dataset]["Source"],
-                                  'Source type':jsondata["metadata"][dataset]["Source_type"],
-                                  'License':jsondata["metadata"][dataset]["License"],
-                                  'url': 'upload'  # Needed to pass validation
-                                },
-                          headers={'Authorization': api_key},
-                          files=[('upload', file(path))])
-        print(r.status_code)
-        if r.status_code != 200:
-            print('Error while creating resource: {0}'.format(r.content))
-        print("-- Data is now available in Azure and Metadata in CKAN --")
+   timestmp = datetime.now().strftime("%Y%m%d_%H%M%S")
+   time_only = datetime.now().strftime("%H%M%S")
 
-            
+   package_name = dataset + timestmp
+   md_title = jsondata["metadata"][dataset]["Title"].replace(' ', '_')
+   package_title = md_title + '_' + time_only
+
+   try:
+       print('Creating "{package_title}" package in CKAN'.format(**locals()))
+       package = ckan_ckan.action.package_create(name=package_name, title=package_title,
+                          description=azr_url.split("/")[-1])
+       #package = ckan.logic.action.package_create(True, metadata)
+   except ckanapi.ValidationError as e:
+       if (e.error_dict['__type'] == 'Validation Error' and
+          e.error_dict['name'] == ['That URL is already in use.']):
+           print('"{package_title}" package already exists'.format(**locals()))
+           package = ckan_ckan.action.package_show(id=package_name)
+       else:
+           raise
+
+   package = ckan_ckan.action.package_show(id=package_name)
+
+   path = os.path.join(os.path.dirname(__file__), dataset+'data.json')
+   file_data = file(path)
+
+   r = requests.post(ckan_host+'/api/action/resource_create',
+                     data= {'Title':jsondata["metadata"][dataset]["Title"],
+                             'Description':jsondata["metadata"][dataset]["Description"],
+                             'version':jsondata["metadata"][dataset]["version"],
+                             'Author':jsondata["metadata"][dataset]["Publisher"],
+                             'package_id': package['id'],
+                             #'name': md_title + '_metadata_' + timestmp,
+                             'name': md_title + '_' + time_only,
+                             'Azure URL':urls,#azr_url
+                             'Source':jsondata["metadata"][dataset]["Source"],
+                             'Source type':sourceTypes, #jsondata["metadata"][dataset]["Source_type"],
+                             'License':jsondata["metadata"][dataset]["License"],
+                             'url': 'upload'  # Needed to pass validation
+                           },
+                     headers={'Authorization': api_key},
+                     files=[('upload', file(path))])
+   print(r.status_code)
+   if r.status_code != 200:
+       print('Error while creating resource: {0}'.format(r.content))
+   print("-- Data is now available in Azure and Metadata in CKAN --")
+   
         
 archive_url = "http://downloads.dbpedia.org/2016-10/core-i18n/en/"
 def get_links():

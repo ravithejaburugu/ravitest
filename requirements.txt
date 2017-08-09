@@ -4,5 +4,3 @@ wget
 bs4
 ckanapi
 BeautifulSoup
-lxml
-html5lib

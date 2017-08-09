@@ -49,7 +49,7 @@ def get_links():
     r = requests.get(archive_url)
      
     # create beautiful-soup object
-    soup = BeautifulSoup(r.content,'html5lib')
+    soup = BeautifulSoup(r.content,'lxml')
      
     # find all links on web-page
     links = soup.findAll('a')

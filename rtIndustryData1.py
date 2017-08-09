@@ -95,7 +95,7 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         file_name = url.split("/")[-1]  
         block_blob_service.copy_blob(path.join(container,dataset),file_name,url)
         print('Uploading file to "'+dataset+'" '+'in Azure container "'+ container +'"')
-	download_url = block_blob_service.make_blob_url(path.join(container, dataset),data.name)
+	download_url = block_blob_service.make_blob_url(path.join(container, dataset),file_name)
         azure_urls.append(download_url)
 
     # Creating metadata of the uploaded files 

@@ -77,7 +77,7 @@ def fetchUrls(dataset):
                      'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topic_signatures_en.tsv.bz2',
                      'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topical_concepts.nt.bz2'],
          'dataid':['http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.json',
-                       'http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.ttl']
+                       'http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.ttl'],
 	 'license':['https://creativecommons.org/licenses/by-sa/3.0/legalcode',
                        'http://www.gnu.org/copyleft/fdl.html']
     }
@@ -95,15 +95,19 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         print("Dataset URL -->> ", url)
         file_name = url.split("/")[-1]  
         
-        if 'license' not in url:
-            block_blob_service.copy_blob(path.join(container,dataset),file_name,url)
-        else:
+       # if 'license' in url or 'html' in url:
+        if dataset == 'license':
             r = requests.get(url,stream=True)
             stream = io.BytesIO(r.content)
             file_name = url.split("/")[-1]   
             block_blob_service.create_blob_from_stream(path.join(container,dataset),
                               file_name ,stream,max_connections =2,
                               content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %file_name)[0]))
+        else :
+            print('copying blob')
+            block_blob_service.copy_blob(path.join(container,dataset),file_name,url)
+
+
         
         print('Uploading file to "'+dataset+'" '+'in Azure container "'+ container +'"')
         download_url = block_blob_service.make_blob_url(path.join(container, dataset),file_name)

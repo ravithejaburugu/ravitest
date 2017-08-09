@@ -68,8 +68,8 @@ def fetchUrls(dataset):
          'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
                       'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
          'wikipedia' :[
-		       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz'
-                       'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
+		       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz',
+                       'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2'
                        ],
          'datasets' :data_links,
          'nlp' :['http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/genders_en.nt.bz2',
@@ -90,7 +90,7 @@ def fetchUrls(dataset):
 def downloadToAzure(urls, block_blob_service, container,dataset):
     metadata ={}
     azure_urls=[]
-        
+
     for url in urls:
         print("Dataset URL -->> ", url)
         file_name = url.split("/")[-1]  
@@ -99,7 +99,8 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         if dataset == 'license':
             r = requests.get(url,stream=True)
             stream = io.BytesIO(r.content)
-            file_name = url.split("/")[-1]   
+            file_name = url.split("/")[-1]
+            print("file_name-> "+file_name)
             block_blob_service.create_blob_from_stream(path.join(container,dataset),
                               file_name ,stream,max_connections =2,
                               content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %file_name)[0]))
@@ -141,10 +142,11 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
        urls += azr_url
     
        srctyp = ''
-       if(azr_url.split(".")[-1] == 'bz2'):
-           srctyp += azr_url.split(".")[-2:-1][0]
+       url_ext = azr_url.split("/")[-1]
+       if(url_ext.split(".")[-1] == 'bz2' or 'gz'):
+           srctyp += url_ext.split(".")[-2:-1][0]
        else:
-           srctyp += azr_url.split(".")[-1]        
+           srctyp += url_ext.split(".")[-1]        
            
        if srctyp not in sourceTypes:
            if(len(sourceTypes)>1):

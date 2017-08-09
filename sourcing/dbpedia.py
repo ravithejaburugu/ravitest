@@ -67,8 +67,7 @@ def fetchUrls(dataset):
     urls_dict = {
          'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
                       'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
-         'wikipedia' :['https://creativecommons.org/licenses/by-sa/3.0/legalcode',
-                       'http://www.gnu.org/copyleft/fdl.html',
+         'wikipedia' :[
 		       'https://dumps.wikimedia.org/enwiki/20170620/enwiki-20170620-stub-meta-history26.xml.gz'
                        'http://downloads.dbpedia.org/2016-10/core-i18n/en/pages_articles_en.xml.bz2',
                        ],
@@ -79,6 +78,8 @@ def fetchUrls(dataset):
                      'http://wifo5-04.informatik.uni-mannheim.de/downloads/datasets/topical_concepts.nt.bz2'],
          'dataid':['http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.json',
                        'http://downloads.dbpedia.org/2016-10/2016-10_dataid_catalog.ttl']
+	 'license':['https://creativecommons.org/licenses/by-sa/3.0/legalcode',
+                       'http://www.gnu.org/copyleft/fdl.html']
     }
     urls = urls_dict[dataset]
     return urls

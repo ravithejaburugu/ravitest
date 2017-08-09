@@ -98,16 +98,11 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         if 'license' not in url:
             block_blob_service.copy_blob(path.join(container,dataset),file_name,url)
         else:
-            r = requests.get(url,stream=True,timeout=None)
+            r = requests.get(url,stream=True)
             stream = io.BytesIO(r.content)
-            file_name = url.split("/")[-1]
-            with open(file_name, 'wb') as data:
-                for chunk in r.iter_content(chunk_size = 1024*1024):
-                    if chunk:
-                        data.write(chunk)    
+            file_name = url.split("/")[-1]   
             block_blob_service.create_blob_from_stream(path.join(container,dataset),
                               file_name ,stream,max_connections =2,
-                              timeout = None,
                               content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %file_name)[0]))
         
         print('Uploading file to "'+dataset+'" '+'in Azure container "'+ container +'"')

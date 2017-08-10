@@ -163,13 +163,14 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
    print(sourceTypes)
        
    # write the metadata content to file in JSON format
-   with open(dataset+'data.json', 'w') as fp:
+   with open(dataset+'_data.json', 'w') as fp:
        json.dump(metadata, fp)
 
    print("METADATA ===>> ", metadata)
 
    # Connecting to CKAN
    ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
+   print(type(ckan_ckan))
 
    with open('data.json') as data_file:
        jsondata = json.load(data_file)
@@ -177,40 +178,53 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
    timestmp = datetime.now().strftime("%Y%m%d_%H%M%S")
    time_only = datetime.now().strftime("%H%M%S")
 
-   package_name = dataset + timestmp
-   md_title = jsondata["metadata"][dataset]["Title"].replace(' ', '_')
-   package_title = md_title + '_' + time_only
+   package_name = dataset #+ timestmp
+   md_title = jsondata["metadata"][dataset]["Title"]
+   package_title = md_title #+ '_' + time_only
 
    try:
        print('Creating "{package_title}" package in CKAN'.format(**locals()))
        package = ckan_ckan.action.package_create(name=package_name, title=package_title,
-                          description=azr_url.split("/")[-1])
-       #package = ckan.logic.action.package_create(True, metadata)
+                          notes=jsondata["metadata"][dataset]["Description"],
+                          #owner_org=jsondata["metadata"][dataset]["Publisher"],
+                          maintainer=jsondata["metadata"][dataset]["Publisher"],
+                          version=jsondata["metadata"][dataset]["version"],
+                          license_id=jsondata["metadata"][dataset]["License"],
+                          tags=[{'name':tag} for tag in jsondata["metadata"][dataset]["Tags"].split(',')]
+                          #resorces=azure_urls
+                          )
    except ckanapi.ValidationError as e:
        if (e.error_dict['__type'] == 'Validation Error' and
           e.error_dict['name'] == ['That URL is already in use.']):
            print('"{package_title}" package already exists'.format(**locals()))
-           package = ckan_ckan.action.package_show(id=package_name)
+           package = ckan_ckan.action.package_update(id=package_name, title=package_title,
+                          notes=jsondata["metadata"][dataset]["Description"],
+                          maintainer=jsondata["metadata"][dataset]["Publisher"],
+                          version=jsondata["metadata"][dataset]["version"],
+                          license_id=jsondata["metadata"][dataset]["License"],
+                          tags=[{'name':tag} for tag in jsondata["metadata"][dataset]["Tags"].split(',')]
+                          )
        else:
            raise
 
    package = ckan_ckan.action.package_show(id=package_name)
 
-   path = os.path.join(os.path.dirname(__file__), dataset+'data.json')
+
+   path = os.path.join(os.path.dirname(__file__), dataset+'_data.json')
    file_data = file(path)
 
    r = requests.post(ckan_host+'/api/action/resource_create',
                      data= {'Title':jsondata["metadata"][dataset]["Title"],
-                             'Description':jsondata["metadata"][dataset]["Description"],
-                             'version':jsondata["metadata"][dataset]["version"],
-                             'Author':jsondata["metadata"][dataset]["Publisher"],
+                             #'Description':jsondata["metadata"][dataset]["Description"],
+                             #'version':jsondata["metadata"][dataset]["version"],
+                             #'Author':jsondata["metadata"][dataset]["Publisher"],
                              'package_id': package['id'],
                              #'name': md_title + '_metadata_' + timestmp,
-                             'name': md_title + '_' + time_only,
+                             'name': md_title, #+ '_' + time_only,
                              'Azure URL':urls,#azr_url
                              'Source':jsondata["metadata"][dataset]["Source"],
                              'Source type':sourceTypes, #jsondata["metadata"][dataset]["Source_type"],
-                             'License':jsondata["metadata"][dataset]["License"],
+                             #'License':jsondata["metadata"][dataset]["License"],
                              'url': 'upload'  # Needed to pass validation
                            },
                      headers={'Authorization': api_key},

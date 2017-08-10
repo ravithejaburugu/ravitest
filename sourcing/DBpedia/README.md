@@ -1,4 +1,4 @@
-# DBPedia Data
+# DBpedia Data
 ## Overview
 The above code sources all the Dbpedia content and stores it into a Azure blob inside a container. Once the data is loaded, the metadata about each of the artifact will be stored to CKAN Data management system. The metadata is available under metadata.json file which can be modified as needed before deploying the script.
 

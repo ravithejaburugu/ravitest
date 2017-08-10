@@ -63,7 +63,7 @@ data_links = get_links()
 
 # select the dataset based on dataset user input arguement.
 # for testing purpose, only limited URLs are provided.
-def fetchUrls(dataset):    
+def fetchUrls(dataset):
     urls_dict = {
          'ontology' :['http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.owl',
                       'http://downloads.dbpedia.org/2016-10/dbpedia_2016-10.nt'],
@@ -81,13 +81,14 @@ def fetchUrls(dataset):
 	 'license':['https://creativecommons.org/licenses/by-sa/3.0/legalcode',
                        'http://www.gnu.org/copyleft/fdl.html']
     }
+    #urls = urls_dict[dataset] + urls_dict['license']
     urls = urls_dict[dataset]
     return urls
 
 
 
 # To upload filedata into Azure fetching directly from URLs
-def downloadToAzure(urls, block_blob_service, container,dataset):
+def downloadToAzure(urls, block_blob_service, container, dataset, ds_type):
     metadata ={}
     azure_urls=[]
 
@@ -96,13 +97,13 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         file_name = url.split("/")[-1]  
         
        # if 'license' in url or 'html' in url:
-        if dataset == 'license':
+        if ds_type == 'license':
             r = requests.get(url,stream=True)
             stream = io.BytesIO(r.content)
             #file_name = url.split("/")[-1]
             print("file_name-> "+file_name)
-            block_blob_service.create_blob_from_stream(path.join(container,dataset),
-                              file_name ,stream,max_connections =2,
+            block_blob_service.create_blob_from_stream(path.join(container, dataset),
+                              file_name, stream, max_connections=2,
                               content_settings=ContentSettings(content_type=mimetypes.guess_type('./%s' %file_name)[0]))
         else :
             print('copying blob')
@@ -114,18 +115,19 @@ def downloadToAzure(urls, block_blob_service, container,dataset):
         download_url = block_blob_service.make_blob_url(path.join(container, dataset),file_name)
         azure_urls.append(download_url)
 
-    # Creating metadata of the uploaded files 
-    current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    metadata['Title'] = 'Dbpedia'+'-'+dataset
-    metadata['Description'] = 'Dummy description for testing.'
-    metadata['Publisher'] = 'RandomTrees'
-    metadata['Created'] = current_date
-    metadata['Last Updated'] = current_date
-    metadata['Sourcing_Date'] = current_date
-    metadata['version'] = "2016-10"
-    metadata['Container'] = container
-    #metadata['SourceType'] = [url.split(".")[-1] for url in azure_urls]
-    metadata['License'] = "Creative Common Attribution, GNU Free Documentation Licsensing."
+    # Creating metadata of the uploaded dataset files, not for license 
+    if ds_type == 'dataset':
+        current_date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        metadata['Title'] = 'Dbpedia'+'-'+dataset
+        metadata['Description'] = 'Dummy description for testing.'
+        metadata['Publisher'] = 'RandomTrees'
+        metadata['Created'] = current_date
+        metadata['Last Updated'] = current_date
+        metadata['Sourcing_Date'] = current_date
+        metadata['version'] = "2016-10"
+        metadata['Container'] = container
+        #metadata['SourceType'] = [url.split(".")[-1] for url in azure_urls]
+        metadata['License'] = "Creative Common Attribution, GNU Free Documentation Licsensing."
 
     return metadata, azure_urls
 
@@ -219,22 +221,6 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
    print("-- Data is now available in Azure and Metadata in CKAN --")
    
         
-archive_url = "http://downloads.dbpedia.org/2016-10/core-i18n/en/"
-def get_links():
-    # create response object
-    r = requests.get(archive_url)
-     
-    # create beautiful-soup object
-    soup = BeautifulSoup(r.content,'html5lib')
-     
-    # find all links on web-page
-    links = soup.findAll('a')
- 
-    # filter the link sending with .mp4
-    data_links = [archive_url + link['href'] for link in links if link['href'].endswith('bz2')]
- 
-    return data_links
-
 def download_data(data_links):
      for link in data_links:
          
@@ -282,20 +268,21 @@ def main():
     
     # Azure blob services used to access azure
     block_blob_service = BlockBlobService(account_name = account_name, account_key = account_key)
-    append_blob_service = AppendBlobService(account_name = account_name, account_key = account_key)
+    #append_blob_service = AppendBlobService(account_name = account_name, account_key = account_key)
     
     assignAzureContainer(block_blob_service, container)
     
+    # begin copying license in the azure container
+    urls = fetchUrls('license')
+    downloadToAzure(urls, block_blob_service, container, dataset, 'license')
+    
+    # download the dataset to the azure container
     urls = fetchUrls(dataset)
+    metadata, azure_urls = downloadToAzure(urls, block_blob_service, container, dataset, 'dataset')
     
-    metadata, azure_urls = downloadToAzure(urls, block_blob_service, container,dataset)
-    
+    # upload metadata into CKAN
     uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key)
     
-#    data_links = get_links()
-#    print(data_links)
-
-#    download_data(data_links)
 
     
 if __name__ == "__main__":

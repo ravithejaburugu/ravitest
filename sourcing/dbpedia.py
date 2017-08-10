@@ -209,7 +209,7 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
                               maintainer=artifact_json["Publisher"],
                               version=artifact_json["version"],
                               license_id=artifact_json["License"],
-                      #        tags=[{'name':tag} for tag in artifact_json["Tags"].split(',')]
+                              tags=[{'name':tag} for tag in artifact_json["Tags"].split(',')]
                               #resorces=azure_urls
                               )
        except ckanapi.ValidationError as e:
@@ -221,7 +221,7 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
                               maintainer=artifact_json["Publisher"],
                               version=artifact_json["version"],
                               license_id=artifact_json["License"],
-                      #        tags=[{'name':tag} for tag in artifact_json["Tags"].split(',')]
+                              tags=[{'name':tag} for tag in artifact_json["Tags"].split(',')]
                               )
            else:
                raise

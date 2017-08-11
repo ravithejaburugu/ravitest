@@ -1,17 +1,9 @@
+# -*- coding: utf-8 -*-
 """
-Created on Mon Aug 07 18:13:49 2017
+Created on Fri Aug 11 11:00:16 2017
 
 @author: Admin
 """
-
-
-# coding: utf-8
-
-# #### Name : Download the dbpedia data into a Azure Blob
-# #### Author : spaturu
-# #### Date :  07/31/2017
-
-# In[1]:
 
 from azure.storage.blob import BlockBlobService, ContentSettings, PublicAccess, AppendBlobService
 import wget
@@ -29,6 +21,7 @@ import json
 import io
 from pprint import pprint
 from tqdm import tqdm
+from config import argument_config
 
 def assignAzureContainer(block_blob_service, container):
     # To check the connection is established sucessfully.
@@ -135,14 +128,38 @@ def downloadToAzure(urls, block_blob_service, container, dataset, ds_type):
 
 # Function executes for 'datasets', as artifacts are to be created for all 166 urls 
 def uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
+    urls= ''
+    artifact_old=''
+    urls_new=''
+    
+    
     for azr_url in azure_urls:
+        
+        if(len(urls)>1):
+            urls+= ', '
+        urls+= azr_url
+        
+            
         print(azr_url)
         
         file_name = azr_url.split("/")[-1].split(".")[0]
+        artifact=''
         artifact = file_name[0:file_name.index('_en')].replace("_", " ")
-
+         
+        if(artifact==artifact_old):
+            urls_new+=urls
         print("datasets's dataset artifact --> " + artifact)
-        uploadMetaDataToCKAN([azr_url], metadata, dataset, ckan_host, api_key, artifact)
+        
+        if((artifact != artifact_old) and (artifact_old != '')):
+            
+            uploadMetaDataToCKAN([urls_new], metadata, dataset, ckan_host, api_key, artifact)
+            urls_new= ''
+            urls= ''
+            
+            
+            
+        
+        artifact_old=artifact
 
 
 # Upload all the metadata details into CKAN
@@ -275,24 +292,18 @@ def download_data(data_links):
 	 
 def main():
     # Collect the user input arguements
-    account_name = str(sys.argv[1])
-    account_key  = str(sys.argv[2])
-    container    = str(sys.argv[3])
-    dataset      = str(sys.argv[4])
-    
-    ckan_host = ''
-    api_key = ''
+    account_name = argument_config.get('azure_account_name')#str(sys.argv[1])
+    account_key  = argument_config.get('azure_account_key')#str(sys.argv[2])
+    container    = argument_config.get('container')
+    dataset      = argument_config.get('dataset')
+    ckan_host    = argument_config.get('ckan_host')
+    api_key      = argument_config.get('ckan_key')
 
     #print(len(sys.argv))
     
-    if len(sys.argv) > 5:
-        ckan_host = str(sys.argv[5])
-        api_key = str(sys.argv[6])
-    else:
-        ckan_host = "http://40.71.214.191:80"
-        api_key = "3474fcd0-2ebc-4036-a60a-8bf77eea161f"
+   
     
-    print(account_name, account_key, container, dataset)
+    #print(account_name, account_key, container, dataset)
     
     # Azure blob services used to access azure
     block_blob_service = BlockBlobService(account_name = account_name, account_key = account_key)
@@ -318,6 +329,3 @@ def main():
     
 if __name__ == "__main__":
     main()
-    
-
-    

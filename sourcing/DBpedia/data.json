@@ -1,8 +1,8 @@
 {
 	"metadata": {
-		"ontology": {
-			"Title": "DBPedia Ontology",
-			"Description": "The DBpedia Ontology is a shallow, cross-domain ontology, which has been manually created based on the most commonly used infoboxes within Wikipedia.",
+		"ontology":{
+			"Title":"DBPedia Ontology",
+			"Description":"The DBpedia Ontology is a shallow, cross-domain ontology, which has been manually created based on the most commonly used infoboxes within Wikipedia.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -15,8 +15,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia, wikiepdia, infobox, Ontology, owl, nt"
 		},
-
-		"wikipedia": {
+		"wikipedia":{
 			"Title": "Dbpedia Wikipedia Input files",
 			"Description": "The wiki input files are the xml source files that are extracted from the Wikipedia dump files",
 			"Publisher": "RandomTrees",
@@ -31,9 +30,8 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "wikipedia, wiki input files, wiki dumps"
 		},
-
-		"datasets": {
-			"Title": "DBPedia Datasets",
+		"datasets":{
+			"Title":"DBPedia Datasets",
 			"Description": "The DBPedia datasets contain triples extracted from the respective Wikipedia, including the ones whose URIs do not have an equivalent Wikidata entry. These are available in two serializations - turtle(ttl) & quad-turtle(tql)",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -47,8 +45,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia, Dbpedia dataset, triples, wikipedia, serialization"
 		},
-
-		"nlp": {
+		"nlp":{
 			"Title": "Dbpedia NLP Datasets",
 			"Description": "The NLP Datasets were created by the DBpedia Spotlight team to support entity recognition and disambiguation tasks, among others. There are four different DBPedia NLP Datasets namely Lexicalization, Topic Signatures, Thematic Concepts and People's Grammatical Genders",
 			"Publisher": "RandomTrees",
@@ -63,8 +60,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia, Dbpedia NLP dataset, wikipedia, NLP, Lexicalization, Topic Signatures, Thematic Concepts, People's Grammatical Genders"
 		},
-
-		"dataid": {
+		"dataid":{
 			"Title": "DBPedia Dataset Metadata as DataIDs",
 			"Description": "The metadata for DBPedia datasets is provided in the form of DataIDs for all extracted languages to the respective language directories.",
 			"Publisher": "RandomTrees",
@@ -79,8 +75,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia, Dbpedia dataset metadata, metadata, wikipedia, DataID"
 		}, 
-		
-		"license": {
+		"license":{
 			"Title": "Dbpedia License",
 			"Description": "The metadata for Licenses.",
 			"Publisher": "RandomTrees",
@@ -95,8 +90,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia, Wikipedia, License, Creative Common Attribution, GNU Free Documentation Licensing"
 		},
-        
-        "anchor texts": {
+        "anchor texts":{
 			"Title": "Dbpedia Anchor Texts",
 			"Description": "Texts used in links to refer to Wikipedia articles from other Wikipedia articles",
 			"Publisher": "RandomTrees",
@@ -109,7 +103,7 @@
 			"Source": "DBPedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Anchor Text"
+            "Tags": "Dbpedia, Wikipedia, Anchor,Text,articles"
 		},
 		"anchor text":{
 			"Title": "Dbpedia Anchor Text",
@@ -124,10 +118,9 @@
 			"Source": "Dbpedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Anchor Text, Anchor, Text"
+            "Tags": "Dbpedia, Wikipedia, Anchor Text, Anchor, Text,articles"
 		},
-        
-        "article categories": {
+        "article categories":{
 			"Title": "Dbpedia Article Categories",
 			"Description": "Links from concepts to categories using the SKOS vocabulary",
 			"Publisher": "RandomTrees",
@@ -156,9 +149,9 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Article Categories, Article, Categories"
+            "Tags": "Dbpedia, Wikipedia, Article ,Categories,Sorted"
 		},
-        "article categories wkd uris": {
+        "article categories wkd uris":{
 			"Title": "Dbpedia Article Categories WKD URIs",
 			"Description": "Links from concepts to categories using the SKOS vocabulary",
 			"Publisher": "RandomTrees",
@@ -171,10 +164,10 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Article Categories, Article, Categories"
+            "Tags": "Dbpedia, Wikipedia, Article,Categories,WKD,URIs"
 		},
 
-        "article templates": {
+        "article templates":{
 			"Title": "Dbpedia Articles Templates",
 			"Description": "Templates used in an article (top-level)",
 			"Publisher": "RandomTrees",
@@ -187,10 +180,10 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Article Templates, Article, Template"
+            "Tags": "Dbpedia, Wikipedia,Article,Template"
 		},  
 		
-        "article templates nested": {
+        "article templates nested":{
 			"Title": "Dbpedia Articles Templates Nested",
 			"Description": "Templates used in an article (top-level)",
 			"Publisher": "RandomTrees",
@@ -203,9 +196,9 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Article Templates, Article, Template, Nested"
+            "Tags": "Dbpedia, Wikipedia,Article,Template,Nested"
 		},  
-		"category labels": {
+		"category labels":{
 			"Title": "Dbpedia Category Lables",
 			"Description": "Labels for Categories.",
 			"Publisher": "RandomTrees",
@@ -218,9 +211,9 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Categories, Labels"
+            "Tags": "Dbpedia,Wikipedia,Categories,Labels"
 		},
-		"category labels sorted": {
+		"category labels sorted":{
 			"Title": "Dbpedia Category Lables Sorted",
 			"Description": "Labels for Categories Sorted.",
 			"Publisher": "RandomTrees",
@@ -233,9 +226,9 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Categories, Labels, Sorted"
+            "Tags": "Dbpedia,Wikipedia,Categories,Labels,Sorted"
 		},
-		"category labels wkd uris": {
+		"category labels wkd uris":{
 			"Title": "Dbpedia Category Lables WKD URIs",
 			"Description": "Labels for Categories WKD URIs.",
 			"Publisher": "RandomTrees",
@@ -248,9 +241,9 @@
 			"Source": "wikipedia",
 			"Source_type": "tql ,ttl",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Categories, Labels, WKD, URIs"
+            "Tags": "Dbpedia,Wikipedia,Categories,Labels,WKD,URIs"
 		},
-		"citation data": {
+		"citation data":{
 			"Title": "Dbpedia Citation Data",
 			"Description": "Raw data extracted from Wikipedia citation templates.",
 			"Publisher": "RandomTrees",
@@ -263,9 +256,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Citation, Data"
+            "Tags": "Dbpedia,Wikipedia,Extracted,Citation,Raw,Data"
 		},
-		"citation links": {
+		"citation links":{
 			"Title": "DBPedia Citation Links",
 			"Description": "Links from a citation to a DBpedia article using the dbp:isCitedBy property.",
 			"Publisher": "RandomTrees",
@@ -278,11 +271,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Citation, Links"
+            "Tags": "Dbpedia,Wikipedia,Citation,Links"
 		},
-		"commons page links": {
+		"commons page links":{
 			"Title": "DBPedia Commons Page Links",
-			"Description": "",
+			"Description": "Links from a commons to a DBpedia article using the dbp:isPagedBy property.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -293,9 +286,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,Commons, Page, Links"
+            "Tags": "Dbpedia,Commons,Page,Links"
 		},
-		"description": {
+		"description":{
 			"Title": "Dbpedia Description",
 			"Description": "Labels for Categories",
 			"Publisher": "RandomTrees",
@@ -308,7 +301,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Description"
+            "Tags": "Dbpedia,Wikipedia,Labels,Description"
 		},
 		"description nmw": {
 			"Title": "Dbpedia Description nmw",
@@ -323,9 +316,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Description, nmw"
+            "Tags": "Dbpedia,Wikipedia,Description,Nmw"
 		},
-		"disambiguations": {
+		"disambiguations":{
 			"Title": "Dbpedia Disambiguations",
 			"Description": "Links extracted from Wikipedia disambiguation pages. Since Wikipedia has no syntax to distinguish disambiguation links from ordinary links, DBpedia has to use heuristics. This dataset has Wikipedia redirects resolved.",
 			"Publisher": "RandomTrees",
@@ -338,9 +331,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Disambiguations"
+            "Tags": "Dbpedia,Links,Wikipedia,Disambiguations"
 		},
-		"disambiguations unredirected": {
+		"disambiguations unredirected":{
 			"Title": "Dbpedia Disambiguations Unredirected",
 			"Description": "Links extracted from Wikipedia disambiguation pages. Since Wikipedia has no syntax to distinguish disambiguation links from ordinary links, DBpedia has to use heuristics.",
 			"Publisher": "RandomTrees",
@@ -353,11 +346,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Disambiguations, Unredirected"
+            "Tags": "Dbpedia,Links,Wikipedia,Disambiguations,Unredirected,Heuristics"
 		},
-		"disambiguations wkd uris": {
+		"disambiguations wkd uris":{
 			"Title": "Dbpedia Disambiguations WKD URIs",
-			"Description": "",
+			"Description": "Links extracted from Wikipedia disambiguation wkd:uri.Since Wikipedia has no syntax to distinguish disambiguation links from ordinary links, DBpedia has to use heuristics. This dataset has Wikipedia redirects resolved.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -368,11 +361,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Disambiguations, Unredirected"
+            "Tags": "Dbpedia,Wikipedia,Disambiguations,Unredirected,Wkd,Uris"
 		},
 		"equations":{
 			"Title": "Dbpedia equations",
-			"Description": "",
+			"Description": "Equations to external web pages about a concept.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -385,7 +378,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia, Wikipedia,equations"
 		},
-		"external links": {
+		"external links":{
 			"Title": "Dbpedia External Links",
 			"Description": "Links to external web pages about a concept.",
 			"Publisher": "RandomTrees",
@@ -398,7 +391,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, External, Links"
+            "Tags": "Dbpedia,Wikipedia,External,Links,Concepts"
 		},
 		"external links wkd uris":{
 			"Title": "Dbpedia external links wkd uris",
@@ -413,11 +406,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, External, Links, Wkd ,Uris"
+            "Tags": "Dbpedia,Wikipedia,External,Links,Wkd,Uris"
 		},
-		"file information": {
+		"file information":{
 			"Title": "Dbpedia File Information",
-			"Description": "",
+			"Description": "This file contains the file-links (owl:sameAs) to the Freebase dataset.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -428,7 +421,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, File, Information"
+            "Tags": "Dbpedia,Wikipedia,File,Information"
 		},
 		"freebase links": {
 			"Title": "Dbpedia Freebase Links",
@@ -443,9 +436,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Freebase, Links,owl"
+            "Tags": "Dbpedia,Wikipedia,Freebase,Links,owl"
 		},
-		"french population": {
+		"french population":{
 			"Title": "Dbpedia French Population",
 			"Description": "French dataset about population.",
 			"Publisher": "RandomTrees",
@@ -458,9 +451,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,french ,population"
+            "Tags": "Dbpedia,french,population"
 		},
-		"genders": {
+		"genders":{
 			"Title": "Dbpedia Genders",
 			"Description": "Dataset trying to identify the gender of a resource.",
 			"Publisher": "RandomTrees",
@@ -490,7 +483,7 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia,genders,resource,wkd ,uris"
 		},
-		"geo coordinates": {
+		"geo coordinates":{
 			"Title": "Dbpedia Geo Coordinates",
 			"Description": "Geographic coordinates extracted from Wikipedia.",
 			"Publisher": "RandomTrees",
@@ -503,7 +496,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,geo,coordinates"
+            "Tags": "Dbpedia,Wikipedia,geo,coordinates"
 		},
 		"geo coordinates mappingbased": {
 			"Title": "Dbpedia Geo Coordinates Mappingbased",
@@ -518,10 +511,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,geo ,coordinates ,mappingbased,infoboxes"
+            "Tags": "Dbpedia,Wikipedia,Geo,Coordinates,Mappingbased,Infoboxes"
 		},
 		"geo coordinates mappingbased wkd uris":{
-			"Title": "Dbpedia geo coordinates mappingbased wkd uris",
+			"Title": "Dbpedia Geo Coordinates Mappingbased Wkd Uris",
 			"Description": "geo coordinates mappingbased wkd uris extracted from Wikipedia originating from mapped infoboxes in the mappings wiki.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -533,10 +526,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,geo ,coordinates ,mappingbased ,wkd ,uris,infoboxes"
+            "Tags": "Dbpedia,Wikipedia,Geo,Coordinates,Mappingbased,Wkd,Uris,Infoboxes"
 		},
 		"geo coordinates wkd uris":{
-			"Title": "Dbpedia geo coordinates wkd uris",
+			"Title": "Dbpedia Geo Coordinates Wkd Uris",
 			"Description": "geo coordinates wkd uris extracted from Wikipedia originating from mapped infoboxes in the mappings wiki.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -548,10 +541,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,geo ,coordinates ,wkd ,uris,infoboxes"
+            "Tags": "Dbpedia,Wikipedia,Geo,Coordinates,Wkd,Uris,Infoboxes"
 		},
 		"geonames links":{
-			"Title": "Dbpedia geonames links",
+			"Title": "Dbpedia Geonames Links",
 			"Description": "geonames links extracted from Wikipedia originating from mapped infoboxes in the mappings wiki.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -563,9 +556,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,geonames, links,infoboxes"
+            "Tags": "Dbpedia,Wikipedia,Geonames,Links,Infoboxes"
 		},
-		"homepages": {
+		"homepages":{
 			"Title": "Dbpedia Homepages",
 			"Description": "Links to homepages of persons, organizations etc.",
 			"Publisher": "RandomTrees",
@@ -578,10 +571,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,homepages,organizations"
+            "Tags": "Dbpedia,Wikipedia,Homepages,Organizations"
 		},
 		"homepages wkd uris":{
-			"Title": "Dbpedia homepages wkd uris",
+			"Title": "Dbpedia Homepages Wkd Uris",
 			"Description": "Links to homepages wkd urisof persons, organizations etc.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -593,7 +586,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,homepages ,wkd ,uris,organizations"
+            "Tags": "Dbpedia,Wikipedia,Homepages,Wkd,Uris,Organizations"
 		},
 		"image annotations": {
 			"Title": "Dbpedia Image Annotations",
@@ -608,7 +601,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,image ,annotations"
+            "Tags": "Dbpedia,Wikipedia,Image,annotations"
 		},
 		"image galleries": {
 			"Title": "Dbpedia Image Galleries.",
@@ -623,7 +616,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,image,galleries"
+            "Tags": "Dbpedia,Wikipedia,Image,Galleries"
 		},
 		"images": {
 			"Title": "Dbpedia Images.",
@@ -638,10 +631,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, images"
+            "Tags": "Dbpedia,Wikipedia,Images"
 		},
 		"images wkd uris":{
-			"Title": "Dbpedia images wkd uris.",
+			"Title": "Dbpedia Images Wkd Uris.",
 			"Description": "Main images wkd uris and corresponding thumbnail from Wikipedia article.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -653,10 +646,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,images ,wkd ,uris"
+            "Tags": "Dbpedia,Wikipedia,Images,Wkd,Uris"
 		},
 		"infobox properties":{
-			"Title": "Dbpedia Infobox Properties .",
+			"Title": "Dbpedia Infobox Properties.",
 			"Description": "Information that has been extracted from Wikipedia infoboxes. Note that this data is in the less clean 'property' namespace. The Mapping-based Properties in the 'ontology' namespace, should always be preferred.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -668,10 +661,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, infobox, properties,ontology"
+            "Tags": "Dbpedia, Wikipedia,Infobox,Properties,Ontology"
 		},
 		"infobox properties mapped":{
-			"Title": "Dbpedia infobox properties mapped",
+			"Title": "Dbpedia Infobox Properties Mapped",
 			"Description": "Information that has been extracted from Wikipedia infoboxes. Note that this data is in the less clean 'property' namespace. The Mapping-based Properties in the 'ontology' namespace, should always be preferred.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -683,11 +676,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, infobox, properties,mapped,ontology"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Mapped,Ontology"
 		},
 		"infobox properties wkd uris":{
-			"Title": "Dbpedia infobox properties wkd uris",
-			"Description": "",
+			"Title": "Dbpedia Infobox Properties Wkd Uris",
+			"Description": "Information that has been extracted from Wikipedia infoboxes wkd:uris. Note that this data is in the less clean 'property' namespace. The Mapping-based Properties in the 'ontology' namespace, should always be preferred.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -698,9 +691,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, infobox, properties,wkd,uris"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Wkd,Uris"
 		},
-		"infobox properties unredirected ": {
+		"infobox properties unredirected ":{
 			"Title": "Dbpedia Infobox Properties Unredirected .",
 			"Description": "Information that has been extracted from Wikipedia infoboxes. Note that this data is in the less clean 'property' namespace. The Mapping-based Properties in the 'ontology' namespace, should always be preferred over this data.",
 			"Publisher": "RandomTrees",
@@ -713,9 +706,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, infobox, properties ,unredirected,ontology"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Unredirected,Ontology"
 		},
-		"infobox properties definitions": {
+		"infobox properties definitions":{
 			"Title": "Dbpedia Infobox Properties Definitions.",
 			"Description": "All properties predicates used in infoboxes.",
 			"Publisher": "RandomTrees",
@@ -728,10 +721,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,infobox ,properties, definitions,predicates"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Definitions,Predicates"
 		},
 		"infobox property definitions wkd uris":{
-			"Title": "Dbpedia infobox property definitions wkd uris",
+			"Title": "Dbpedia Infobox Property Definitions Wkd Uris",
 			"Description": "All properties wkd uri used in infoboxes.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -743,10 +736,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,infobox ,properties, definitions,predicates"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Definitions,Predicates"
 		},
 		"infobox properties sorted":{
-			"Title": "Dbpedia infobox properties sorted.",
+			"Title": "Dbpedia Infobox Properties Sorted.",
 			"Description": "All properties sorted used in infoboxes.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -758,11 +751,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,infobox ,properties,sorted"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Sorted"
 		},
 		"infobox test": {
 			"Title": "Dbpedia Infobox Test.",
-			"Description": "",
+			"Description": "Contains triples of the form $object rdf:type $class from the mapping-based extraction.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -773,7 +766,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,infobox, test"
+            "Tags": "Dbpedia,Wikipedia,Infobox,Test"
 		},
 		"instance types": {
 			"Title": "Dbpedia Instance Types .",
@@ -788,9 +781,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,instance ,types"
+            "Tags": "Dbpedia,Wikipedia,Instance,Types"
 		},
-		"instance types sdtyped dbo": {
+		"instance types sdtyped dbo":{
 			"Title": "Dbpedia Instance Types Sdtyped Dbo .",
 			"Description": "The SDType heuristic can extract probable type information in large, cross-domain databases on noisy data. This is its result for DBpedia which supplements the normally gathered instance types. This set is its result for .",
 			"Publisher": "RandomTrees",
@@ -803,9 +796,69 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, instance, sdtyped, dbo"
+            "Tags": "Dbpedia,Instance,Sdtyped,Dbo"
 		},
-		"instance types transitive": {
+		"instance types lhd dbo":{
+			"Title": "Dbpedia Instance Types Lhd Dbo.",
+			"Description": "The lhd dbo Type heuristic can extract probable type information in large, cross-domain databases on noisy data. This is its result for DBpedia which supplements the normally gathered instance types. This set is its result for .",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Instance,Types,Lhd,Dbo"
+		},
+		"instance types lhd ext":{
+			"Title": "Dbpedia Instance Types Lhd Ext.",
+			"Description": "The lhd ext Type heuristic can extract probable type information in large, cross-domain databases on noisy data. This is its result for DBpedia which supplements the normally gathered instance types. This set is its result for .",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Instance,Types,Lhd,Ext"
+		},
+		"instance types sorted":{
+			"Title": "Dbpedia Instance Types Sorted.",
+			"Description": "This is its result for DBpedia sorted which supplements the normally gathered instance types. This set is its result for .",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Instance,Types,Sorted"
+		},
+		"instance types wkd uris":{
+			"Title": "Dbpedia Instance Types Wkd Uris.",
+			"Description": "This is its result for DBpedia instance types wkd uris  which supplements the normally gathered instance types. This set is its result for .",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Instance,Types,Wkd,Uris"
+		},
+		"instance types transitive":{
 			"Title": "Dbpedia Instance Types Transitive .",
 			"Description": "Contains transitive rdf:type $class based on the DBpedia ontology.",
 			"Publisher": "RandomTrees",
@@ -818,9 +871,24 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, instance, types, transitive"
+            "Tags": "Dbpedia,Instance,Types,Transitive"
 		},
-		"interlanguage links": {
+		"instance types transitive wkd uris":{
+			"Title": "Dbpedia Instance Types Transitive Wkd Uris.",
+			"Description": "Contains transitive wkd:uris $class based on the DBpedia ontology.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Instance,Wkd,Uris,Transitive"
+		},
+		"interlanguage links":{
 			"Title": "Dbpedia Interlanguage Links.",
 			"Description": "Dataset linking a DBpedia resource to the same resource in other languages and in Wikidata.",
 			"Publisher": "RandomTrees",
@@ -833,7 +901,37 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,interlanguage,links,languages"
+            "Tags": "Dbpedia,Interlanguage,Links,Languages"
+		},
+		"interlanguage links chapters":{
+			"Title": "Dbpedia Interlanguage Links.",
+			"Description": "Dataset linking a DBpedia chapters resource to the same resource in other languages and in Wikidata.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Interlanguage,Links,Languages,Chapters"
+		},
+		"interlanguage links sorted":{
+			"Title": "Dbpedia Interlanguage Links Sorted",
+			"Description": "Dataset linking a DBpedia sorted resource to the same resource in other languages and in Wikidata.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Interlanguage,Links,Languages,Sorted"
 		},
 		"kml files": {
 			"Title": "Dbpedia Kml Files.",
@@ -848,9 +946,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,kml ,files,Commons"
+            "Tags": "Dbpedia,Wikipedia,Kml,Files,Commons"
 		},
-		"labels": {
+		"labels":{
 			"Title": "Dbpedia Labels .",
 			"Description": "Titles of all Wikipedia Articles in the corresponding language.",
 			"Publisher": "RandomTrees",
@@ -863,11 +961,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, Labels,Articles ,language"
+            "Tags": "Dbpedia,Wikipedia, Labels,Articles ,language"
 		},
-		"labels nmw": {
-			"Title": "Dbpedia Labels Nmw .",
-			"Description": "",
+		"labels sorted":{
+			"Title": "Dbpedia Labels Sorted.",
+			"Description": "Titles of all sorted Wikipedia Articles in the corresponding language.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -878,9 +976,39 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,labels, nmw"
+            "Tags": "Dbpedia,Wikipedia,Labels,Articles,Sorted,Language"
 		},
-		"long abstracts": {
+		"labels nmw": {
+			"Title": "Dbpedia Labels Nmw .",
+			"Description": "Titles of all nmw Wikipedia Articles in the corresponding language.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Labels,Nmw"
+		},
+		"labels wkd uris":{
+			"Title": "Dbpedia Labels Wkd Uris.",
+			"Description": "Titles of all wkd:uris Wikipedia Articles in the corresponding language.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Wikipedia,Labels,Articles,Language"
+		},
+		"long abstracts":{
 			"Title": "Dbpedia Long Abstracts .",
 			"Description": "Full abstracts of Wikipedia articles, usually the first section.",
 			"Publisher": "RandomTrees",
@@ -893,9 +1021,24 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, long ,abstracts"
+            "Tags": "Dbpedia,Wikipedia,Long,Abstracts,Articles"
 		},
-		"mappingbased literals": {
+		"long abstracts wkd uris":{
+			"Title": "Dbpedia Long Abstracts Wkd Uris.",
+			"Description": "Full abstracts wkd:uris of Wikipedia articles, usually the first section.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Wikiepdia,Long,Abstracts,Wkd,Uris"
+		},
+		"mappingbased literals":{
 			"Title": "Dbpedia Mappingbased Literals .",
 			"Description": "High-quality data extracted from Infoboxes using the mapping-based extraction (Literal properties only). The predicates in this dataset are in the ontology namespace. Note that this data is of much higher quality than .",
 			"Publisher": "RandomTrees",
@@ -908,9 +1051,39 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, mappingbased, literals,Infoboxes,ontology,quality"
+            "Tags": "Dbpedia,Mappingbased,Literals,Infoboxes,Ontology,Quality"
 		},
-		"mappingbased objects": {
+		"mappingbased literals sorted":{
+			"Title": "Dbpedia Mappingbased Literals Sorted.",
+			"Description": "High-quality data sorted from Infoboxes using the mapping-based extraction (Literal properties only). The predicates in this dataset are in the ontology namespace. Note that this data is of much higher quality than .",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Mappingbased,Literals,Infoboxes,Ontology,Quality,Sorted"
+		},
+		"mappingbased literals wkd uris":{
+			"Title": "Dbpedia Mappingbased Literals Wkd Uris.",
+			"Description": "High-quality data wkd:uris from Infoboxes using the mapping-based extraction (Literal properties only). The predicates in this dataset are in the ontology namespace. Note that this data is of much higher quality than .",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Mappingbased,Literals,Infoboxes,Ontology,Quality,Wkd,Uris"
+		},
+		"mappingbased objects":{
 			"Title": "Dbpedia Mappingbased Objects .",
 			"Description": "High-quality data extracted from Infoboxes using the mapping-based extraction (Object properties only). The predicates in this dataset are in the 'ontology' namespace. Note that this data is of much higher quality than the Raw Infobox Properties in the 'property' namespace.",
 			"Publisher": "RandomTrees",
@@ -923,7 +1096,37 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,mappingbased ,objects,quality,property"
+            "Tags": "Dbpedia,Mappingbased,Objects,Quality,Property"
+		},
+		"mappingbased objects uncleaned":{
+			"Title": "Dbpedia Mappingbased Objects Uncleaned",
+			"Description": "High-quality data uncleaned objects extracted from Infoboxes using the mapping-based extraction (Object properties only). The predicates in this dataset are in the 'ontology' namespace. Note that this data is of much higher quality than the Raw Infobox Properties in the 'property' namespace.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Mappingbased,Objects,Quality,Property,Uncleaned"
+		},
+		"mappingbased objects wkd uris":{
+			"Title": "Dbpedia Mappingbased Objects Wkd Uris",
+			"Description": "High-quality data wkd:uri objects extracted from Infoboxes using the mapping-based extraction (Object properties only). The predicates in this dataset are in the 'ontology' namespace. Note that this data is of much higher quality than the Raw Infobox Properties in the 'property' namespace.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Mappingbased,Objects,Quality,Property,wkd,Uri"
 		},
 		"mappingbased objects disjoint domain": {
 			"Title": "Dbpedia Mappingbased Objects Disjoint Domain .",
@@ -938,9 +1141,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,mappingbased ,objects ,disjoint, domain,properties"
+            "Tags": "Dbpedia,Mappingbased,Objects,Disjoint,Domain,Properties"
 		},
-		"mappingbased objects disjoint range": {
+		"mappingbased objects disjoint range":{
 			"Title": "Dbpedia Mappingbased Objects Disjoint Range.",
 			"Description": "Errors detected in the mapping based properties (disjoint range).",
 			"Publisher": "RandomTrees",
@@ -953,11 +1156,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,mappingbased,bjects,disjoint,range"
+            "Tags": "Dbpedia,Mappingbased,Ojects,Disjoint,Range"
 		},
-		"mappingbased properties reified": {
+		"mappingbased properties reified":{
 			"Title": "Dbpedia Mappingbased Properties Reified .",
-			"Description": "",
+			"Description": "Errors detected in the mapping based reified properties.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -968,11 +1171,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,mappingbased ,properties, reified"
+            "Tags": "Dbpedia,Mappingbased,Properties,Reified"
 		},
-		"mappingbased properties reified qualifiers": {
+		"mappingbased properties reified qualifiers":{
 			"Title": "Dbpedia Mappingbased Properties Reified Qualifiers .",
-			"Description": "",
+			"Description": "Errors detected in the mapping based reified qualifiers.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -983,11 +1186,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,mappingbased, properties ,reified ,qualifiers"
+            "Tags": "Dbpedia,Mappingbased,Properties,Reified,Qualifiers"
 		},
-		"ontology subclassof": {
-			"Title": "Dbpedia Ontology Subclassof .",
-			"Description": "",
+		"nested article templates":{
+			"Title": "Dbpedia Nested Article Templates",
+			"Description": "Detected in the mapping based aricle template",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -998,7 +1201,67 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,ontology, subclassof"
+            "Tags": "Dbpedia,Mappingbased,Article,Template"
+		},
+		"nif context":{
+			"Title": "Dbpedia Nif Context",
+			"Description": "Detecting nifi context  articles.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Articles,Nifi,Context"
+		},
+		"nif page structure":{
+			"Title": "Dbpedia Nif Page Structure",
+			"Description": "Detecting nif page structure in wikipedia articles.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Articles,Nif,Page,Structure"
+		},
+		"nif text links":{
+			"Title": "Dbpedia Nif Text Links",
+			"Description": "Detecting nif text links in wikipedia articles.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Nif,Text,Links,Articles"
+		},
+		"ontology subclassof":{
+			"Title": "Dbpedia Ontology Subclassof .",
+			"Description": "Detecting ontology subclass of links in wikipedia articles.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Wikiepdia,Ontology,Subclassof"
 		},
 		"out degree": {
 			"Title": "Dbpedia Out Degree.",
@@ -1015,7 +1278,22 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia,out,degree,links,Wikipedia,articles"
 		},
-		"page ids": {
+		"pages articles":{
+			"Title": "Dbpedia Page Articles.",
+			"Description":"Dataset linking a DBpedia page article of the Wikipedia article the data was extracted from.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Page,Article"
+		},
+		"page ids":{
 			"Title": "Dbpedia Page Ids.",
 			"Description": "Dataset linking a DBpedia resource to the page ID of the Wikipedia article the data was extracted from.",
 			"Publisher": "RandomTrees",
@@ -1028,7 +1306,22 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,page,ids,article"
+            "Tags": "Dbpedia,Page,Ids,Article"
+		},
+		"page ids sorted":{
+			"Title": "Dbpedia Page Ids Sorted.",
+			"Description": "Dataset linking a DBpedia resource to the page ID sorted of the Wikipedia article the data was extracted from.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Page,Ids,Article,Sorted"
 		},
 		"page length": {
 			"Title": "Dbpedia Page Length.",
@@ -1043,10 +1336,10 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,Wikipedia, page, length,characters"
+            "Tags": "Dbpedia,Wikipedia,Page,Length,Characters"
 		},
-		"page links": {
-			"Title": "Dbpedia Page Links .",
+		"page links":{
+			"Title": "Dbpedia Page Links.",
 			"Description": "Dataset containing internal links between DBpedia instances. The dataset was created from the internal links between Wikipedia articles. The dataset might be useful for structural analysis, data mining or for ranking DBpedia instances using Page Rank or similar algorithms.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
@@ -1058,7 +1351,22 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia, page ,links,structural ,analysis, data, mining ,rank"
+            "Tags": "Dbpedia,Wikipedia,Page,Links,Structural,Analysis,Data,Mining,Rank"
+		},
+		"page links wkd uris":{
+			"Title": "Dbpedia Page Links Wkd Uris.",
+			"Description": "Dataset containing internal links  wkd:uris between DBpedia instances. The dataset was created from the internal links between Wikipedia articles. The dataset might be useful for structural analysis, data mining or for ranking DBpedia instances using Page Rank or similar algorithms.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Wikipedia,Page,Links,Structural,Analysis,Data,Mining,Rank,Wkd,Uris"
 		},
 		"page links unredirected": {
 			"Title": "Dbpedia Page Links Unredirected.",
@@ -1073,9 +1381,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Page Links,internal links, data, mining,rank,analysis"
+            "Tags": "Dbpedia,Page,Links,Internal,Links,Data,Mining,Rank,Analysis"
 		},
-		"persondata": {
+		"persondata":{
 			"Title": "Dbpedia Persondata.",
 			"Description": "Information about persons (date and place of birth etc., extracted from the English and German Wikipedia, represented using the FOAF vocabulary.",
 			"Publisher": "RandomTrees",
@@ -1088,9 +1396,24 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Information, persons ,persondata,vocabulary"
+            "Tags": "Dbpedia,Information,Persons,Persondata,Vocabulary"
 		},
-		"persondata unredirected": {
+		"persondata wkd uris":{
+			"Title": "Dbpedia persondata wkd uris.",
+			"Description": "Information about persons wkd:uri (date and place of birth etc., extracted from the English and German Wikipedia, represented using the FOAF vocabulary.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Information,Persons,Persondata,Wkd,Uri,Vocabulary"
+		},
+		"persondata unredirected":{
 			"Title": "Dbpedia Persondata Unredirected .",
 			"Description": "Information about persons (date and place of birth etc., extracted from the English and German Wikipedia, represented using the FOAF vocabulary.",
 			"Publisher": "RandomTrees",
@@ -1103,11 +1426,41 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, unredirected, persondata, wikiepdia,vocabulary  "
+            "Tags": "Dbpedia,Unredirected,Persondata,Wikiepdia,Vocabulary "
 		},
-		"properties": {
+		"pnd":{
+			"Title":"Dbpedia Pnd.",
+			"Description": "Information about pnd (date and place of birth etc., extracted from the English and German Wikipedia, represented using the FOAF vocabulary.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Pnd,Wikiepdia,Vocabulary  "
+		},
+		"pnd wkd uris":{
+			"Title":"Dbpedia Pnd Wkd Uris.",
+			"Description":"Information about pnd  wkd uris (date and place of birth etc., extracted from the English and German Wikipedia, represented using the FOAF vocabulary.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Pnd,Wkd,Uris,Wikiepdia,Vocabulary"
+		},
+		"properties":{
 			"Title": "Dbpedia Properties.",
-			"Description": "",
+			"Description": "Information about properties of dbpedia articles",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1118,11 +1471,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,properties"
+            "Tags": "Dbpedia,Properties,Articles"
 		},
-		"raw": {
+		"raw":{
 			"Title": "Dbpedia Raw .",
-			"Description": "",
+			"Description": "Dbpedia Raw data",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1133,11 +1486,26 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,raw"
+            "Tags": "Dbpedia,Raw,Data"
+		},
+		"raw tables":{
+			"Title": "Dbpedia Raw Tables.",
+			"Description": "Dbpedia Raw tables data",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Raw,Tables."
 		},
 		"raw reified": {
 			"Title": "Dbpedia Raw Reified.",
-			"Description": "",
+			"Description": "Dbpedia raw reified data",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1148,11 +1516,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,raw ,reified"
+            "Tags": "Dbpedia,Raw,Reified"
 		},
-		"raw reified qualifiers": {
+		"raw reified qualifiers":{
 			"Title": "Dbpedia Raw Reified Qualifiers.",
-			"Description": "",
+			"Description": "Dbpedia raw reified qualifiers data",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1163,11 +1531,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,raw, reified ,qualifiers"
+            "Tags": "Dbpedia,Raw,Reified,Qualifiers,Data"
 		},
-		"raw unredirected": {
+		"raw unredirected":{
 			"Title": "Dbpedia Raw Unredirected.",
-			"Description": "",
+			"Description": "Dbpedia raw unredirected data.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1178,9 +1546,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,raw, unredirected"
+            "Tags": "Dbpedia,Raw,Unredirected"
 		},
-		"redirects": {
+		"redirects":{
 			"Title": "Dbpedia Redirects.",
 			"Description": "Dataset containing redirects between articles in Wikipedia.",
 			"Publisher": "RandomTrees",
@@ -1193,11 +1561,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Redirects, articles,articles,wikipedia"
+            "Tags": "Dbpedia,Redirects,Articles,Wikipedia"
 		},
 		"references": {
 			"Title": "Dbpedia References.",
-			"Description": "",
+			"Description": "Dbpedia references data",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1208,9 +1576,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, References"
+            "Tags": "Dbpedia,References"
 		},
-		"revision ids": {
+		"revision ids":{
 			"Title": "Dbpedia Revision Ids.",
 			"Description": "Dataset linking a DBpedia resource to the revision ID of the Wikipedia article the data was extracted from.",
 			"Publisher": "RandomTrees",
@@ -1223,9 +1591,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Revisionid ,wikipedia,linking,resources,articles"
+            "Tags": "Dbpedia,Revisionid,wikipedia,linking,Resources,Articles"
 		},
-		"revision meta": {
+		"revision meta":{
 			"Title": "Dbpedia Revision Meta",
 			"Description": "Dataset containing additional revision information.",
 			"Publisher": "RandomTrees",
@@ -1238,9 +1606,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,Revisions,revisionmeta"
+            "Tags": "Dbpedia,Revisions,Revisionmeta"
 		},
-		"revision uris": {
+		"revision uris":{
 			"Title": "Dbpedia Revision Uris",
 			"Description": "Dataset linking DBpedia resource to the specific Wikipedia article revision used in this DBpedia release.",
 			"Publisher": "RandomTrees",
@@ -1253,11 +1621,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Revision, Dataset, linking, Wikipedia,uris"
+            "Tags": "Dbpedia,Revision,Dataset,Linking,Wikipedia,Uris"
 		},
-		"sameas all wikis": {
+		"sameas all wikis":{
 			"Title": "Dbpedia Sameas All Wikis.",
-			"Description": "",
+			"Description": "Dataset containing sameas all wiki information.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1268,11 +1636,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Revision, Dataset, linking, Wikipedia,sameas"
+            "Tags": "Dbpedia,Revision,Dataset,Linking,Wikipedia,Sameas"
 		},
-		"sameas external": {
+		"sameas external":{
 			"Title": "Dbpedia Sameas External.",
-			"Description": "",
+			"Description": "Dataset containing same as external information.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1285,9 +1653,9 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia,Wikipedia,sameas ,external"
 		},
-		"sameas wikidata": {
+		"sameas wikidata":{
 			"Title": "Dbpedia Sameas Wikidata.",
-			"Description": "",
+			"Description": "Dataset containing sames as wiki information.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1298,11 +1666,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,sameas, wikidata "
+            "Tags": "Dbpedia,Sameas,Wikidata "
 		},
-		"short abstracts": {
+		"short abstracts":{
 			"Title": "Dbpedia Short Abstracts.",
-			"Description": "Short Abstracts (max. 500 characters long, of Wikipedia articles.",
+			"Description": "Short Abstracts (max. 500 characters long, of Wikipedia articles).",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1313,9 +1681,39 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,abstracts,wikipedia,short"
+            "Tags": "Dbpedia,Abstracts,Wikipedia,Short"
 		},
-		"skos categories": {
+		"short abstracts sorted":{
+			"Title": "Dbpedia Short Abstracts Sorted.",
+			"Description": "Short Abstracts sorted(max. 500 characters long, of Wikipedia articles).",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Abstracts,Wikipedia,Short,Sorted"
+		},
+		"short abstracts wkd uris":{
+			"Title": "Dbpedia Short Abstracts Wkd Uris.",
+			"Description": "Short Abstracts wkd uris(max. 500 characters long, of Wikipedia articles).",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Abstracts,Wikipedia,Short,Wkd ,Uris"
+		},
+		"skos categories":{
 			"Title": "Dbpedia Skos Categories.",
 			"Description": "Information which concept is a category and how categories are related using the SKOS Vocabulary.",
 			"Publisher": "RandomTrees",
@@ -1330,7 +1728,22 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia,Skos,information, category,skos "
 		},
-		"specific mappingbased properties": {
+		"skos categories wkd uris":{
+			"Title": "Dbpedia Skos Categories Wkd Uris.",
+			"Description": "Information which concept is a category wkd:uri and how categories are related using the SKOS Vocabulary.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Skos,Information,Category,Skos,wkd,Uris "
+		},
+		"specific mappingbased properties":{
 			"Title": "Dbpedia Specific Mappingbased Properties.",
 			"Description": "Infobox data from the mapping-based extraction, using units of measurement more convenient for the resource type, e.g. square kilometres instead of square metres for the area of a city.",
 			"Publisher": "RandomTrees",
@@ -1343,7 +1756,22 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,Mappingbased,Infoboxdata,specific ,mappingbased ,properties "
+            "Tags": "Dbpedia,Mappingbased,Infoboxdata,Specific,Mappingbased,Properties "
+		},
+		"specific mappingbased properties wkd uris":{
+			"Title": "Dbpedia Specific Mappingbased Properties Wkd Uris.",
+			"Description": "Infobox data from the mapping-based extraction wkd:uris,using units of measurement more convenient for the resource type, e.g. square kilometres instead of square metres for the area of a city.",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Mappingbased,Infoboxdata,Specific,Mappingbased,Properties,wkd,Uri"
 		},
 		"template parameters": {
 			"Title": "Dbpedia Template Parameters.",
@@ -1358,9 +1786,9 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,template,parameters,names "
+            "Tags": "Dbpedia,Template,Parameters,Names "
 		},	
-		"topical concepts": {
+		"topical concepts":{
 			"Title": "Dbpedia Topical Concepts",
 			"Description": "Resources that describe a category",
 			"Publisher": "RandomTrees",
@@ -1373,9 +1801,24 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,topical,concepts,category,resources "
+            "Tags": "Dbpedia,Topical,Concepts,Category,Resources "
 		},
-		"topical concepts unredirected": {
+		"topical concepts wkd uris":{
+			"Title": "Dbpedia Topical Concepts Wkd uris",
+			"Description": "Resources that describe a category",
+			"Publisher": "RandomTrees",
+			"Created": "createdDate",
+			"Last Updated": "LastupdatedDate",
+			"Container": "containername",
+			"URL": "AzureURL",
+			"Sourcing_Date": "createdDate",
+			"version": "2016-10",
+			"Source": "DBPedia",
+			"Source_type": "File formats should go here",
+			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
+            "Tags": "Dbpedia,Topical,Concepts,Category,Resources,Wkd,Uris"
+		},
+		"topical concepts unredirected":{
 			"Title": "Dbpedia Topical Concepts Unredirected",
 			"Description": "Resources that describe a category",
 			"Publisher": "RandomTrees",
@@ -1388,7 +1831,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,topical,concepts,category,unredirected"
+            "Tags": "Dbpedia,Topical,Concepts,Category,Unredirected"
 		},
 		"transitive redirects": {
 			"Title": "Dbpedia Transitive Redirects",
@@ -1403,7 +1846,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,transitive,redirects,article,wikiepdia "
+            "Tags": "Dbpedia,Transitive,Redirects,Article,Wikiepdia "
 		},
 		"uri same as iri": {
 			"Title": "Dbpedia Uri Same As Iri.",
@@ -1422,7 +1865,7 @@
 		},
 		"wikidata duplicate iri split": {
 			"Title": "Dbpedia Wikidata Duplicate Iri Split.",
-			"Description": "",
+			"Description": "DBpedia wikidata duplicate iri split data in wiki.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1433,11 +1876,11 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia,iri,wikidata ,duplicate,split"
+            "Tags": "Dbpedia,Iri,Wikidata,Duplicate,Split"
 		},
 		"wikidata r2r mapping errors": {
 			"Title": "Dbpedia Wikidata R2r Mapping Errors.",
-			"Description": "",
+			"Description": "DBpedia wikidata contains  r2r mapping errors ",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",
 			"Last Updated": "LastupdatedDate",
@@ -1448,7 +1891,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikidata, r2r, mapping, errors"
+            "Tags": "Dbpedia,Wikidata,r2r,Mapping,Errors"
 		},
 		"wikipedia links": {
 			"Title": "Dbpedia Wikipedia Links",
@@ -1463,7 +1906,7 @@
 			"Source": "DBPedia",
 			"Source_type": "File formats should go here",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Wikipedia,links,article"
+            "Tags": "Dbpedia,Wikipedia,Links,Article"
 		}
 	}
 }

@@ -266,27 +266,27 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
        print("-- Data is now available in Azure and Metadata in CKAN --")
    
         
-def download_data(data_links):
-     for link in data_links:
+# def download_data(data_links):
+#      for link in data_links:
          
-         '''iterate through all links in data_links
-         and download them one by one'''
+#          '''iterate through all links in data_links
+#          and download them one by one'''
           
-         # obtain filename by splitting url and getting last string
-         file_name = link.split('/')[-1]   
-         #print ("Downloading file:%s"%file_name)
+#          # obtain filename by splitting url and getting last string
+#          file_name = link.split('/')[-1]   
+#          #print ("Downloading file:%s"%file_name)
           
-         # create response object
-         r = requests.get(link, stream = True)
+#          # create response object
+#          r = requests.get(link, stream = True)
          
-         # download started
-         with open(file_name, 'wb') as f:
-            for chunk in r.iter_content(chunk_size = 1024*1024):
-                if chunk:
-                    f.write(chunk)
-         print ("%s downloaded!\n"%file_name) 
-     print ("All data downloaded!")
-     return
+#          # download started
+#          with open(file_name, 'wb') as f:
+#             for chunk in r.iter_content(chunk_size = 1024*1024):
+#                 if chunk:
+#                     f.write(chunk)
+#          print ("%s downloaded!\n"%file_name) 
+#      print ("All data downloaded!")
+#      return
 
 
 	 

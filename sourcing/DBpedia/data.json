@@ -708,8 +708,8 @@
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
             "Tags": "Dbpedia,Wikipedia,Infobox,Properties,Unredirected,Ontology"
 		},
-		"infobox properties definitions":{
-			"Title": "Dbpedia Infobox Properties Definitions.",
+		"infobox property definitions":{
+			"Title": "Dbpedia Infobox Property Definitions.",
 			"Description": "All properties predicates used in infoboxes.",
 			"Publisher": "RandomTrees",
 			"Created": "createdDate",

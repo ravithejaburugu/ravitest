@@ -58,7 +58,7 @@
 			"Source": "DBPedia",
 			"Source_type": "nt, nq, tsv",
 			"License": "Creative Common Attribution, GNU Free Documentation Licensing",
-            "Tags": "Dbpedia, Dbpedia NLP dataset, wikipedia, NLP, Lexicalization, Topic Signatures, Thematic Concepts, People's Grammatical Genders"
+            "Tags": "Dbpedia, Dbpedia NLP dataset, wikipedia, NLP, Lexicalization, Topic Signatures, Thematic Concepts, Peoples Grammatical Genders"
 		},
 		"dataid":{
 			"Title": "DBPedia Dataset Metadata as DataIDs",

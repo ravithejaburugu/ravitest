@@ -1,12 +1,19 @@
-# -*- coding: utf-8 -*-
 """
-Created on Fri Aug 11 11:00:16 2017
+Created on Mon Aug 07 18:13:49 2017
 
 @author: Admin
 """
 
+
+# coding: utf-8
+
+# #### Name : Download the dbpedia data into a Azure Blob
+# #### Author : spaturu
+# #### Date :  07/31/2017
+
+# In[1]:
+
 from azure.storage.blob import BlockBlobService, ContentSettings, PublicAccess, AppendBlobService
-import wget
 import requests
 import sys
 import os
@@ -15,13 +22,13 @@ from bs4 import BeautifulSoup
 import mimetypes
 from datetime import datetime
 mimetypes.init()
-import urllib
 import ckanapi
 import json
 import io
 from pprint import pprint
 from tqdm import tqdm
 from config import argument_config
+
 
 def assignAzureContainer(block_blob_service, container):
     # To check the connection is established sucessfully.
@@ -128,38 +135,29 @@ def downloadToAzure(urls, block_blob_service, container, dataset, ds_type):
 
 # Function executes for 'datasets', as artifacts are to be created for all 166 urls 
 def uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
-    urls= ''
-    artifact_old=''
-    urls_new=''
+    common_urls = []
+    artif_urls_dict = {}
+    artifacts = []
     
-    
-    for azr_url in azure_urls:
-        
-        if(len(urls)>1):
-            urls+= ', '
-        urls+= azr_url
-        
-            
+    for azr_url in azure_urls:        
+        file_name = azr_url.split("/")[-1].split(".")[0]
+        artifact = file_name[0:file_name.index('_en')].replace("_", " ")
+        artifacts.append(artifact)
+
+        print("datasets's dataset artifact --> " + artifact)
         print(azr_url)
         
-        file_name = azr_url.split("/")[-1].split(".")[0]
-        artifact=''
-        artifact = file_name[0:file_name.index('_en')].replace("_", " ")
-         
-        if(artifact==artifact_old):
-            urls_new+=urls
-        print("datasets's dataset artifact --> " + artifact)
+        if artifact in artif_urls_dict:
+            common_urls = artif_urls_dict[artifact]
+            common_urls.append(azr_url)
+        else:
+            common_urls = [azr_url]
         
-        if((artifact != artifact_old) and (artifact_old != '')):
+        artif_urls_dict[artifact] = common_urls
             
-            uploadMetaDataToCKAN([urls_new], metadata, dataset, ckan_host, api_key, artifact)
-            urls_new= ''
-            urls= ''
-            
-            
-            
-        
-        artifact_old=artifact
+    for artifact in artifacts:
+        #print("clubbed and retrieved -- "+artifact+" => "+str(artif_urls_dict[artifact]))
+        uploadMetaDataToCKAN(artif_urls_dict[artifact], metadata, dataset, ckan_host, api_key, artifact)
 
 
 # Upload all the metadata details into CKAN
@@ -198,7 +196,7 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
    with open(dataset+'_data.json', 'w') as fp:
        json.dump(metadata, fp)
 
-   print("METADATA --> ", metadata)
+   #print("METADATA --> ", metadata)
 
    # Connecting to CKAN
    ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
@@ -266,27 +264,27 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
        print("-- Data is now available in Azure and Metadata in CKAN --")
    
         
-# def download_data(data_links):
-#      for link in data_links:
+def download_data(data_links):
+     for link in data_links:
          
-#          '''iterate through all links in data_links
-#          and download them one by one'''
+         '''iterate through all links in data_links
+         and download them one by one'''
           
-#          # obtain filename by splitting url and getting last string
-#          file_name = link.split('/')[-1]   
-#          #print ("Downloading file:%s"%file_name)
+         # obtain filename by splitting url and getting last string
+         file_name = link.split('/')[-1]   
+         #print ("Downloading file:%s"%file_name)
           
-#          # create response object
-#          r = requests.get(link, stream = True)
+         # create response object
+         r = requests.get(link, stream = True)
          
-#          # download started
-#          with open(file_name, 'wb') as f:
-#             for chunk in r.iter_content(chunk_size = 1024*1024):
-#                 if chunk:
-#                     f.write(chunk)
-#          print ("%s downloaded!\n"%file_name) 
-#      print ("All data downloaded!")
-#      return
+         # download started
+         with open(file_name, 'wb') as f:
+            for chunk in r.iter_content(chunk_size = 1024*1024):
+                if chunk:
+                    f.write(chunk)
+         print ("%s downloaded!\n"%file_name) 
+     print ("All data downloaded!")
+     return
 
 
 	 
@@ -298,10 +296,8 @@ def main():
     dataset      = argument_config.get('dataset')
     ckan_host    = argument_config.get('ckan_host')
     api_key      = argument_config.get('ckan_key')
-
-    #print(len(sys.argv))
     
-   
+    #print(len(sys.argv))
     
     #print(account_name, account_key, container, dataset)
     
@@ -329,3 +325,6 @@ def main():
     
 if __name__ == "__main__":
     main()
+    
+
+    

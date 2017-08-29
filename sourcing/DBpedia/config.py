@@ -15,5 +15,6 @@ argument_config = {
 	'container': os.getenv('CONTAINER'),
     'dataset': os.getenv('DATASET'),
     'ckan_host': os.getenv('CKAN_HOST'),
-    'ckan_key': os.getenv('CKAN_KEY')
+    'ckan_key': os.getenv('CKAN_KEY'),
+	'owner_org': os.getenv('OWNER_ORG')
 }

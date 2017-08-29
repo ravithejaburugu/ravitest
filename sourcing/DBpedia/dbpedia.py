@@ -45,7 +45,7 @@ def get_links():
     r = requests.get(archive_url)
      
     # create beautiful-soup object
-    soup = BeautifulSoup(r.content)
+    soup = BeautifulSoup(r.content, "html.parser")
      
     # find all links on web-page
     links = soup.findAll('a')
@@ -128,7 +128,7 @@ def downloadToAzure(urls, block_blob_service, container, dataset, ds_type):
 
 
 # Function executes for 'datasets', as artifacts are to be created for all the bulk of URLs 
-def uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_key):
+def uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, owner_org):
     artifacts = []
     common_urls = []
     artif_urls_dict = {}
@@ -151,11 +151,11 @@ def uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_
             
     # loop to create package for each artifact in CKAN
     for artif in artif_urls_dict:
-        uploadMetaDataToCKAN(artif_urls_dict[artif], metadata, dataset, ckan_host, api_key, artif)
+        uploadMetaDataToCKAN(artif_urls_dict[artif], metadata, dataset, ckan_host, api_key, owner_org, artif)
 
 
 # Upload all the metadata details into CKAN
-def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, artifact):
+def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, owner_org, artifact):
    urls = ''
    sourceTypes = ''
    
@@ -203,16 +203,28 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
    # create or update the package for each artifact with latest Metadata of Azure datasets.
    if str(artifact_json) :
        package_title = artifact_json["Title"].replace('.','')       
+       tags = [{'name': str(tag).strip()} for tag in artifact_json["Tags"].split(',')]
        try:
-           package = ckan_ckan.action.package_create(name=package_name, 
-                              title=package_title,
-                              notes=artifact_json["Description"],
-                              maintainer=artifact_json["Publisher"],
-                              version=artifact_json["version"],
-                              license_id=artifact_json["License"],
-                              tags=[{'name':tag} for tag in artifact_json["Tags"].split(',')]
-                              )
-           #  package = ckan_ckan.action.package_show(id=package_name)
+           package = ckan_ckan.action.package_show(id=package_name)
+           if package:
+               package = ckan_ckan.action.package_update(id=package_name, 
+                                  title=package_title,
+                                  notes=artifact_json["Description"],
+                                  maintainer=artifact_json["Publisher"],
+                                  version=artifact_json["version"],
+                                  license_id=artifact_json["License"],
+                                  tags=tags 
+                                  )
+           else:
+               package = ckan_ckan.action.package_create(name=package_name, 
+                                  title=package_title,
+                                  notes=artifact_json["Description"],
+                                  maintainer=artifact_json["Publisher"],
+                                  version=artifact_json["version"],
+                                  license_id=artifact_json["License"],
+                                  tags=tags 
+                                  )
+           
            r = requests.post(ckan_host+'/api/action/resource_create',
                              data= {'Title':package_title,
                                      'package_id': package['id'],
@@ -220,6 +232,7 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
                                      'Azure URL':urls,
                                      'Source':artifact_json["Source"],
                                      'Source type':sourceTypes, 
+                                     'owner_org':owner_org,
                                      'url': 'upload'  # Needed to pass validation
                                    },
                              headers={'Authorization': api_key},
@@ -228,38 +241,9 @@ def uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, arti
            if r.status_code != 200:
                print('Error while creating resource: {0}'.format(r.content))
            else:
-               print('Created "{package_title}" package in CKAN'.format(**locals()))
-       except ckanapi.ValidationError as e:
-           if (e.error_dict['__type'] == 'Validation Error'): #and
-               if('name' in e.error_dict and e.error_dict['name'] == ['That URL is already in use.']):
-                   package = ckan_ckan.action.package_update(id=package_name, 
-                                  title=package_title,
-                                  notes=artifact_json["Description"],
-                                  maintainer=artifact_json["Publisher"],
-                                  version=artifact_json["version"],
-                                  license_id=artifact_json["License"],
-                                  tags=[{'name':tag} for tag in artifact_json["Tags"].split(',')]
-                                  )
-                   r = requests.post(ckan_host+'/api/action/resource_create',
-                                     data= {'Title':package_title,
-                                             'package_id': package['id'],
-                                             'name': package_title,
-                                             'Azure URL':urls,
-                                             'Source':artifact_json["Source"],
-                                             'Source type':sourceTypes,
-                                             'url': 'upload'  # Needed to pass validation
-                                           },
-                                     headers={'Authorization': api_key},
-                                     files=[('upload', file(path))])
-                   print(r.status_code)
-                   if r.status_code != 200:
-                       print('Error while creating resource: {0}'.format(r.content))
-                   else:
-                       print('"{package_title}" package got updated'.format(**locals()))
-               else: # exception other than creating CKAN package
-                   pass 
-           else: # exception while creating package
-               raise
+               print('Created "{package_title}" package in CKAN'.format(**locals()))       
+       except:
+           raise
 
         
 def download_data(data_links):
@@ -294,6 +278,7 @@ def main():
     dataset      = argument_config.get('dataset')
     ckan_host    = argument_config.get('ckan_host')
     api_key      = argument_config.get('ckan_key')
+    owner_org    = argument_config.get('owner_org')
     
     #print(len(sys.argv))
     
@@ -315,9 +300,9 @@ def main():
     
     # upload metadata into CKAN
     if dataset == 'datasets':
-        uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_key)
+        uploadMultipleArtifactsToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, owner_org)
     else:
-        uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, dataset)
+        uploadMetaDataToCKAN(azure_urls, metadata, dataset, ckan_host, api_key, owner_org, dataset)
     
 
     

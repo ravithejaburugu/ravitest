@@ -13,4 +13,4 @@ RUN pip install -r requirements.txt
 
 RUN ["/bin/bash", "-c", "source arguments.env"]
 
-CMD ["python", “dbpedia.py"]
+CMD ["/bin/bash", "-c","source arguments.env && python dbpedia.py"]

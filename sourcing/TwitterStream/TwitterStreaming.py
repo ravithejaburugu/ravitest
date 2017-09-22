@@ -20,9 +20,9 @@ class TwitterStreamListener(tweepy.StreamListener):
     """This is the stream listener, resposible for listeneing from Twitter
     and receiving data using countinuously Streaming."""
 
-    def __init__(self, handle):
+    def __init__(self, hashtags):
         self.t = 60
-        self.handle = handle
+        self.hashtags = hashtags
         kafka_broker_uri = 'localhost:9092'
         self.producer = KafkaProducer(bootstrap_servers=[kafka_broker_uri])
 
@@ -49,13 +49,13 @@ class TwitterStreamListener(tweepy.StreamListener):
         screen_names = []
         user_mentions = json_resp["entities"]["user_mentions"]
         for user_mention in user_mentions:
-            if user_mention["screen_name"] in self.handle:
+            if user_mention["screen_name"] in self.hashtags:
                 screen_name = user_mention["screen_name"]
                 screen_names.append(screen_name)
 
         for account_name in screen_names:
-            filename = open(account_name+'.json', 'a+')
-            json.dump(json_resp, filename, sort_keys=True, indent=4)
+            with open(account_name+'.json', 'a+') as acc_file:
+                json.dump(json_resp, acc_file, sort_keys=True, indent=4)
             # for custom consumer
             self.producer.send(account_name, json.dumps(json_resp))
             self.producer.flush()
@@ -69,19 +69,16 @@ class TwitterStreamListener(tweepy.StreamListener):
 
 def getTwitterIds(twitter_accounts):
     twitter_ids = []
-
     for ta in twitter_accounts:
         getIdUrl = "http://gettwitterid.com/?submit=GET+USER+ID&user_name="+ta
         r = requests.get(getIdUrl)
         soup = BeautifulSoup(r.content, "html.parser")
-
         p_list = soup.find_all('p')
         for p_val in p_list:
             if 'Twitter User ID:' in p_val:
                 id_line = p_list[p_list.index(p_val)+1]
                 id_val = re.split('[< >]', str(id_line))[2]
                 twitter_ids.append(id_val)
-
     return twitter_ids
 
 
@@ -95,42 +92,20 @@ def main():
     consumer_secret = argument_config.get('consumer_secret')
     access_token = argument_config.get('access_token')
     access_token_secret = argument_config.get('access_token_secret')
+    twitter_hashtags = argument_config.get('twitter_hashtags')
 
-    listener = TwitterStreamListener()
+    # Oauth functionality for Twitter
+    twitter_auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+    twitter_auth.set_access_token(access_token, access_token_secret)
 
-    auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-    auth.set_access_token(access_token, access_token_secret)
+    # Instantiating listener class.
+    listener = TwitterStreamListener(twitter_hashtags)
 
     # accessing StreamingAPI using tweepy to Authenticate as Step 1.
-    stream = tweepy.Stream(auth, listener)
+    stream = tweepy.Stream(twitter_auth, listener)
     logging.info("Twitter authenticated.")
 
-    # Hashtag to twitter pages
-    twitter_account_tags = ['WSJ',
-                            'business',
-                            'Forbes',
-                            'FT',
-                            'Reuters',
-                            'nytimes',
-                            'TheStreet',
-                            'TheEconomists',
-                            # 'TheEconomists',
-                            'WSJMarkets',
-                            'CNNMoney',
-                            'MarketWatch',
-                            'YahooFinance',
-                            'jimcramer',
-                            'bySamRo',
-                            'BrianSozzi',
-                            'TruthGundlach',
-                            'MarketFolly',
-                            'Carl_C_Icahn',
-                            'ReformedBroker',
-                            'Northman Trader',
-                            'Samir_Madani']
-
-    twitter_ids = getTwitterIds(twitter_account_tags)
-    print twitter_ids
+    twitter_ids = getTwitterIds(twitter_hashtags)
 
     while True:
         try:

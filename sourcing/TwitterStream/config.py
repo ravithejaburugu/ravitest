@@ -18,5 +18,6 @@ argument_config = {
     'consumer_secret': os.getenv('CONSUMER_SECRET', 'T62bKQcKgFlctabY63eTxQ0WlGc8GOV4AkvnMaAM87NRFw726m'),
     'access_token': os.getenv('ACCESS_TOKEN', '140517807-YTwIXlHvEKIRKxxTLm0USi9rYzbi2DMfu8dFOCqa'),
     'access_token_secret': os.getenv('ACCESS_TOKEN_SECRET', 'Qp3pvMcVF9ka4AmhgeNHzN9k918X8ALqcXjOkXLQHY1no'),
-    'twitter_hashtags': os.getenv('TWITTER_HASHTAGS', HASHTAGS)
+    'twitter_hashtags': os.getenv('TWITTER_HASHTAGS', HASHTAGS),
+    'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
 }

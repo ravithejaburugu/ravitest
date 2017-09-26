@@ -22,12 +22,13 @@ class TwitterStreamListener(tweepy.StreamListener):
     """This is the stream listener, resposible for listeneing from Twitter
     and receiving data using countinuously Streaming."""
 
-    def __init__(self, hashtags, twitter_ids, kafka_broker_uri):
+    def __init__(self, hashtags, twitter_ids, kafka_broker_uri, topic_name):
         self.t = 60
         self.hashtags = hashtags
         self.twitter_ids = twitter_ids
         self.siesta = 0
         self.nightnight = 0
+        self.topic_name = topic_name
         try:
             self.producer = KafkaProducer(bootstrap_servers=[kafka_broker_uri])
         except:
@@ -44,23 +45,24 @@ class TwitterStreamListener(tweepy.StreamListener):
             return True
 
         # Writing tweet to specific topic in Kafka.
+        tweet = {}
         user_mentions = json_resp["entities"]["user_mentions"]
-        for user_mention in user_mentions:
-            if user_mention["screen_name"] in self.hashtags:
-                account_name = user_mention["screen_name"]
-                with open(account_name+'.json', 'a+') as acc_file:
-                    json.dump(json_resp, acc_file, sort_keys=True, indent=4)
-                # Writing Topics into producer
-                self.producer.send(account_name, json.dumps(json_resp))
-                self.producer.flush()
-                logging.info("-- TWEET :: " + json_resp["text"])
+        user_mention = user_mentions[len(user_mentions)-1]
+
+        if user_mention["screen_name"] in self.hashtags:
+            tweet[user_mention["screen_name"]] = json.dumps(json_resp)
+
+            # Writing Tweet to Kafa Topics into producer
+            self.producer.send(self.topic_name, bytes(tweet))
+            self.producer.flush()
+            logging.info("-- TWEET :: " + json_resp["text"])
 
     def on_error(self, status_code):
         if status_code == 420:
             sleepy = 60 * math.pow(2, self.siesta)
-            logging.warn("A reconnection attempt will occur in {0} minutes, due to ERROR: {1}."
+            logging.warn("A reconnection attempt will occur in {0} minutes,\
+                         due to ERROR: {1}."
                          .format(str(sleepy/60), str(status_code)))
-
             time.sleep(sleepy)
             self.siesta += 1
         elif status_code == 401:
@@ -68,7 +70,8 @@ class TwitterStreamListener(tweepy.StreamListener):
             sys.exit()
         else:
             sleepy = 5 * math.pow(2, self.nightnight)
-            logging.warn("A reconnection attempt will occur in {0} seconds, due to ERROR: {1}."
+            logging.warn("A reconnection attempt will occur in {0} seconds,\
+                         due to ERROR: {1}."
                          .format(str(sleepy), str(status_code)))
             time.sleep(sleepy)
             self.nightnight += 1
@@ -108,6 +111,7 @@ if __name__ == '__main__':
     access_token_secret = argument_config.get('access_token_secret')
     twitter_hashtags = argument_config.get('twitter_hashtags')
     kafka_broker_uri = argument_config.get('kafka_broker_uri')
+    topic_name = argument_config.get('topic_name')
 
     # OAuth authentication functionality for Twitter
     twitter_auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
@@ -119,7 +123,7 @@ if __name__ == '__main__':
     try:
         # Instantiating listener class.
         listener = TwitterStreamListener(twitter_hashtags, twitter_ids,
-                                         kafka_broker_uri)
+                                         kafka_broker_uri, topic_name)
     except:
         logging.error("Error while creating Stream Listener : ")
 

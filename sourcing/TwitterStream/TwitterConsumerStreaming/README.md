@@ -37,7 +37,5 @@ Below are the list of environment variables to be part of the execution.
     * `MONGO_INDEX_NAME`: The field with unique values to create an index on
 
 
-## Note:
-
 Once deployed and run, the script should consume messages from the broker and publish to MongoDB. 
 

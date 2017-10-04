@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """
 Created on Wed Sep 27 13:27:54 2017
-@author: RAVITHEJA
+@author: Anshul
 """
 
 import logging
@@ -21,7 +21,7 @@ class KafkaConsumerForTwitterStream():
         if index_name not in self.col.index_information():
             self.col.create_index(index_name, unique=False)
         try:
-            self.consumer = KafkaConsumer(self.kafka_topic, bootstrap_servers=[self.kafka_broker_uri],
+            self.consumer = KafkaConsumer(self.kafka_topic, bootstrap_servers=[kafka_broker_uri],
                                           value_deserializer=lambda m: json.loads(m.decode('ascii')),
                                           auto_offset_reset='earliest', enable_auto_commit=False)
         except:
@@ -30,13 +30,15 @@ class KafkaConsumerForTwitterStream():
     def initiateKafkaConsumer(self):
         
         #self.consumer.subscribe(self.kafka_topic)
-        for message in self.consumer:
-            object = {self.kafka_topic : message}
-            logging.info("Loading Consumer message in Mongo")
-            self.col.insert_one(object)
-            print (type(object))
-            object.clear
-
+        try:
+            for message in self.consumer:
+                object = {self.kafka_topic : message}
+                logging.info("Loading Consumer message in Mongo")
+                self.col.insert_one(object)
+                object.clear
+        except:
+            logging.error("Error in loading data to Mongo")
+    
 
 if __name__ == '__main__':
     """ Twitter Streaming towards Kafka Consumer."""

@@ -9,11 +9,13 @@ The Dockerfile has the information to build a docker image which in turn is used
 Below are the list of environment variables to be part of the execution.
 
 * **Agent**
+
 KAFKA_BROKER_URI: The URI of the deployed Kafka broker to connect to (default: localhost:9092)
 
 KAFKA_TOPIC: The Kafka topic the consumer should consume messages from (default: twitterhandle)
 
 * **MongoDB**
+
 REQUIRES_AUTH: Whether or not the MongoDB instance to source into requires authentication (default: false)
 
 MONGO_URI: The URI of the deployed MongoDB instance (default: localhost:27017)

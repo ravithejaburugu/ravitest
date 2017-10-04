@@ -1,6 +1,6 @@
 # Twitter Consumer Streaming
 ## Overview
-This project consumes the 'TwitterHandle' topic from the Kafka broker through Kafka consumer and stores into MongoDB. 
+This project consumes the specified (default: twitterhandle) topic from the Kafka broker through Kafka consumer and stores into MongoDB. 
 
 ## Instructions
 

@@ -49,7 +49,6 @@ if __name__ == '__main__':
                         level=logging.INFO)
 
     # Collecting Authentication and other details from arguments.
-    twitter_hashtags = argument_config.get('twitter_hashtags')
     kafka_broker_uri = argument_config.get('kafka_broker_uri')
     kafka_topic = argument_config.get('kafka_topic')
 

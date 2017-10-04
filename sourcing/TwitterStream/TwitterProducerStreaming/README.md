@@ -15,7 +15,7 @@ Below are the list of arguments to be part of the execution.
 * 'CONSUMER_SECRET': Twitter consumer secret authenticates the source application user.
 * 'ACCESS_TOKEN': Twitter access token replaces the user access for OAuth.
 * 'ACCESS_TOKEN_SECRET': Twitter access token secret authenticates without password, using OAuth.
-* 'HASHTAGS': Twitter handles whose data needs to be streamed
+* 'TWITTER_HASHTAGS': Twitter handles whose data needs to be streamed
 * 'KAFKA_BROKER_URI': URI (including host name and port number, if applicable), where Kafka server is running.
 * 'KAFKA_TOPIC_NAME': A Topic to be used by Kafka Producer to write the message and Kafka Consumer to read from the same.
 

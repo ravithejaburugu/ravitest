@@ -21,6 +21,5 @@ mongo_config = {
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
     'db_name': os.getenv('MONGO_DB_NAME', ''),
     'col_name': os.getenv('MONGO_COL_NAME', ''),
-    'mongo_index_name': os.getenv('MONGO_INDEX_NAME', ''),
-    'ssl_required': os.getenv('MONGO_SSL_REQUIRED', False)
+    'mongo_index_name': os.getenv('MONGO_INDEX_NAME', '')
 }

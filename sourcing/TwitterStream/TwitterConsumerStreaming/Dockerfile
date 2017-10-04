@@ -4,9 +4,9 @@ RUN  apk add --no-cache --update bash && \
      apk add python py-pip gcc python-dev build-base g++ musl-dev tar ca-certificates openssl && \
      pip install --upgrade pip
 
-ADD . /TWITTERSTREAMING
+ADD . /TWITTERCONSUMER
 
-WORKDIR /TWITTERSTREAMING
+WORKDIR /TWITTERCONSUMER
 
 RUN pip install -r requirements.txt
 

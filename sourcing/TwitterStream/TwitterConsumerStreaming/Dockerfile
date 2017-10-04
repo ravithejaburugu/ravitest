@@ -10,4 +10,4 @@ WORKDIR /TWITTERSTREAMING
 
 RUN pip install -r requirements.txt
 
-CMD ["/bin/bash", "-c", "source arguments.env && python TwitterStreaming.py"]
+CMD ["/bin/bash", "-c", "source arguments.env && python TwitterConsumerStreaming.py"]

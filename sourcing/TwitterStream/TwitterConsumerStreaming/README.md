@@ -10,9 +10,10 @@ Below are the list of environment variables to be part of the execution.
 
 * **Agent**
 
-    * `KAFKA_BROKER_URI`: The URI of the deployed Kafka broker to connect to (default: localhost:9092)
+    * `KAFKA_BROKER_URI`: URI (including host name and port number, if applicable), where Kafka server is running.
+    
+    * `KAFKA_TOPIC_NAME`: A Topic to be used by Kafka Producer to write the message and Kafka Consumer to read from the same.
 
-    * `KAFKA_TOPI`: The Kafka topic the consumer should consume messages from (default: twitterhandle)
 
 * **MongoDB**
 

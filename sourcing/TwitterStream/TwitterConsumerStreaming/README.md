@@ -38,7 +38,6 @@ Below are the list of environment variables to be part of the execution.
 
 
 ## Note:
-* Twitter Account handles are included in the config file. For any updates in the Twitter Accounts/Hashtags to be modified at the same location ('HASHTAGS' list in the config.py). To get these changes reflected, Streaming program has to be recompiled and re-run.
 
-Once deployed and run, the script should stream the tweets and data is to be published in MongoDB. 
+Once deployed and run, the script should consume messages from the broker and publish to MongoDB. 
 

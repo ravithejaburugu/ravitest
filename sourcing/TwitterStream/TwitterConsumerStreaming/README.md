@@ -16,29 +16,25 @@ Below are the list of environment variables to be part of the execution.
 
 * **MongoDB**
 
-    * `REQUIRES_AUTH`: Whether or not the MongoDB instance to source into requires
-    authentication (default: `false`)
+    * `REQUIRES_AUTH`: If the MongoDB instance to source into requires authentication (default: `false`)
     
     * `MONGO_URI`: The URI of the deployed MongoDB instance (default: `localhost:27017`)
     
-    * `MONGO_USER`: If authentication is required, the MongoDB username (default: `admin`)
+    * `MONGO_USER`: If authentication is required, the MongoDB username
     
     * `MONGO_PASSWORD`: If authentication is required, the MongoDB password
     
-    * `MONGO_AUTH_SOURCE`: If authentication is required, the database which 
-    MongoDB uses as its authentication source (default: `admin`)
+    * `MONGO_AUTH_SOURCE`: If authentication is required, the database which MongoDB uses as its authentication source (default: `dbadmin`)
     
     * `MONGO_AUTH_MECHANISM`: If authentication is required, the method which 
-    MongoDB uses as its authentication mechanism (default: `SCRAM-SHA-1`)
+    MongoDB uses as its authentication mechanism (default: `MONGODB-CR`)
     
-    * `MONGO_DB_NAME`: The name of the MongoDB database to 
-    source into (default: `foursquare`)
+    * `MONGO_DB_NAME`: The name of the MongoDB database to source into 
     
     * `MONGO_COL_NAME`: The name of the MongoDB collection within the above database to 
-    source into (default: `hotels`)
+    source into
     
-    * `MONGO_INDEX_NAME`: The field with unique values to create 
-    an index on (default: `_hash`)
+    * `MONGO_INDEX_NAME`: The field with unique values to create an index on
 
 
 ## Note:

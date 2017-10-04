@@ -1,6 +1,6 @@
-# Twitter Streaming
+# Twitter Producer Streaming
 ## Overview
-This project streams the Twitter accounts based on Twitter hashtags using Kafka. Kafka Producer writes the streamed tweets to Kafka topics in JSON format. Kafka Consumer consumes the tweets as is and passes them to store in MongoDB.
+This project streams the Twitter data for the handles mentioned under the config file using Twitter's Live Streaming API. Kafka Producer writes the streamed tweets to Kafka topics in JSON format. Kafka Consumer consumes the tweets as is and passes them to store in MongoDB.
 
 ## Instructions
 An application has to be created in apps.twitter.com to get our application recognised by Twitter. 
@@ -22,3 +22,4 @@ Below are the list of arguments to be part of the execution.
 * Twitter Account handles are included in the config file. For any updates in the Twitter Accounts/Hashtags to be modified at the same location ('HASHTAGS' list in the config.py). To get these changes reflected, Streaming program has to be recompiled and re-run.
 
 Once deployed and run, the script should stream the tweets and data is to be published in MongoDB. 
+

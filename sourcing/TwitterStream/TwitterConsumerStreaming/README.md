@@ -35,6 +35,8 @@ Below are the list of environment variables to be part of the execution.
     * `MONGO_COL_NAME`: The name of the MongoDB collection within the database where data is grouped
     
     * `MONGO_INDEX_NAME`: The field with unique values to create an index on
+    
+    * `MONGO_SSL_REQUIRED`: MongoDB clients can use TLS/SSL to encrypt connections to mongod and mongos instances.
 
 
 Once deployed and run, the script should consume messages from the broker and publish to MongoDB. 

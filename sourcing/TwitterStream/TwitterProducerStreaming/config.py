@@ -6,7 +6,7 @@ Created on Thu Sep 21 16:48:44 2017
 
 import os
 
-TWITTER_ACCOUNT_IDS = {"business":"34713362",
+TWITTER_ACCOUNT_IDS = { "business":"34713362",
                         "WSJ":"3108351",
                         "WSJMarkets":"28164923",
                         "Forbes":"91478624",
@@ -55,7 +55,7 @@ TWITTER_ACCOUNT_IDS = {"business":"34713362",
                         "jessefelder":"1473431",
                         "DailyFXTeam":"28366310",
                         "Ukarlewitz":"37284991",
-                        "Stephanie_Link":"455309376",
+                        "Stephanie_Link":"455309376"
                         }
 
 argument_config = {

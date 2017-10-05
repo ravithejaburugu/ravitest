@@ -22,7 +22,7 @@ Below are the list of arguments to be part of the execution.
   * `KAFKA_TOPIC_NAME`: A Topic to be used by Kafka Producer to write the message and Kafka Consumer to read from the same.
 
 ## Note:
-* Twitter Account handles are included in the config file. For any updates in the Twitter Accounts/Hashtags to be modified at the same location ('HASHTAGS' list in the config.py). To get these changes reflected, Streaming program has to be recompiled and re-run.
+* Twitter Account handles are included in the config file as a Dictionary-key:Value pair (Key- HandleNames, Value-Userids). For any updates in the Twitter Accounts/Hashtags to be modified at the same location ('HASHTAGS' list in the config.py). To get these changes reflected, Streaming program has to be recompiled and re-run.
 
 Once deployed and run, the script should stream the tweets and data is to be published in MongoDB. 
 

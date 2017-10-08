@@ -59,11 +59,11 @@ TWITTER_ACCOUNT_IDS = { "business":"34713362",
                         }
 
 argument_config = {
-    'consumer_key': os.getenv('CONSUMER_KEY', ''),
-    'consumer_secret': os.getenv('CONSUMER_SECRET', ''),
-    'access_token': os.getenv('ACCESS_TOKEN', ''),
-    'access_token_secret': os.getenv('ACCESS_TOKEN_SECRET', ''),
+    'consumer_key': os.getenv('CONSUMER_KEY', 'q82WzYf6G4pEIy6juEVf0yUyL'),
+    'consumer_secret': os.getenv('CONSUMER_SECRET', 'T7sgpGhMsaIoOMfjBVhtbxhf3OQyV11cRnHhH9InPbPsHqx1Ev'),
+    'access_token': os.getenv('ACCESS_TOKEN', '75057484-VuMhurqBdy48Yl4w0IQNGcKUv0Mphi0j4BDnBB91Q'),
+    'access_token_secret': os.getenv('ACCESS_TOKEN_SECRET', 'MGHQb61i57AOZJAPslMVNAcRxQqMnsFTQlQI7NDHFuOjo'),
     'twitter_hashtags': os.getenv('TWITTER_HASHTAGS', TWITTER_ACCOUNT_IDS),
     'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
-    'kafka_topic': os.getenv('KAFKA_TOPIC', 'twitterhandle')
+    'kafka_topic': os.getenv('KAFKA_TOPIC', 'tweeter')
 }

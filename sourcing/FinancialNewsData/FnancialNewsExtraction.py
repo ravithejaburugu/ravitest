@@ -28,12 +28,14 @@ def main():
     site_map_urls = argument_config.get('site_map_urls')
     scrapy_urls = argument_config.get('scrapy_urls')
     
-    rssFeedParser = RSSFeedParser(rss_feed_urls)
+    rssFeedParser = RSSFeedParser()
+    rssFeedParser.parseFeed(rss_feed_urls)
     
-    sitemapParser = SitemapParser(site_map_urls)
+    sitemapParser = SitemapParser()
+    sitemapParser.crawlAndScrape(site_map_urls)
     
-    scrapyExtractor = ScrapyExtractor(scrapy_urls)
-        
+    scrapyExtractor = ScrapyExtractor()
+    scrapyExtractor.performScraping(scrapy_urls)
     
 
 

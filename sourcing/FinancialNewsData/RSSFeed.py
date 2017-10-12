@@ -6,6 +6,7 @@ Created on Thu Oct 12 12:16:31 2017
 """
 
 import logging
+import feedparser
 
 
 class RSSFeedParser():
@@ -17,5 +18,8 @@ class RSSFeedParser():
 
 
     def parseFeed(self, scrapeURLs):
-        pass
+        for rss_url in scrapeURLs:
+            print rss_url
+            feed = feedparser.parse(rss_url)
+            print feed
     

@@ -6,6 +6,8 @@ Created on Thu Oct 12 12:16:53 2017
 """
 
 import logging
+import requests
+from bs4 import BeautifulSoup
 
 
 class SitemapParser():
@@ -17,5 +19,11 @@ class SitemapParser():
 
 
     def crawlAndScrape(self, scrapeURLs):
-        pass
+        
+        for url in scrapeURLs:
+            r = requests.get(url)
+            text = r.text
+            soup = BeautifulSoup(text)
+            
+
     

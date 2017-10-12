@@ -18,6 +18,7 @@ class RSSFeedParser():
 
 
     def parseFeed(self, scrapeURLs):
+        print("parseFeed")
         for rss_url in scrapeURLs:
             print rss_url
             feed = feedparser.parse(rss_url)

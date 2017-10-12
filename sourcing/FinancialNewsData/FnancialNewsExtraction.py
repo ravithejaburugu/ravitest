@@ -32,7 +32,7 @@ def main():
     rssFeedParser.parseFeed(rss_feed_urls)
     
     sitemapParser = SitemapParser()
-    sitemapParser.crawlAndScrape(site_map_urls)
+    #sitemapParser.crawlAndScrape(site_map_urls)
     
     scrapyExtractor = ScrapyExtractor()
     scrapyExtractor.performScraping(scrapy_urls)

@@ -34,7 +34,7 @@ SCRAPY_URLS = {
 
 
 argument_config = {
-    'rss_feed_urls': os.getenv('RSS_FEED_URLS', RSS_FEED_URLS),
-    'site_map_urls': os.getenv('SITE_MAP_URLS', SITE_MAP_URLS),
-    'scrapy_urls': os.getenv('SCRAPY_URLS', SCRAPY_URLS),
+    'rss_feed_urls': os.getenv('RSS_FEED_URLS', RSS_FEED_URLS.values()),
+    'site_map_urls': os.getenv('SITE_MAP_URLS', SITE_MAP_URLS.values()),
+    'scrapy_urls': os.getenv('SCRAPY_URLS', SCRAPY_URLS.values()),
 }

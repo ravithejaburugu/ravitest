@@ -14,7 +14,7 @@ def make_mongo_connection(col_name):
     print("col_name --> "+col_name)
     client = MongoClient(mongo_config.get('mongo_uri'),
                          ssl=mongo_config.get('ssl_required'))
-    if mongo_config.get('requires_auth') == 'false':
+    if mongo_config.get('requires_auth') == 'true':
         client.the_database.authenticate(mongo_config.get('mongo_username'),
                                          mongo_config.get('mongo_password'),
                                          source=mongo_config.get(

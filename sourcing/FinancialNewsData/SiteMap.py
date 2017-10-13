@@ -36,7 +36,7 @@ class SitemapParser():
                 if line.startswith('Sitemap'):    # this is for allowed url
                     print("line = "+line)
                     sitemap_url = line.split(': ')[1].split(' ')[0]
-                    if sitemap_url.split(".") !="gz":
+                    if sitemap_url.split(".")[-1] !="gz":
                         http_response = self.crawlSiteMap(sitemap_url)
                         self.insertMongo(source, http_response)
                     else:
@@ -87,10 +87,27 @@ class SitemapParser():
             print children[0].text
             locs.append(children[0].text)
             for loc in locs:
-                 if loc.split(".")[-1] =="gz":
-                     self.gz_urls(loc)
+                if loc.split(".")[-1] =="gz":
+                     input1 = self.gz_urls(loc)
+                     print input1
+    
+    def gz_urls(self,loc):
+        print "<<<<<<<<<>>>>>>>>>"+loc
+        response = requests.get(loc, stream=True)
+        sitemap_xml = self.decompress_stream(response.raw)
+        tree = etree.parse(sitemap_xml)
+        root = tree.getroot()
+        print "The number of sitemap tags are {0}".format(len(root))
+        input1=[]
+        for sitemap1 in root:
+            children1 = sitemap1.getchildren()
+            input1.append(children1[0].text)
+        return input1
+        
                         
 
+    
+    
     def decompress_stream(self, rraw):
         READ_BLOCK_SIZE = 1024 * 8
         result = StringIO()

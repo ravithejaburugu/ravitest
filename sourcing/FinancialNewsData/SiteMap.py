@@ -40,11 +40,14 @@ class SitemapParser():
                         http_response = self.crawlSiteMap(sitemap_url)
                         self.insertMongo(source, http_response)
                     else:
-                        self.unzipURL(sitemap_url)
+                        self.unzipURL(source, sitemap_url)
+                        #self.insertMongo(source, http_response)
+                        
+                        
                         
 
         
-    def crawlSiteMap(self, sitemap_url):
+    def crawlSiteMap(self,sitemap_url):
         index_response = requests.get(sitemap_url) 
         index_root = etree.fromstring(index_response.content)
         #print "The number of sitemap tags are {0}".format(len(index_root))
@@ -73,40 +76,51 @@ class SitemapParser():
                     
         return http_responses
                 
-
-
-    def unzipURL(self, sitemap_url):
+    def unzipURL(self,source, sitemap_url):
         response = requests.get(sitemap_url, stream=True)
         sitemap_xml = self.decompress_stream(response.raw)
         tree = etree.parse(sitemap_xml)
         root = tree.getroot()
-        print "The number of sitemap tags are {0}".format(len(root))
+        print "The number of first_gz tags are {0}".format(len(root))
         locs=[]
+        i=1
         for sitemap in root:
-            children = sitemap.getchildren()
-            print children[0].text
-            locs.append(children[0].text)
-            for loc in locs:
-                if loc.split(".")[-1] =="gz":
-                     input1 = self.gz_urls(loc)
-                     print input1
-    
-    def gz_urls(self,loc):
-        print "<<<<<<<<<>>>>>>>>>"+loc
-        response = requests.get(loc, stream=True)
-        sitemap_xml = self.decompress_stream(response.raw)
-        tree = etree.parse(sitemap_xml)
-        root = tree.getroot()
-        print "The number of sitemap tags are {0}".format(len(root))
-        input1=[]
-        for sitemap1 in root:
-            children1 = sitemap1.getchildren()
-            input1.append(children1[0].text)
-        return input1
+                children = sitemap.getchildren()
+                print i,children[0].text
+                i=i+1
+                type(children)
+                locs.append(children[0].text)
+                len(locs)
         
+        j=1
+        for loc in locs:
+             if loc.split(".")[-1] =="gz":
+                 response = requests.get(loc, stream=True)
+                 sitemap_xml = self.decompress_stream(response.raw)
+                 tree = etree.parse(sitemap_xml)
+                 root = tree.getroot()
+                 print j,"Final_urls are {0}".format(len(root)) + " at {0} ".format(loc.split("/")[-1])
+                 j=j+1
+                 final_urls=[]
+                 for sitemap in root:
+                        children = sitemap.getchildren()
+                        final_urls.append(children[0].text)
                         
+                 print len(final_urls)
+                 http_responses1 =[]
+                 for final_url in final_urls:
+                     http = httplib2.Http()
+                     http_headers, http_response = http.request(final_url, 'GET')    
+                     if http_headers['status'] == "200":
+                        http_responses1.append(http_response)
+                        self.insertMongo(source, http_responses1)
+                    
+                
+                     
 
-    
+        
+    ##def gz_urls(self,loc):
+        
     
     def decompress_stream(self, rraw):
         READ_BLOCK_SIZE = 1024 * 8
@@ -120,7 +134,7 @@ class SitemapParser():
                 
     def insertMongo(self, source, http_response):
         client = MongoClient()
-        db = client.html
-        collection = db.html
+        db = client.html1
+        collection = db.html1
         collection.insert_one({source: http_response})
 

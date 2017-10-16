@@ -6,38 +6,57 @@ Created on Thu Oct 12 12:16:31 2017
 """
 
 import logging
+import threading
 import feedparser
-from config import mongo_config
-from mongoDBConnection import make_mongo_connection
+from mongoDBConnection import insert_into_mongo
 
 
 class RSSFeedParser():
 
     def __init__(self):
         logging.basicConfig(format='%(asctime)s %(levelname)s \
-                            %(module)s.%(funcName)s %(message)s',
+                            %(module)s.%(funcName)s :: %(message)s',
                             level=logging.INFO)
 
     def parseFeed(self, rss_feed_urls):
-        print("parseFeed")
-        for rss_feed in rss_feed_urls:
-            print(rss_feed, rss_feed_urls[rss_feed])
-            feed = feedparser.parse(rss_feed_urls[rss_feed])
-            
-            feed = str(feed).replace('\'', '"')
-            print(feed)
+        """Iterates each RSS to pass the URL for parsing Feeds."""
 
-            rss_object = {rss_feed: feed}
+        i = 0
+        for rss_feed_name in rss_feed_urls:
+            rss_feed_url = rss_feed_urls[rss_feed_name]
 
-            logging.info("Loading Consumer message in Mongo")
+            logging.info("RSS feed of " + rss_feed_name + "[" + rss_feed_url
+                         + "]")
+            # Create new thread.
+            i += 1
+            feed_thread = rssThread(i, rss_feed_name, i, rss_feed_url)
+            feed_thread.start()
+        return i
 
-            mongo_colln = make_mongo_connection(rss_feed)
-            index_name = mongo_config.get('mongo_index_name')
-            if index_name not in mongo_colln.index_information():
-                mongo_colln.create_index(index_name, unique=False)
 
-            mongo_colln.insert_one(rss_object)
-            print("INSERTED SUCCESFULLY")
-            rss_object.clear
-            
-            break
+class rssThread(threading.Thread):
+
+    def __init__(self, threadID, name, counter, url):
+        threading.Thread.__init__(self)
+        self.threadID = threadID
+        self.name = name
+        self.counter = counter
+        self.url = url
+
+    def run(self):
+        print "Starting " + self.name
+        self.parseAndSave(self.name, self.url)
+        print "Exiting " + self.name
+
+    def parseAndSave(self, feedName, feedURL):
+        feed = feedparser.parse(feedURL)
+
+        feed = str(feed).replace('\'', '"')
+        logging.info(feed)
+
+        rss_object = {feedName: feed}
+
+        logging.info("Loading Feed in MongoDB...")
+
+        if insert_into_mongo(feedName, rss_object):
+            logging.info("INSERTED SUCCESSFULLY.")

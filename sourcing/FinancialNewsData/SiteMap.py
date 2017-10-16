@@ -1,8 +1,7 @@
-# -*- coding: utf-8 -*-
 """
 Created on Thu Oct 12 12:16:53 2017
 
-@author: RAVITHEJA
+@author:Harikumar
 """
 
 import requests
@@ -15,18 +14,16 @@ from functools import partial
 from lxml import etree
 from StringIO import StringIO
 from bs4 import BeautifulSoup
-#import robotparser
 
 
 class SitemapParser():
-
     def __init__(self):
         logging.basicConfig(format='%(asctime)s %(levelname)s \
                             %(module)s.%(funcName)s %(message)s',
                             level=logging.INFO)
 
     def crawlAndScrape(self, site_map_urls):
-        #print site_map_urls
+        # It fetches all sitmap urls from robots.txt, filter the zip,xml urls
         for source in site_map_urls:
             print(source, site_map_urls[source])
             robots_url = site_map_urls[source]
@@ -36,93 +33,92 @@ class SitemapParser():
                 if line.startswith('Sitemap'):    # this is for allowed url
                     print("line = "+line)
                     sitemap_url = line.split(': ')[1].split(' ')[0]
-                    if sitemap_url.split(".")[-1] !="gz":
-                        http_response = self.crawlSiteMap(sitemap_url)
-                        self.insertMongo(source, http_response)
+                    print "The Sitemap url from robot.txt ::: {0} "\
+                        .format(sitemap_url)
+                    if sitemap_url.split(".")[-1] != "gz":
+                        self.crawlSiteMap(source, sitemap_url)
+                        # self.insertMongo(source, http_response)
                     else:
                         self.unzipURL(source, sitemap_url)
-                        #self.insertMongo(source, http_response)
-                        
-                        
-                        
 
-        
-    def crawlSiteMap(self,sitemap_url):
-        index_response = requests.get(sitemap_url) 
+    def crawlSiteMap(self, source, sitemap_url):
+        # Proces each .xml urls from robots.txt and return html object.
+        index_response = requests.get(sitemap_url)
         index_root = etree.fromstring(index_response.content)
-        #print "The number of sitemap tags are {0}".format(len(index_root))
-        
-        http_responses = []
+        print "The number of xml urls {0}".format(len(index_root))
+
+        # Process  all sub .xml urls available,store in list
+        h = 1
         for sitemap in index_root:
-            print("sitemap = ")
-            print(sitemap)
             index_children = sitemap.getchildren()
             index_loc = index_children[0].text
-            
-            print("index_loc = "+ index_loc)
-            urlset_response = requests.get(index_loc) 
+            print "Processing the {0} url ".format(h) + "amoung {0} Urls"\
+                .format(len(index_root))
+
+            urlset_response = requests.get(index_loc)
             soup = BeautifulSoup(urlset_response.text)
             urlset_locs = soup.find_all("loc")
-            print "The number of locs tags are {0}".format(len(urlset_locs))
-            
+            print " Processing the {0} url and it contains".format(h) \
+                + "{0} urls" .format(len(urlset_locs))
+            h = h + 1
+            k = 1
+            # Process all sub .xml urls list,returns html object for mongo
             for urlset_loc in urlset_locs:
                 final_url = urlset_loc.contents[0]
-            
+                print k, "The url is {0}".format(final_url) + \
+                    " inserted into mongo"
                 http = httplib2.Http()
-                http_headers, http_response = http.request(final_url, 'GET')    
+                http_headers, http_response = http.request(final_url, 'GET')
                 if http_headers['status'] == "200":
-                    #print(http_response)
-                    http_responses.append(http_response)
-                    
-        return http_responses
-                
-    def unzipURL(self,source, sitemap_url):
+                    self.insertMongo(source, http_response)
+                    k = k + 1
+
+    def unzipURL(self, source, sitemap_url):
+        # Process the zip url from robot.txt and store in mongo
         response = requests.get(sitemap_url, stream=True)
         sitemap_xml = self.decompress_stream(response.raw)
         tree = etree.parse(sitemap_xml)
         root = tree.getroot()
-        print "The number of first_gz tags are {0}".format(len(root))
-        locs=[]
-        i=1
+        print "The number of gz tags are {0}".format(len(root))
+        locs = []
+        i = 1
         for sitemap in root:
                 children = sitemap.getchildren()
-                print i,children[0].text
-                i=i+1
+                print i, children[0].text
+                i = i + 1
                 type(children)
-                locs.append(children[0].text)
+                locs.append(children[0].text)      # 23 urls
                 len(locs)
-        
-        j=1
-        for loc in locs:
-             if loc.split(".")[-1] =="gz":
-                 response = requests.get(loc, stream=True)
-                 sitemap_xml = self.decompress_stream(response.raw)
-                 tree = etree.parse(sitemap_xml)
-                 root = tree.getroot()
-                 print j,"Final_urls are {0}".format(len(root)) + " at {0} ".format(loc.split("/")[-1])
-                 j=j+1
-                 final_urls=[]
-                 for sitemap in root:
-                        children = sitemap.getchildren()
-                        final_urls.append(children[0].text)
-                        
-                 print len(final_urls)
-                 http_responses1 =[]
-                 for final_url in final_urls:
-                     http = httplib2.Http()
-                     http_headers, http_response = http.request(final_url, 'GET')    
-                     if http_headers['status'] == "200":
-                        http_responses1.append(http_response)
-                        self.insertMongo(source, http_responses1)
-                    
-                
-                     
 
-        
-    ##def gz_urls(self,loc):
-        
-    
+        j = 1
+        for loc in locs:
+            if loc.split(".")[-1] == "gz":
+                print j, " The procesing url is {0} ".format(loc)
+                response = requests.get(loc, stream=True)
+                sitemap_xml = self.decompress_stream(response.raw)
+                tree = etree.parse(sitemap_xml)
+                root = tree.getroot()
+                print " <<<>>>> Final_urls are {0}".format(len(root)) + \
+                    " at {0} ".format(loc.split("/")[-1])
+                j = j + 1
+
+                final_urls = []
+                for sitemap in root:
+                    children = sitemap.getchildren()
+                    final_urls.append(children[0].text)
+
+                k = 1
+                for final_url in final_urls:
+                    http = httplib2.Http()
+                    http_headers, http_response =  \
+                        http.request(final_url, 'GET')
+                    if http_headers['status'] == "200":
+                        print " Inserted {0} url into mongo  ".format(k)
+                        k = k+1
+                        self.insertMongo(source, http_response)
+
     def decompress_stream(self, rraw):
+        # Decompress the zip url
         READ_BLOCK_SIZE = 1024 * 8
         result = StringIO()
         d = zlib.decompressobj(16 + zlib.MAX_WBITS)
@@ -131,10 +127,9 @@ class SitemapParser():
         result.seek(0)
         return result
 
-                
     def insertMongo(self, source, http_response):
+        # Inser into mongodb
         client = MongoClient()
-        db = client.html1
-        collection = db.html1
+        db = client.html_csff
+        collection = db.html_cs1
         collection.insert_one({source: http_response})
-

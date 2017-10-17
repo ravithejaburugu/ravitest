@@ -44,16 +44,18 @@ def make_mongo_connection(collection_name):
     return col
 
 
-def insert_into_mongo(rss_feed, rss_object):
-    """To insert a news feed/post, given in JSON format, into MongoDB."""
-
+def initialize_mongo(source):
     # Creating Mongo Collection
-    mongo_colln = make_mongo_connection(rss_feed)
+    mongo_colln = make_mongo_connection(source)
     mongo_index_name = mongo_config.get('mongo_index_name')
     if mongo_index_name not in mongo_colln.index_information():
         mongo_colln.create_index(mongo_index_name, unique=False)
+    return mongo_colln
 
+
+def insert_into_mongo(mongo_colln, feed_object):
+    """To insert a news feed/post, given in JSON format, into MongoDB."""
     # Inserting feed data into Mongo Collection
-    mongo_colln.insert_one(rss_object)
-    rss_object.clear
+    mongo_colln.insert_one(feed_object)
+    feed_object.clear
     return True

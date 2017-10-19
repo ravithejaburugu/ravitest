@@ -5,7 +5,6 @@ Created on Tue Oct 17 09:38:57 2017
 @author: RAVITHEJA
 """
 
-from lxml import etree
 import time
 import logging
 import threading
@@ -14,7 +13,7 @@ import requests
 import demjson
 import os
 import json
-from config import argument_config, mongo_config
+from config import argument_config
 from bs4 import BeautifulSoup
 from mongoDBConnection import initialize_mongo, insert_into_mongo
 from finsymbols.symbols import get_sp500_symbols, get_nyse_symbols
@@ -38,6 +37,7 @@ def main():
     rss_feed_urls = argument_config.get('rss_feed_urls')
     site_map_urls = argument_config.get('site_map_urls')
     scrapy_urls = argument_config.get('scrapy_urls')
+
     i = 0
 
     """ RSSFeedParsing begins. """
@@ -50,25 +50,25 @@ def main():
         feed_thread.start()
 
     """ SitemapParsing begins. It fetches all sitmap urls from robots.txt and
-        filters the zip, xml urls.
+        filters the zip, xml urls."""
     for source in site_map_urls:
         print(source, site_map_urls[source])
         robots_url = site_map_urls[source]
         # Creating new thread.
         i += 1
         scrape_thread = ThreadClass(i, source, i, robots_url, 'sitemap')
-        scrape_thread.start()"""
+        scrape_thread.start()
 
-    """ Scraping begins. 
+    """ Scraping begins. """
     for source in scrapy_urls:
         scrape_url = scrapy_urls[source]
         logging.info("RSS feed of " + source + "[" + scrape_url + "]")
         # Creating new thread.
         i += 1
         scrape_thread = ThreadClass(i, source, i, scrape_url, 'scrape')
-        scrape_thread.start()"""
+        scrape_thread.start()
 
-    """ Google finance News extraction begins.
+    """ Google finance News extraction begins."""
     all_fin_symbols = get_sp500_symbols() + get_nyse_symbols() + get_amex_symbols() + get_nasdaq_symbols()
 
     logging.info("RSS feed of Google News")
@@ -76,15 +76,15 @@ def main():
     # Creating new thread.
     gnews_thread = ThreadClass(i, 'googlenews', i, all_fin_symbols,
                                'googlenews')
-    gnews_thread.start()"""
+    gnews_thread.start()
 
-    """ Google Stocks extraction begins.
+    """ Google Stocks extraction begins."""
     logging.info("RSS feed of Google Stocks")
     i += 1
     # Creating new thread.
     gstocks_thread = ThreadClass(i, 'googlestocks', i, all_fin_symbols,
                                  'googlestocks')
-    gstocks_thread.start()"""
+    gstocks_thread.start()
 
     logging.info("Total time taken :: " + str(time.time() - t1))
 
@@ -124,7 +124,7 @@ class ThreadClass(threading.Thread):
             r = requests.get(link)
             data = r.content
             print data
- 
+
     def crawlAndScrape(self, source, robots_url):
         result = os.popen("curl " + robots_url).read()
         sitemapParser = SitemapParser()
@@ -137,7 +137,7 @@ class ThreadClass(threading.Thread):
                     sitemapParser.crawlSiteMap(source, sitemap_url)
                 else:
                     sitemapParser.unzipURL(source, sitemap_url)
-                        
+
     def scrapeAndSave(self, feedName, feedURL):
         r = requests.get(feedURL)
         data = r.text

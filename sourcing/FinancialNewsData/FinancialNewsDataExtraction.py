@@ -119,18 +119,12 @@ class ThreadClass(threading.Thread):
         feed = feedparser.parse(feedURL)
         entries = feed['entries']
         for e in entries:
-            print e['link']
-            r = requests.get(feedURL)
+            link = e['link']
+            print link
+            r = requests.get(link)
             data = r.content
             print data
-            # parse fetched data using beatifulsoup
-            #soup = BeautifulSoup(data, "html.parser")
-            #print "+++++++++++++++SOUP++++++++++++++++++"
-            #print soup
-            #rows = soup.find_all("tr", {"class": "nn"})
-
-           # break
-            
+ 
     def crawlAndScrape(self, source, robots_url):
         result = os.popen("curl " + robots_url).read()
         sitemapParser = SitemapParser()

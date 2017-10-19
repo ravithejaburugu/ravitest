@@ -5,6 +5,7 @@ Created on Tue Oct 17 09:38:57 2017
 @author: RAVITHEJA
 """
 
+from lxml import etree
 import time
 import logging
 import threading
@@ -19,6 +20,7 @@ from mongoDBConnection import initialize_mongo, insert_into_mongo
 from finsymbols.symbols import get_sp500_symbols, get_nyse_symbols
 from finsymbols.symbols import get_amex_symbols, get_nasdaq_symbols
 from urllib2 import Request, urlopen
+from SiteMap import SitemapParser
 
 
 def main():
@@ -48,28 +50,25 @@ def main():
         feed_thread.start()
 
     """ SitemapParsing begins. It fetches all sitmap urls from robots.txt and
-        filters the zip, xml urls
+        filters the zip, xml urls.
     for source in site_map_urls:
         print(source, site_map_urls[source])
         robots_url = site_map_urls[source]
-        result = os.popen("curl " + robots_url).read()
-
-
         # Creating new thread.
         i += 1
-        scrape_thread = ThreadClass(i, source, i, scrape_url, 'sitemap')
+        scrape_thread = ThreadClass(i, source, i, robots_url, 'sitemap')
         scrape_thread.start()"""
 
-    """ Scraping begins. """
+    """ Scraping begins. 
     for source in scrapy_urls:
         scrape_url = scrapy_urls[source]
         logging.info("RSS feed of " + source + "[" + scrape_url + "]")
         # Creating new thread.
         i += 1
         scrape_thread = ThreadClass(i, source, i, scrape_url, 'scrape')
-        scrape_thread.start()
+        scrape_thread.start()"""
 
-    """ Google finance News extraction begins."""
+    """ Google finance News extraction begins.
     all_fin_symbols = get_sp500_symbols() + get_nyse_symbols() + get_amex_symbols() + get_nasdaq_symbols()
 
     logging.info("RSS feed of Google News")
@@ -77,15 +76,15 @@ def main():
     # Creating new thread.
     gnews_thread = ThreadClass(i, 'googlenews', i, all_fin_symbols,
                                'googlenews')
-    gnews_thread.start()
+    gnews_thread.start()"""
 
-    """ Google Stocks extraction begins."""
+    """ Google Stocks extraction begins.
     logging.info("RSS feed of Google Stocks")
     i += 1
     # Creating new thread.
     gstocks_thread = ThreadClass(i, 'googlestocks', i, all_fin_symbols,
                                  'googlestocks')
-    gstocks_thread.start()
+    gstocks_thread.start()"""
 
     logging.info("Total time taken :: " + str(time.time() - t1))
 
@@ -106,7 +105,7 @@ class ThreadClass(threading.Thread):
         if self.feedtype == 'rss':
             self.parseAndSave(self.name, self.source_url)
         elif self.feedtype == 'sitemap':
-            self.scrapeAndSave(self.name, self.source_url)
+            self.crawlAndScrape(self.name, self.source_url)
         elif self.feedtype == 'scrape':
             self.scrapeAndSave(self.name, self.source_url)
         elif self.feedtype == 'googlenews':
@@ -118,16 +117,33 @@ class ThreadClass(threading.Thread):
 
     def parseAndSave(self, feedName, feedURL):
         feed = feedparser.parse(feedURL)
-        feed = str(feed).replace('\'', '"')
-        logging.info(feed)
+        entries = feed['entries']
+        for e in entries:
+            print e['link']
+            r = requests.get(feedURL)
+            data = r.content
+            print data
+            # parse fetched data using beatifulsoup
+            #soup = BeautifulSoup(data, "html.parser")
+            #print "+++++++++++++++SOUP++++++++++++++++++"
+            #print soup
+            #rows = soup.find_all("tr", {"class": "nn"})
 
-        rss_object = {feedName: feed}
-        logging.info("Loading Feed in MongoDB...")
-
-        mongo_colln = initialize_mongo(feedName)
-        if insert_into_mongo(mongo_colln, rss_object):
-            logging.info("INSERTED SUCCESSFULLY.")
-
+           # break
+            
+    def crawlAndScrape(self, source, robots_url):
+        result = os.popen("curl " + robots_url).read()
+        sitemapParser = SitemapParser()
+        for line in result.split("\n"):
+            if line.startswith('Sitemap'):    # this is for allowed url
+                sitemap_url = line.split(': ')[1].split(' ')[0]
+                print "The Sitemap url from robot.txt ::: {0} "\
+                    .format(sitemap_url)
+                if sitemap_url.split(".")[-1] != "gz":
+                    sitemapParser.crawlSiteMap(source, sitemap_url)
+                else:
+                    sitemapParser.unzipURL(source, sitemap_url)
+                        
     def scrapeAndSave(self, feedName, feedURL):
         r = requests.get(feedURL)
         data = r.text

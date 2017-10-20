@@ -77,7 +77,7 @@ def main():
 def kafkaSendProducer(feedName, response):
     try:
         # Writing Tweet to Kafa Topics into producer
-        producer.send(feedName, response)
+        producer.send(feedName, key=feedName, value=response)
         producer.flush()
         #future = producer.send(feedName, {feedName: response})
         #result = future.get(timeout=60)

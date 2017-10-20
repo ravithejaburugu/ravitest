@@ -7,11 +7,11 @@ Created on Thu Oct 12 12:25:49 2017
 
 import os
 
-SOURCES = {
+SOURCES = [
         "thomson_reuters",
+        "cnbc",
         "wall_street_journal",
         "financial_times",
-        "cnbc",
         "cnn_money",
         "morning_star",
         "rtt_news",
@@ -26,12 +26,13 @@ SOURCES = {
         "finviz",
         "googleNews",
         "googlestock"
-         }
+        ]
+         
 
 
 argument_config = {
     'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
-    #'kafka_topic': os.getenv('KAFKA_TOPIC', 'twitterhandle')
+    'kafka_topic': os.getenv('KAFKA_TOPIC', SOURCES)
 }
 
 mongo_config = {

@@ -67,9 +67,9 @@ def main():
     logging.info("RSS feed of Google News")
     getGoogleNews("gnews", all_fin_symbols)
 
-    """ Google Stocks extraction begins."""
+    """ Google Stocks extraction begins.
     logging.info("RSS feed of Google Stocks")
-    getGoogleQuotes("gstocks", all_fin_symbols)
+    getGoogleQuotes("gstocks", all_fin_symbols)"""
 
     logging.info("Total time taken :: " + str(time.time() - t1))
 
@@ -127,18 +127,22 @@ def scrapeAndSave(feedName, feedURL):
                 response = requests.get(original_link)
                 kafkaSendProducer(feedName, response.content)
 
+
 def getGoogleNews(feedName, finsymbols):
     base_url = 'http://www.google.com/finance/company_news?'\
                 + 'output=json&start=0&num=1000&q='
     for symbol in finsymbols:
         symbol = symbol['symbol']
         url = base_url + symbol
+        print url
+        
         req = Request(url)
         resp = urlopen(req)
         content = resp.read()
         content_json = demjson.decode(content)
-        # print "total news: ", content_json['total_number_of_news']
-        logging.info("Loading Google News into Mongo : " + symbol)
+        print "total news: ", content_json['total_number_of_news']
+        
+        #logging.info("Loading Google News into Mongo : " + symbol)
         article_json = []
         news_json = content_json['clusters']
         for cluster in news_json:
@@ -159,9 +163,9 @@ def getGoogleQuotes(feedName, finsymbols):
         # TODO: Create KAFKA Topic
         if rsp.status_code in (200,):
             logging.info("Loading Google Stock data into Mongo: " + symbol)
-            fin_data = json.loads(rsp.content[6:-2]
-                                  .decode('unicode_escape'))
-            kafkaSendProducer(symbol, fin_data)
+            fin_data = json.loads(rsp.content[6:-2].decode('unicode_escape'))
+            print fin_data
+            #kafkaSendProducer('googleStocks', fin_data)
 
 if __name__ == '__main__':
     main()

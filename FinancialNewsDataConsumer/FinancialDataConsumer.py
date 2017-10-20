@@ -2,7 +2,7 @@
 """
 Created on Tue Oct 17 09:38:57 2017
 
-@author: RAVITHEJA
+@author: ANSHUL
 """
 import logging
 from config import argument_config
@@ -11,8 +11,6 @@ from mongoDBConnection import initialize_mongo, insert_into_mongo
 
 
 kafka_broker_uri = argument_config.get('kafka_broker_uri')
-
-                       
 
 
 def main():
@@ -24,28 +22,28 @@ def main():
                         %(module)s.%(funcName)s :: %(message)s',
                         level=logging.INFO)
 
-    # Fetching URLs from Config file.
-    
-
-def kafkaConsumerToMongo():
-    #take all feed name from config file its in dict in config.
-    #use each name at a time and make a loop to complete the below flow.
+#def kafkaConsumerToMongo():
+    kafka_topics = argument_config.get('kafka_topics')
+    print len(kafka_topics)
+#    for feedName in kafka_topics:
     try:
-        consumer = KafkaConsumer(feedName, bootstrap_servers=[kafka_broker_uri],auto_offset_reset='earliest',
-                         enable_auto_commit=False)
+        consumer = KafkaConsumer(*,
+                                 bootstrap_servers=[kafka_broker_uri],
+                                 auto_offset_reset='earliest',
+                                 enable_auto_commit=False)
         mongo_colln = initialize_mongo(feedName)
         print feedName
         for message in consumer:
-            feedObject = {feedName : message}
+            feedObject = {feedName: message}
             if insert_into_mongo(mongo_colln, feedObject):
-                    logging.info("Inserted "+feedName+" data to Mongo successfully")
+                    logging.info("Inserted " + feedName + " data to Mongo"
+                                 + " successfully")
                     feedObject.clear
-        
+        consumer.close()
     except:
-         logging.info("Error while loading to consumer/mongo: "+feedName)
-         pass
-            
-            
+        logging.info("Error while loading to consumer/mongo: " + feedName)
+        pass
+
 
 if __name__ == '__main__':
     main()

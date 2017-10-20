@@ -1,7 +1,7 @@
 """
 Created on Thu Oct 12 12:16:53 2017
 
-@author:Harikumar
+@author: RAVITHEJA
 """
 
 import requests
@@ -12,14 +12,23 @@ from functools import partial
 from lxml import etree
 from StringIO import StringIO
 from bs4 import BeautifulSoup
-from mongoDBConnection import initialize_mongo, insert_into_mongo
 
 
 class SitemapParser():
-    def __init__(self):
+    def __init__(self, producer):
         logging.basicConfig(format='%(asctime)s %(levelname)s \
                             %(module)s.%(funcName)s %(message)s',
                             level=logging.INFO)
+        self.producer = producer
+
+    def kafkaSendProducer(self, feedName, response):
+        try:
+            # Writing Tweet to Kafa Topics into producer
+            self.producer.send(feedName, {feedName: response})
+            self.producer.flush()
+            logging.info("-- FEED :: " + feedName)
+        except ValueError:
+            logging.info("Issue in kafka Producer for: " + feedName)
 
     def crawlSiteMap(self, source, sitemap_url):
         # Proces each .xml urls from robots.txt and return html object.
@@ -45,30 +54,18 @@ class SitemapParser():
                 # Process all sub .xml urls list,returns html object for mongo
                 for urlset_loc in urlset_locs:
                     final_url = urlset_loc.contents[0]
-                    print k, "The url is {0}".format(final_url) + \
-                        " inserted into mongo"
                     http = httplib2.Http()
                     http_headers, http_response = http.request(final_url,
                                                                'GET')
                     if http_headers['status'] == "200":
-                        sitemap_object = {source: http_response}
-                        mongo_colln = initialize_mongo(source)
-                        if insert_into_mongo(mongo_colln, sitemap_object):
-                            logging.info("INSERTED SUCCESSFULLY.")
                         k = k + 1
+                        self.kafkaSendProducer(source, http_response)
             else:
-                # Process all sub .xml urls list,returns html object for mongo
-                print "Processing the {0} url ".format(h) + "amoung {0} Urls"\
-                    .format(len(index_root))
-
                 http = httplib2.Http()
                 http_headers, http_response = http.request(index_loc, 'GET')
                 if http_headers['status'] == "200":
-                    sitemap_object = {source: http_response}
-                    mongo_colln = initialize_mongo(source)
-                    if insert_into_mongo(mongo_colln, sitemap_object):
-                        logging.info("INSERTED SUCCESSFULLY.")
                     h = h + 1
+                    self.kafkaSendProducer(source, http_response)
 
     def unzipURL(self, source, sitemap_url):
         # Process the zip url from robot.txt and store in mongo
@@ -112,10 +109,7 @@ class SitemapParser():
                     if http_headers['status'] == "200":
                         print " Inserted {0} url into mongo  ".format(k)
                         k = k+1
-                        sitemap_object = {source: http_response}
-                        mongo_colln = initialize_mongo(source)
-                        if insert_into_mongo(mongo_colln, sitemap_object):
-                            logging.info("INSERTED SUCCESSFULLY.")
+                        self.kafkaSendProducer(source, http_response)
 
     def decompress_stream(self, rraw):
         # Decompress the zip url

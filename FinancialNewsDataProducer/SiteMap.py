@@ -54,7 +54,7 @@ class SitemapParser():
                         sitemap_object = {source: http_response}
                         try:
                             # Writing Tweet to Kafa Topics into producer
-                            self.producer.send(source, sitemap_object)
+                            self.producer.send(source, key=source, value=sitemap_object)
                             self.producer.flush()
                             logging.info("-- FEED :: " + source)
                         except:

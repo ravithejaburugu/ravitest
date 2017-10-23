@@ -1,7 +1,7 @@
 """
 Created on Thu Oct 12 12:16:53 2017
 
-@author:Harikumar
+@author: RAVITHEJA
 """
 
 import requests
@@ -12,15 +12,15 @@ from functools import partial
 from lxml import etree
 from StringIO import StringIO
 from bs4 import BeautifulSoup
-#from mongoDBConnection import initialize_mongo, insert_into_mongo
+from config import argument_config
+from kafka import KafkaProducer
 
 
 class SitemapParser():
-    def __init__(self, producer):
+    def __init__(self):
         logging.basicConfig(format='%(asctime)s %(levelname)s \
                             %(module)s.%(funcName)s %(message)s',
                             level=logging.INFO)
-        self.producer = producer
 
     def crawlSiteMap(self, source, sitemap_url):
         # Proces each .xml urls from robots.txt and return html object.
@@ -28,7 +28,7 @@ class SitemapParser():
         index_root = etree.fromstring(index_response.content)
         print "The number of xml urls {0}".format(len(index_root))
 
-        # Process  all sub .xml urls available,stored in list
+        # Process all sub .xml urls available,stored in list
         h = 1
         for sitemap in index_root:
             index_children = sitemap.getchildren()
@@ -51,41 +51,13 @@ class SitemapParser():
                                                                'GET')
                     if http_headers['status'] == "200":
                         k = k + 1
-                        sitemap_object = {source: http_response}
-                        try:
-                            # Writing Tweet to Kafa Topics into producer
-                            self.producer.send(source, key=source, value=sitemap_object)
-                            self.producer.flush()
-                            logging.info("-- FEED :: " + source)
-                        except:
-                            logging.info("Issue in sending Sitemap - " + source
-                                         + " to kafka Producer")
-                        #mongo_colln = initialize_mongo(source)
-                        #if insert_into_mongo(mongo_colln, sitemap_object):
-                            #logging.info("INSERTED SUCCESSFULLY.")
-                        
+                        self.kafkaSendProducer(source, http_response)
             else:
-                # Process all sub .xml urls list,returns html object for mongo
-                # print "Processing the {0} url ".format(h) + "amoung {0} Urls"\
-                 #   .format(len(index_root))
-
                 http = httplib2.Http()
                 http_headers, http_response = http.request(index_loc, 'GET')
                 if http_headers['status'] == "200":
                     h = h + 1
-                    sitemap_object = {source: http_response}
-                    try:
-                        # Writing Tweet to Kafa Topics into producer
-                        self.producer.send(source, sitemap_object)
-                        self.producer.flush()
-                        logging.info("-- FEED :: " + source)
-                    except:
-                        logging.info("Issue in sending Sitemap - " + source
-                                     + " to kafka Producer")
-                    #mongo_colln = initialize_mongo(source)
-                    #if insert_into_mongo(mongo_colln, sitemap_object):
-                     #   logging.info("INSERTED SUCCESSFULLY.")
-                    
+                    self.kafkaSendProducer(source, http_response)
 
     def unzipURL(self, source, sitemap_url):
         # Process the zip url from robot.txt and store in mongo
@@ -103,7 +75,6 @@ class SitemapParser():
                 type(children)
                 locs.append(children[0].text)      # 23 urls
                 len(locs)
-
         j = 1
         for loc in locs:
             if loc.split(".")[-1] == "gz":
@@ -129,18 +100,7 @@ class SitemapParser():
                     if http_headers['status'] == "200":
                         print " Inserted {0} url into mongo  ".format(k)
                         k = k+1
-                        sitemap_object = {source: http_response}
-                        try:
-                            # Writing Tweet to Kafa Topics into producer
-                            self.producer.send(source, sitemap_object)
-                            self.producer.flush()
-                            logging.info("-- FEED :: " + source)
-                        except:
-                            logging.info("Issue in sending Sitemap - " + source
-                                         + " to kafka Producer")
-                        #mongo_colln = initialize_mongo(source)
-                        #if insert_into_mongo(mongo_colln, sitemap_object):
-                         #   logging.info("INSERTED SUCCESSFULLY.")
+                        self.kafkaSendProducer(source, http_response)
 
     def decompress_stream(self, rraw):
         # Decompress the zip url
@@ -151,3 +111,14 @@ class SitemapParser():
             result.write(d.decompress(chunk))
         result.seek(0)
         return result
+
+    def kafkaSendProducer(self, feedName, response):
+        kafka_broker_uri = argument_config.get('kafka_broker_uri')
+        producer = KafkaProducer(bootstrap_servers=[kafka_broker_uri])
+        try:
+            # Writing Tweet to Kafa Topics into producer
+            producer.send(feedName, key=feedName, value=response)
+            producer.flush()
+            logging.info("-- FEED :: " + feedName)
+        except ValueError:
+            logging.info("Issue in kafka Producer for: " + feedName)

@@ -9,9 +9,8 @@ import os
 
 SOURCES = [
         "thomson_reuters",
-        "cnbc",
         "wall_street_journal",
-        "financial_times",
+        "cnbc",
         "cnn_money",
         "morning_star",
         "rtt_news",
@@ -22,17 +21,20 @@ SOURCES = [
         "bloomberg",
         "market_watch",
         "forbes",
-        "ceic_data",
+        "the_street",
+        "msci_dataset",
+        "ceic_dataset",
         "finviz",
-        "googleNews",
-        "googlestock"
-        ]
-         
+        "googleFinanceNews",
+        "googleStocks",
+        "yahooStocks",
+        #"financial_times",
+         ]
 
 
 argument_config = {
     'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
-    'kafka_topic': os.getenv('KAFKA_TOPIC', SOURCES)
+    'kafka_topics': os.getenv('KAFKA_TOPICS', SOURCES)
 }
 
 mongo_config = {
@@ -43,6 +45,6 @@ mongo_config = {
     'mongo_password': os.getenv('MONGO_PASSWORD', 'sl03pois!'),
     'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'dbadmin'),
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
-    'db_name': os.getenv('MONGO_DB_NAME', 'finnews2'),
+    'db_name': os.getenv('MONGO_DB_NAME', 'finnews_all3'),
     'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrt'),
 }

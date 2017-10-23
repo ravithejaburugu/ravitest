@@ -5,7 +5,6 @@ Created on Thu Oct 12 14:44:42 2017
 @author: RAVITHEJA
 """
 
-from uuid import uuid1
 from pymongo import MongoClient
 from config import mongo_config
 
@@ -33,15 +32,7 @@ def make_mongo_connection(collection_name):
                                          mechanism=mongo_auth_mechanism
                                          )
     db = client[db_name]
-    col = db[collection_name]
-
-    # To ensure that the collection exists, so that an index is created on it
-    test_uuid = str(uuid1())
-    col.insert_one({'uuid': test_uuid})
-    col.delete_one({'uuid': test_uuid})
-
-    print(col)
-    return col
+    return db[collection_name]
 
 
 def initialize_mongo(source):
@@ -55,7 +46,6 @@ def initialize_mongo(source):
 
 def insert_into_mongo(mongo_colln, feed_object):
     """To insert a news feed/post, given in JSON format, into MongoDB."""
-    # Inserting feed data into Mongo Collection
     mongo_colln.insert_one(feed_object)
     feed_object.clear
     return True

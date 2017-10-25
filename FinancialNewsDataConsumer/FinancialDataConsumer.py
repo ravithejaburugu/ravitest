@@ -4,13 +4,12 @@ Created on Tue Oct 17 09:38:57 2017
 
 @author: ANSHUL
 """
+
 import logging
 from config import argument_config
 from kafka import KafkaConsumer
 from mongoDBConnection import initialize_mongo, insert_into_mongo
-
-
-kafka_broker_uri = argument_config.get('kafka_broker_uri')
+from ckanForMetadata import insert_into_ckan
 
 
 def main():
@@ -23,6 +22,10 @@ def main():
                         level=logging.INFO)
 
     kafka_topics = argument_config.get('kafka_topics')
+    kafka_broker_uri = argument_config.get('kafka_broker_uri')
+    ckan_host = argument_config.get('ckan_host')
+    api_key = argument_config.get('api_key')
+    publisher = argument_config.get('publisher')
 
     try:
         consumer = KafkaConsumer(*kafka_topics,
@@ -30,15 +33,24 @@ def main():
                                  auto_offset_reset='earliest',
                                  enable_auto_commit=False)
         for message in consumer:
-            print message.key
-            mongo_colln = initialize_mongo(message.key)
-            feedObject = {message.key: message.value}
-            if insert_into_mongo(mongo_colln, feedObject):
-                    logging.info("Inserted " + message.key + " data to Mongo"
-                                 + " successfully")
+            source = message.key
+            print source
+            mongo_colln = initialize_mongo(source)
+            feedObject = {source: message.value}
+
+            try:
+                if insert_into_mongo(mongo_colln, feedObject):
+    
+                    insert_into_ckan(ckan_host, api_key, publisher,
+                                     source, feedObject)
+    
+                    logging.info("Inserted " + source + " data to MongoDB")
                     feedObject.clear
+            except:
+                logging.info("Error while loading to Mongo/CKAN ")
+                continue
     except IOError:
-        logging.info("Error while loading to consumer/mongo ")
+        logging.info("Error while loading to consumer/Mongo ")
         pass
 
 

@@ -5,6 +5,7 @@ Created on Thu Oct 12 14:44:42 2017
 @author: RAVITHEJA
 """
 
+import logging
 from pymongo import MongoClient
 from config import mongo_config
 
@@ -36,11 +37,17 @@ def make_mongo_connection(collection_name):
 
 
 def initialize_mongo(source):
-    # Creating Mongo Collection
-    mongo_colln = make_mongo_connection(source)
     mongo_index_name = mongo_config.get('mongo_index_name')
-    if mongo_index_name not in mongo_colln.index_information():
-        mongo_colln.create_index(mongo_index_name, unique=False)
+
+    # Creating Mongo Collection
+    try:
+        mongo_colln = make_mongo_connection(source)
+
+        # Create Mongo Collection, if index is not available for it.
+        if mongo_index_name not in mongo_colln.index_information():
+            mongo_colln.create_index(mongo_index_name, unique=False)
+    except IOError:
+        logging.error("Could not connect to Mongo Server")
     return mongo_colln
 
 

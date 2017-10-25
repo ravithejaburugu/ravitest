@@ -6,14 +6,11 @@ Created on Thu Oct 12 12:16:53 2017
 
 import requests
 import zlib
-import httplib2
 import logging
 from functools import partial
 from lxml import etree
 from StringIO import StringIO
-from bs4 import BeautifulSoup
-from config import argument_config
-from kafka import KafkaProducer
+from FinKafkaProducer import finKafkaProducer
 
 
 class SitemapParser():
@@ -21,104 +18,100 @@ class SitemapParser():
         logging.basicConfig(format='%(asctime)s %(levelname)s \
                             %(module)s.%(funcName)s %(message)s',
                             level=logging.INFO)
+        self.kafkaProducer = finKafkaProducer()
 
-    def crawlSiteMap(self, source, sitemap_url):
+    def crawlSiteMapXML(self, source, sitemap_url):
+        """Crawls the SiteMap XMLs and Fetches the HTML pages,
+        to send to Kafka Topic."""
+
         # Proces each .xml urls from robots.txt and return html object.
         index_response = requests.get(sitemap_url)
         index_root = etree.fromstring(index_response.content)
-        print "The number of xml urls {0}".format(len(index_root))
+        logging.info(source + " has " + str(len(index_root)) + " XML URLs")
 
         # Process all sub .xml urls available,stored in list
-        h = 1
-        for sitemap in index_root:
+
+        index_loc_list = []
+        for i, sitemap in enumerate(index_root):
             index_children = sitemap.getchildren()
             index_loc = index_children[0].text
-            if index_loc.split(".")[-1] == "xml":
-                print "Processing the {0} url ".format(h) + "amoung {0} Urls"\
-                    .format(len(index_root))
-                urlset_response = requests.get(index_loc)
-                soup = BeautifulSoup(urlset_response.text)
-                urlset_locs = soup.find_all("loc")
-                print " Processing the {0} url and it contains".format(h) \
-                    + "{0} urls" .format(len(urlset_locs))
-                h = h + 1
-                k = 1
-                # Process all sub .xml urls list,returns html object for mongo
-                for urlset_loc in urlset_locs:
-                    final_url = urlset_loc.contents[0]
-                    http = httplib2.Http()
-                    http_headers, http_response = http.request(final_url,
-                                                               'GET')
-                    if http_headers['status'] == "200":
-                        k = k + 1
-                        self.kafkaSendProducer(source, http_response)
-            else:
-                http = httplib2.Http()
-                http_headers, http_response = http.request(index_loc, 'GET')
-                if http_headers['status'] == "200":
-                    h = h + 1
-                    self.kafkaSendProducer(source, http_response)
+            index_loc_list.append(index_loc)
 
-    def unzipURL(self, source, sitemap_url):
+        for idx_loc in index_loc_list:
+            if index_loc.split(".")[-1] == "xml":
+                urlset_response = requests.get(index_loc)
+                urlset_locs = etree.fromstring(urlset_response.content)
+
+                logging.info("Processing the URL: " + str(i)
+                             + "(" + str(len(urlset_locs)) + " URLs)")
+
+                # Process all sub .xml urls list,returns html object for mongo
+                self.loopRootURLSet(source, urlset_locs)
+            else:
+                logging.info("Sitemap index_loc (not xml) - " + index_loc)
+                self.sendToKafka(source, index_loc)
+
+    def loopRootURLSet(self, source, rootURLSets):
+        for urlset_loc in rootURLSets:
+            children = urlset_loc.getchildren()
+            final_url = children[0].text
+            logging.info("urlset_loc final_url - " + final_url)
+            self.sendToKafka(source, final_url)
+
+    def unzipSiteMapURL(self, source, sitemap_url):
+        """Exctracts zip format URLs to fetch Post URLs."""
+
         # Process the zip url from robot.txt and store in mongo
-        response = requests.get(sitemap_url, stream=True)
-        sitemap_xml = self.decompress_stream(response.raw)
+        sitemap_xml = self.decompress_stream(sitemap_url)
+
         tree = etree.parse(sitemap_xml)
         root = tree.getroot()
-        print "The number of gz tags are {0}".format(len(root))
+
+        logging.info("The number of gz tags: " + str(len(root)))
         locs = []
-        i = 1
         for sitemap in root:
-                children = sitemap.getchildren()
-                print i, children[0].text
-                i = i + 1
-                type(children)
-                locs.append(children[0].text)      # 23 urls
-                len(locs)
-        j = 1
-        for loc in locs:
+            children = sitemap.getchildren()
+            locs.append(children[0].text)      # 23 urls
+
+        for i, loc in enumerate(locs):
             if loc.split(".")[-1] == "gz":
-                print j, " The procesing url is {0} ".format(loc)
-                response = requests.get(loc, stream=True)
-                sitemap_xml = self.decompress_stream(response.raw)
-                tree = etree.parse(sitemap_xml)
-                root = tree.getroot()
-                print " <<<>>>> Final_urls are {0}".format(len(root)) + \
-                    " at {0} ".format(loc.split("/")[-1])
-                j = j + 1
+                sub_sitemap_xml = self.decompress_stream(loc)
 
-                final_urls = []
-                for sitemap in root:
-                    children = sitemap.getchildren()
-                    final_urls.append(children[0].text)
+                sub_tree = etree.parse(sub_sitemap_xml)
+                sub_root = sub_tree.getroot()
 
-                k = 1
-                for final_url in final_urls:
-                    http = httplib2.Http()
-                    http_headers, http_response =  \
-                        http.request(final_url, 'GET')
-                    if http_headers['status'] == "200":
-                        print " Inserted {0} url into mongo  ".format(k)
-                        k = k+1
-                        self.kafkaSendProducer(source, http_response)
+                logging.info(str(i) + " The processing url: " + loc)
+                logging.info("Final URLs at " + loc.split("/")[-1] + " are "
+                             + str(len(sub_root)))
 
-    def decompress_stream(self, rraw):
-        # Decompress the zip url
+                self.loopRootURLSet(source, sub_root)
+            elif loc.split(".")[-1] == "xml":
+                self.crawlSiteMap(source, loc)
+
+            else:
+                logging.info("Its neither gz nor xml. Please check the format")
+
+    def decompress_stream(self, sitemap_url):
+        zip_response = requests.get(sitemap_url, stream=True)
+        rraw = zip_response.raw
+
         READ_BLOCK_SIZE = 1024 * 8
-        result = StringIO()
-        d = zlib.decompressobj(16 + zlib.MAX_WBITS)
-        for chunk in iter(partial(rraw.read, READ_BLOCK_SIZE), ''):
-            result.write(d.decompress(chunk))
-        result.seek(0)
-        return result
+        sitemap_xml = StringIO()
 
-    def kafkaSendProducer(self, feedName, response):
-        kafka_broker_uri = argument_config.get('kafka_broker_uri')
-        producer = KafkaProducer(bootstrap_servers=[kafka_broker_uri])
-        try:
-            # Writing Tweet to Kafa Topics into producer
-            producer.send(feedName, key=feedName, value=response)
-            producer.flush()
-            logging.info("-- FEED :: " + feedName)
-        except ValueError:
-            logging.info("Issue in kafka Producer for: " + feedName)
+        # Compiling decompress object
+        d = zlib.decompressobj(16 + zlib.MAX_WBITS)
+
+        for chunk in iter(partial(rraw.read, READ_BLOCK_SIZE), ''):
+            sitemap_xml.write(d.decompress(chunk))
+
+        # offsetting the current position to the absolute file position.
+        sitemap_xml.seek(0)
+        return sitemap_xml
+
+    def sendToKafka(self, source, final_url):
+        session = requests.Session()
+        final_response = session.get(final_url)  # allow_redirects=False
+        session.close()
+
+        if final_response.status_code == 200:
+            self.kafkaProducer.kafkaSend(source, final_response.content)

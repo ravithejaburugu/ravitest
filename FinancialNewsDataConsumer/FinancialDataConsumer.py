@@ -14,9 +14,8 @@ import json
 
 
 def main():
-    """Initiate the Financial news extraction functionality.
-    To make calls to RSS feed parser, Sitemap parser, Scrapy extractor and
-    API calls, if any."""
+    """Initiate the Financial news data reading from Kafka Topics using
+    Kafka Consumer."""
 
     logging.basicConfig(format='%(asctime)s %(levelname)s \
                         %(module)s.%(funcName)s :: %(message)s',
@@ -30,31 +29,43 @@ def main():
     mongo_uri = mongo_config.get('mongo_uri')
 
     try:
-        consumer = KafkaConsumer(*kafka_topics,  # "cnn_money",
+        consumer = KafkaConsumer(*kafka_topics,
                                  bootstrap_servers=[kafka_broker_uri],
-                                 #value_deserializer=lambda m:
-                                  #   json.loads(m.decode('ascii')),
+                                 # value_deserializer=lambda m:
+                                 #   json.loads(m.decode('ascii')),
                                  auto_offset_reset='earliest',
                                  enable_auto_commit=False)
         for message in consumer:
             try:
                 source = message.key
                 val_obj = message.value
-                
+
                 json_val_obj = json.loads(val_obj)
                 post_url = json_val_obj.keys()[0]
                 msg_val = json_val_obj[post_url]
-                
+
+                # print msg_val
+
                 feedObject = {source: msg_val}
-    
+
                 mongo_colln = initialize_mongo(source)
-                #part_url = "url-test"
-                #feedObject = {source: message.value}
+                # part_url = "url-test"
+                # feedObject = {source: message.value}
                 try:
                     inserted = insert_into_mongo(mongo_colln, feedObject)
-                    
+
                     if inserted:
                         logging.info("Inserted " + source + " data to MongoDB")
+
+                        # Maintain metadata for the inserted data.
+                        try:
+                            meta_mongo_colln = initialize_mongo("METADATA")
+                            meta_feedObj = {source: post_url}
+                            insert_into_mongo(meta_mongo_colln, meta_feedObj)
+                        except:
+                            pass
+
+                        # Maintain CKAN information for each Web source.
                         try:
                             insert_into_ckan(ckan_host, api_key, publisher,
                                              mongo_uri, source)

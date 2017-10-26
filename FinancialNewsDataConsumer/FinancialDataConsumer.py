@@ -42,8 +42,8 @@ def main():
                 val_obj = message.value
                 
                 json_val_obj = json.loads(val_obj)
-                part_url = json_val_obj.keys()[0]
-                msg_val = json_val_obj[part_url]
+                post_url = json_val_obj.keys()[0]
+                msg_val = json_val_obj[post_url]
                 
                 feedObject = {source: msg_val}
     
@@ -52,11 +52,12 @@ def main():
                 #feedObject = {source: message.value}
                 try:
                     inserted = insert_into_mongo(mongo_colln, feedObject)
+                    
                     if inserted:
                         logging.info("Inserted " + source + " data to MongoDB")
                         try:
                             insert_into_ckan(ckan_host, api_key, publisher,
-                                             mongo_uri, source, part_url)
+                                             mongo_uri, source)
                             logging.info("Updated CKAN for " + source)
                         except:
                             logging.error("Error while loading to CKAN.")

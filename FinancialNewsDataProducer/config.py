@@ -9,8 +9,8 @@ import os
 
 
 RSS_FEED_URLS = {
-        "thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
-        #"wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
+        #"thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
+        "wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
         #"cnbc": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
         #"cnn_money": "http://rss.cnn.com/rss/money_latest.rss",
         #"morning_star": "http://feeds.feedburner.com/morningstar/glkd",
@@ -25,17 +25,17 @@ RSS_FEED_URLS = {
         }
 
 SITE_MAP_URLS = {
-        #"bloomberg": "https://www.bloomberg.com/robots.txt",
-        #"market_watch": "http://www.marketwatch.com/robots.txt",
-        #"forbes": "https://www.forbes.com/robots.txt",
-        #"the_street": "https://www.thestreet.com/robots.txt",
-        #"msci_dataset": "https://www.msci.com/robots.txt",
-        #"ceic_dataset": "https://www.ceicdata.com/robots.txt",
+        "bloomberg": "https://www.bloomberg.com/robots.txt",
+        "market_watch": "http://www.marketwatch.com/robots.txt",
+        "forbes": "https://www.forbes.com/robots.txt",
+        "the_street": "https://www.thestreet.com/robots.txt",
+        "msci_dataset": "https://www.msci.com/robots.txt",
+        "ceic_dataset": "https://www.ceicdata.com/robots.txt",
 
         # SITEMAPS FOR HISTORICAL RSS 
       #  "wall_street_journal": "https://www.wsj.com/robots.txt",
        # "cnbc": "https://www.cnbc.com/robots.txt",
-        "cnn_money": "http://money.cnn.com/robots.txt",
+        #"cnn_money": "http://money.cnn.com/robots.txt",
        # "rtt_news": "http://www.rttnews.com/robots.txt",
         #"seeking_alpha": "https://seekingalpha.com/robots.txt",
         #"zacks_investment": "https://www.zacks.com/robots.txt",
@@ -49,8 +49,8 @@ AUTH_URLS = {
                 "auth_pwd": "welcome123"
                 },
         "the-wall-street-journal": {
-                "auth_id": "",
-                "auth_pwd": ""
+                "auth_id": "vavasarala@randomtrees.com",
+                "auth_pwd": "welcome123"
                 },
         }
 

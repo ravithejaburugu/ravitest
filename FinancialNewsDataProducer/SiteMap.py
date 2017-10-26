@@ -7,6 +7,7 @@ Created on Thu Oct 12 12:16:53 2017
 import requests
 import zlib
 import logging
+import time
 from functools import partial
 from lxml import etree
 from StringIO import StringIO
@@ -110,8 +111,14 @@ class SitemapParser():
 
     def sendToKafka(self, source, final_url):
         session = requests.Session()
-        final_response = session.get(final_url)  # allow_redirects=False
-        session.close()
+        final_response = session.get(final_url, allow_redirects=False)
 
         if final_response.status_code == 200:
-            self.kafkaProducer.kafkaSend(source, final_response.content)
+            part_url = final_url.split("/")[-1]
+            if not part_url:
+                part_url = final_url.split("/")[-2]
+            self.kafkaProducer.kafkaSend(source, part_url,
+                                         final_response.content)
+
+        time.sleep(3)
+        session.close()

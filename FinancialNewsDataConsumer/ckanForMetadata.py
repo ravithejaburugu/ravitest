@@ -5,12 +5,14 @@ Created on Tue Oct 24 11:36:20 2017
 @author: RAVITHEJA
 """
 
+import re
 import ckanapi
 from datetime import datetime
 from config import mongo_config
 
 
-def insert_into_ckan(ckan_host, api_key, publisher, source, feedObject):
+def insert_into_ckan(ckan_host, api_key, publisher, mongo_uri,
+                     source, part_url):
 
     current_date = datetime.now()
 
@@ -18,14 +20,14 @@ def insert_into_ckan(ckan_host, api_key, publisher, source, feedObject):
 
     ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
 
-    package_name = source + "-" + current_date.strftime("%d%m%Y-%H%M")
-    package_name = package_name.replace("_", "-")
+    re_part_url = re.sub('[^A-Za-z0-9]+', '', part_url)
+    package_name = source + re_part_url.lower()
 
     dict_additional_fields = {
             'Title': package_name,
             'Sourcing_Date': current_date.strftime("%B %d, %Y, %H:%M"),
             'Source': source,
-            # 'Datastore': data_store_url,
+            'Datastore': mongo_uri,
             'Database_Name': db_name,
             'Collection': source,
             'Description': "Financial data of " + source.replace("_", " "),
@@ -42,7 +44,7 @@ def insert_into_ckan(ckan_host, api_key, publisher, source, feedObject):
                                         tags=tags,
                                         extras=additional_fields,
                                         )
-    except:  # ValidationError:
+    except:
         ckan_ckan.action.package_update(id=package_name,
                                         title=package_name,
                                         maintainer=publisher,

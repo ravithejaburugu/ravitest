@@ -6,10 +6,11 @@ Created on Tue Oct 17 09:38:57 2017
 """
 
 import logging
-from config import argument_config
+from config import argument_config, mongo_config
 from kafka import KafkaConsumer
 from mongoDBConnection import initialize_mongo, insert_into_mongo
 from ckanForMetadata import insert_into_ckan
+import json
 
 
 def main():
@@ -26,31 +27,50 @@ def main():
     ckan_host = argument_config.get('ckan_host')
     api_key = argument_config.get('api_key')
     publisher = argument_config.get('publisher')
+    mongo_uri = mongo_config.get('mongo_uri')
 
     try:
-        consumer = KafkaConsumer(*kafka_topics,
+        consumer = KafkaConsumer(*kafka_topics,  # "cnn_money",
                                  bootstrap_servers=[kafka_broker_uri],
+                                 #value_deserializer=lambda m:
+                                  #   json.loads(m.decode('ascii')),
                                  auto_offset_reset='earliest',
                                  enable_auto_commit=False)
         for message in consumer:
-            source = message.key
-            print source
-            mongo_colln = initialize_mongo(source)
-            feedObject = {source: message.value}
-
             try:
-                if insert_into_mongo(mongo_colln, feedObject):
+                source = message.key
+                val_obj = message.value
+                
+                json_val_obj = json.loads(val_obj)
+                part_url = json_val_obj.keys()[0]
+                msg_val = json_val_obj[part_url]
+                
+                feedObject = {source: msg_val}
     
-                    insert_into_ckan(ckan_host, api_key, publisher,
-                                     source, feedObject)
-    
-                    logging.info("Inserted " + source + " data to MongoDB")
+                mongo_colln = initialize_mongo(source)
+                #part_url = "url-test"
+                #feedObject = {source: message.value}
+                try:
+                    inserted = insert_into_mongo(mongo_colln, feedObject)
+                    if inserted:
+                        logging.info("Inserted " + source + " data to MongoDB")
+                        try:
+                            insert_into_ckan(ckan_host, api_key, publisher,
+                                             mongo_uri, source, part_url)
+                            logging.info("Updated CKAN for " + source)
+                        except:
+                            logging.error("Error while loading to CKAN.")
+                    else:
+                        logging.info(source + " data not saved in MongoDB")
+                except:
+                    logging.error("Error while loading to MongoDB.")
+                    continue
+                finally:
                     feedObject.clear
             except:
-                logging.info("Error while loading to Mongo/CKAN ")
                 continue
     except IOError:
-        logging.info("Error while loading to consumer/Mongo ")
+        logging.error("Error while loading Topics of Kafka Consumer.")
         pass
 
 

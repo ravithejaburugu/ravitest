@@ -33,26 +33,40 @@ def make_mongo_connection(collection_name):
                                          mechanism=mongo_auth_mechanism
                                          )
     db = client[db_name]
+
     return db[collection_name]
 
 
 def initialize_mongo(source):
+    """Initializes MongoDB Connection
+    and returns MongoCollection with the given Index."""
+
     mongo_index_name = mongo_config.get('mongo_index_name')
 
-    # Creating Mongo Collection
     try:
+        # Creating Mongo Collection
         mongo_colln = make_mongo_connection(source)
 
-        # Create Mongo Collection, if index is not available for it.
+        # Create index, if it is not available.
         if mongo_index_name not in mongo_colln.index_information():
             mongo_colln.create_index(mongo_index_name, unique=False)
+
     except IOError:
         logging.error("Could not connect to Mongo Server")
+
     return mongo_colln
 
 
 def insert_into_mongo(mongo_colln, feed_object):
     """To insert a news feed/post, given in JSON format, into MongoDB."""
-    mongo_colln.insert_one(feed_object)
-    feed_object.clear
+
+    try:
+        mongo_colln.insert_one(feed_object)
+        # mongo_colln.update(feed_object, upsert=True)
+    except:
+        raise
+        logging.error("Mongo Insert Exception.")
+    finally:
+        feed_object.clear
+
     return True

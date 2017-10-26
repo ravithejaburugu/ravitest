@@ -20,8 +20,10 @@ from finsymbols.symbols import get_sp500_symbols, get_nyse_symbols
 from finsymbols.symbols import get_amex_symbols, get_nasdaq_symbols
 from FinKafkaProducer import finKafkaProducer
 from requests.auth import HTTPBasicAuth
+from mongoDBConnection import initialize_mongo
 
 kafkaProducer = finKafkaProducer()
+mongo_colln = initialize_mongo()
 
 
 def main():
@@ -43,7 +45,7 @@ def main():
 
     rss_keys = rss_feed_urls.keys()
 
-    #while True:
+    # while True:
     """ RSSFeedParsing begins."""
     for rss_feed_name in rss_feed_urls:
         rss_feed_url = rss_feed_urls[rss_feed_name]
@@ -64,7 +66,7 @@ def main():
                              ft_api_key)
                 elif auth_item == "the-wall-street-journal":
                     news_url = "https://newsapi.org/v1/articles"
-                    scrapeWSJ(auth_item, news_url, auth_id, auth_pwd)
+                    ## scrapeWSJ(auth_item, news_url, auth_id, auth_pwd)
             except:
                 logging.warn("Problem while scraping " + auth_item)
                 continue
@@ -103,19 +105,23 @@ def main():
 
     logging.info("Total time taken for extracting all Financial Data :: "
                  + str(time.time() - t1))
-        #time.sleep(1800)
+        #time.sleep(180)
 
     logging.warn("Financial Data Extraction program terminated.")
 
 
-def scrapeWSJ(feedname, news_url, auth_id, auth_pwd):
-    querystring = {"source": feedname,
+def scrapeWSJ(feedName, news_url, auth_id, auth_pwd):
+    querystring = {"source": feedName,
                    "sortBy": "top",
                    "apiKey": "67c7663f07af4c388e2734118ffa6b17"}
     auth_response = requests.request("GET", news_url, params=querystring)
     js = json.loads(auth_response.content)
     for url in js['articles']:
-        sendToKafka(feedname, url['url'], auth_id, auth_pwd)
+        metadata_cursor = mongo_colln.find({feedName: url['url']})
+        if metadata_cursor.count() == 0:
+            sendToKafka(feedName, url['url'], auth_id, auth_pwd)
+        else:
+            logging.info("Duplicate data Skipped")
 
 
 def scrapeFT(feedName, news_url, auth_id, auth_pwd, ft_api_key):
@@ -128,15 +134,23 @@ def scrapeFT(feedName, news_url, auth_id, auth_pwd, ft_api_key):
         res = url['results']
         for loc in res:
             loc_url = loc['location']['uri']
-            sendToKafka(feedName, loc_url, auth_id, auth_pwd)
+            metadata_cursor = mongo_colln.find({feedName: loc_url})
+            if metadata_cursor.count() == 0:
+                sendToKafka(feedName, loc_url, auth_id, auth_pwd)
+            else:
+                logging.info("Duplicate data Skipped")
 
 
 def parseAndSave(feedName, feedURL):
     feed = feedparser.parse(feedURL)
     entries = feed['entries']
     for e in entries:
-        print e['link']
-        sendToKafka(feedName, e['link'])
+        logging.info(e['link'])
+        metadata_cursor = mongo_colln.find({feedName: e['link']})
+        if metadata_cursor.count() == 0:
+            sendToKafka(feedName, e['link'])
+        else:
+            logging.info("Duplicate data Skipped")
 
 
 def crawlAndScrape(source, robots_url):
@@ -167,21 +181,19 @@ def crawlAndScrape(source, robots_url):
 
 
 def scrapeAndSave(feedName, feedURL):
-    r = requests.get(feedURL)
-    data = r.text
-    # parse fetched data using beatifulsoup
-    soup = BeautifulSoup(data)
+    resp = requests.get(feedURL)
+    soup = BeautifulSoup(resp.text)
     rows = soup.find_all("tr", {"class": "nn"})
-
     for col in rows:
         td = col.find_all("td")
         for url in td:
             link = url.find('a', href=True)
             if link:
-                original_link = link['href']
-                logging.info("Scraping " + feedName + "[" + original_link
-                             + "]")
-                sendToKafka(feedName, original_link)
+                metadata_cursor = mongo_colln.find({feedName: link['href']})
+                if metadata_cursor.count() == 0:
+                    sendToKafka(feedName, link['href'])
+                else:
+                    logging.info("Duplicate data Skipped")
 
 
 def getGoogleNews(feedName, finsymbols):
@@ -190,47 +202,59 @@ def getGoogleNews(feedName, finsymbols):
     for symbol in finsymbols:
         resp = urlopen(Request(base_url + symbol['symbol']))
         content_json = demjson.decode(resp.read())
-        logging.info(symbol['symbol'], content_json['total_number_of_news'])
-
+        # logging.info(symbol['symbol'], content_json['total_number_of_news'])
         article_json = []
         for cluster in content_json['clusters']:
             if 'a' in cluster:
                 article_json.extend(cluster['a'])
         for article_url in article_json:
-            logging.info(article_url['u'])
-            sendToKafka(feedName, article_url['u'])
+            metadata_cursor = mongo_colln.find({feedName: article_url['u']})
+            if metadata_cursor.count() == 0:
+                sendToKafka(feedName, article_url['u'])
+            else:
+                logging.info("Duplicate data Skipped")
 
 
 def getGoogleQuotes(feedName, finsymbols):
     base_url = 'https://finance.google.com/finance?output=json&q='
     for symbol in finsymbols:
-        symbol = symbol['symbol']
-        sendToKafka(feedName, base_url + symbol)
+        final_url = base_url + symbol['symbol']
+        metadata_cursor = mongo_colln.find({feedName: final_url})
+        if metadata_cursor.count() == 0:
+            sendToKafka(feedName, final_url)
+        else:
+            logging.info("Duplicate data Skipped")
 
 
 def getYahooStocks(feedName, all_fin_symbols):
     for fin_symbol in all_fin_symbols:
         sym = fin_symbol['symbol']
-        # base_url = 'http://finance.yahoo.com/d/quotes.csv?f=sb2b3jk&s=' + sym
-        base_url = "https://finance.yahoo.com/quote/" + sym + "?p=" + sym
-        sendToKafka(feedName, base_url)
+        final_url = "https://finance.yahoo.com/quote/" + sym + "?p=" + sym
+        metadata_cursor = mongo_colln.find({feedName: final_url})
+        if metadata_cursor.count() == 0:
+            sendToKafka(feedName, final_url)
+        else:
+            logging.info("Duplicate data Skipped")
 
 
 def sendToKafka(source, final_url, auth_id='', auth_pwd=''):
     session = requests.Session()
-
-    part_url = final_url.split("/")[-1]
-    if not part_url:
-        part_url = final_url.split("/")[-2]
-    logging.info("part_url :: (" + source + ") " + part_url)
+    logging.info("To KafkaProducer :: [" + source + "] " + final_url)
 
     if auth_id and auth_pwd:
-        final_response = session.get(final_url, allow_redirects=False,
+        final_response = session.get(final_url, allow_redirects=True,
                                      auth=HTTPBasicAuth(auth_id, auth_pwd))
-        kafkaProducer.kafkaSend(source, part_url, final_response.content)
+        if final_response.content:
+            kafkaProducer.kafkaSend(source, final_url, final_response.content)
+        else:
+            logging.info(str(final_response.status_code))
     else:
-        final_response = session.get(final_url, allow_redirects=False)
-        kafkaProducer.kafkaSend(source, part_url, final_response.content)
+        final_response = session.get(final_url, allow_redirects=True)
+
+        if final_response.content:
+            kafkaProducer.kafkaSend(source, final_url, final_response.content)
+        else:
+            logging.info(str(final_response.status_code))
 
     time.sleep(3)
     session.close()

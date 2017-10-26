@@ -12,6 +12,7 @@ from functools import partial
 from lxml import etree
 from StringIO import StringIO
 from FinKafkaProducer import finKafkaProducer
+from mongoDBConnection import initialize_mongo
 
 
 class SitemapParser():
@@ -20,6 +21,7 @@ class SitemapParser():
                             %(module)s.%(funcName)s %(message)s',
                             level=logging.INFO)
         self.kafkaProducer = finKafkaProducer()
+        self.mongo_colln = initialize_mongo()
 
     def crawlSiteMapXML(self, source, sitemap_url):
         """Crawls the SiteMap XMLs and Fetches the HTML pages,
@@ -50,14 +52,22 @@ class SitemapParser():
                 self.loopRootURLSet(source, urlset_locs)
             else:
                 logging.info("Sitemap index_loc (not xml) - " + index_loc)
-                self.sendToKafka(source, index_loc)
+                metadata_cursor = self.mongo_colln.find({source: index_loc})
+                if metadata_cursor.count() == 0:
+                    self.sendToKafka(source, index_loc)
+                else:
+                    logging.info("Duplicate data Skipped")
 
     def loopRootURLSet(self, source, rootURLSets):
         for urlset_loc in rootURLSets:
             children = urlset_loc.getchildren()
             final_url = children[0].text
             logging.info("urlset_loc final_url - " + final_url)
-            self.sendToKafka(source, final_url)
+            metadata_cursor = self.mongo_colln.find({source: final_url})
+            if metadata_cursor.count() == 0:
+                self.sendToKafka(source, final_url)
+            else:
+                logging.info("Duplicate data Skipped")
 
     def unzipSiteMapURL(self, source, sitemap_url):
         """Exctracts zip format URLs to fetch Post URLs."""
@@ -111,14 +121,13 @@ class SitemapParser():
 
     def sendToKafka(self, source, final_url):
         session = requests.Session()
-        final_response = session.get(final_url, allow_redirects=False)
+        final_response = session.get(final_url, allow_redirects=True)
+        logging.info("To KafkaProducer :: [" + source + "] " + final_url)
 
         if final_response.status_code == 200:
-            part_url = final_url.split("/")[-1]
-            if not part_url:
-                part_url = final_url.split("/")[-2]
-            self.kafkaProducer.kafkaSend(source, part_url,
+            self.kafkaProducer.kafkaSend(source, final_url,
                                          final_response.content)
-
+        else:
+            logging.info(str(final_response.status_code))
         time.sleep(3)
         session.close()

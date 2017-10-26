@@ -10,7 +10,7 @@ import os
 
 RSS_FEED_URLS = {
         #"thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
-        "wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
+        #"wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
         #"cnbc": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
         #"cnn_money": "http://rss.cnn.com/rss/money_latest.rss",
         #"morning_star": "http://feeds.feedburner.com/morningstar/glkd",
@@ -18,7 +18,7 @@ RSS_FEED_URLS = {
         #"seeking_alpha": "https://seekingalpha.com/sector/financial.xml",
         #"yahoo_finance": "https://finance.yahoo.com/rss/topstories",
         #"motley_fool": "http://culture.fool.com/feed/",
-        #"zacks_investment": "http://feed.zacks.com/commentary/AllStories/rss",
+        "zacks_investment": "http://feed.zacks.com/commentary/AllStories/rss",
         
         # Need Subscription 
         # "financial_times": "https://www.openft.org/searches/083bb4149bf03104c4549dcbc929b428e8f98c84.rss", # need API KEY
@@ -67,3 +67,17 @@ argument_config = {
     'ft_api_key': os.getenv('FT_API_KEY', '7hnme32uuvku4r9zp47kf5x9'),
     'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
 }
+
+mongo_config = {
+    'mongo_uri': os.getenv('MONGO_URI', 'localhost:27017'),
+    'ssl_required': os.getenv('MONGO_SSL_REQUIRED', False),
+    'requires_auth': os.getenv('REQUIRES_AUTH', 'false'),
+    'mongo_username': os.getenv('MONGO_USER', ''),
+    'mongo_password': os.getenv('MONGO_PASSWORD', ''),
+    'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'dbadmin'),
+    'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
+    'db_name': os.getenv('MONGO_DB_NAME', 'finnews_all6'),#needs to be same as consumer code.
+    'col_name': os.getenv('MONGO_COL_NAME', 'METADATA'),
+    'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrt'),
+}
+

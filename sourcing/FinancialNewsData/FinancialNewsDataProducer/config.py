@@ -9,25 +9,25 @@ import os
 
 
 RSS_FEED_URLS = {
-        #"thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
-        #"wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
-        #"cnbc": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
-        #"cnn_money": "http://rss.cnn.com/rss/money_latest.rss",
-        #"morning_star": "http://feeds.feedburner.com/morningstar/glkd",
-        #"rtt_news": "http://www.rttnews.com/RSS/Todaystop.xml",
-        #"seeking_alpha": "https://seekingalpha.com/sector/financial.xml",
-        #"yahoo_finance": "https://finance.yahoo.com/rss/topstories",
-        #"motley_fool": "http://culture.fool.com/feed/",
-        #"zacks_investment": "http://feed.zacks.com/commentary/AllStories/rss",
+        "thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
+        "wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
+        "cnbc": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
+        "cnn_money": "http://rss.cnn.com/rss/money_latest.rss",
+        "morning_star": "http://feeds.feedburner.com/morningstar/glkd",
+        "rtt_news": "http://www.rttnews.com/RSS/Todaystop.xml",
+        "seeking_alpha": "https://seekingalpha.com/sector/financial.xml",
+        "yahoo_finance": "https://finance.yahoo.com/rss/topstories",
+        "motley_fool": "http://culture.fool.com/feed/",
+        "zacks_investment": "http://feed.zacks.com/commentary/AllStories/rss",
         }
 
 SITE_MAP_URLS = {
         "bloomberg": "https://www.bloomberg.com/robots.txt",
         "market_watch": "http://www.marketwatch.com/robots.txt",
         "forbes": "https://www.forbes.com/robots.txt",
-        #"the_street": "https://www.thestreet.com/robots.txt",
-        #"msci_dataset": "https://www.msci.com/robots.txt",
-        #"ceic_dataset": "https://www.ceicdata.com/robots.txt",
+        "the_street": "https://www.thestreet.com/robots.txt",
+        "msci_dataset": "https://www.msci.com/robots.txt",
+        "ceic_dataset": "https://www.ceicdata.com/robots.txt",
 
         # SITEMAPS FOR HISTORICAL RSS 
         #"wall_street_journal": "https://www.wsj.com/robots.txt",
@@ -62,7 +62,7 @@ argument_config = {
     'scrapy_urls': os.getenv('SCRAPY_URLS', SCRAPY_URLS),
     'auth_urls': os.getenv('AUTH_URLS', AUTH_URLS),
     'ft_api_key': os.getenv('FT_API_KEY', '7hnme32uuvku4r9zp47kf5x9'),
-    'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
+    'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', '173.193.253.179:253'),
 }
 
 mongo_config = {
@@ -74,7 +74,7 @@ mongo_config = {
     'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'dbadmin'),
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
     # db_name needs to be same as consumer code, for checking duplicates.
-    'db_name': os.getenv('MONGO_DB_NAME', 'finnews_all2'),
+    'db_name': os.getenv('MONGO_DB_NAME', 'fin'),
     'col_name': os.getenv('MONGO_COL_NAME', 'METADATA'),
     'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrt'),
 }

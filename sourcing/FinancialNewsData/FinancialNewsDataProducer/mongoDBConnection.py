@@ -37,6 +37,13 @@ def make_mongo_connection(collection_name):
     db = client[db_name]
     col = db[collection_name]
     
+    test_uuid = str(uuid1())
+    try:
+        col.insert_one({'uuid': test_uuid})
+        col.delete_one({'uuid': test_uuid})
+    except DuplicateKeyError:
+        logging.debug("Collection %s already exists" % collection_name)
+    
     return col
 
 

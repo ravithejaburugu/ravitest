@@ -4,7 +4,7 @@ Created on Thu Oct 12 14:44:42 2017
 
 @author: RAVITHEJA
 """
-
+from uuid import uuid1
 import logging
 from pymongo import MongoClient
 from config import mongo_config
@@ -33,8 +33,15 @@ def make_mongo_connection(collection_name):
                                          mechanism=mongo_auth_mechanism
                                          )
     db = client[db_name]
-
-    return db[collection_name]
+    col = db[collection_name]
+    
+    test_uuid = str(uuid1())
+    try:
+        col.insert_one({'uuid': test_uuid})
+        col.delete_one({'uuid': test_uuid})
+    except DuplicateKeyError:
+        logging.debug("Collection %s already exists" % collection_name)
+    return col
 
 
 def initialize_mongo(source):

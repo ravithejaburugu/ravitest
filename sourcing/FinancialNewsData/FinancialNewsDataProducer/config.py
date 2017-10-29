@@ -47,7 +47,7 @@ SCRAPY_URLS = {
 
 
 argument_config = {
-    'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', 'localhost:9092'),
+    'kafka_broker_uri': os.getenv('KAFKA_BROKER_URI', '173.193.179.253:9097'),
 
     'rss_feed_urls': os.getenv('RSS_FEED_URLS', RSS_FEED_URLS),
     'site_map_urls': os.getenv('SITE_MAP_URLS', SITE_MAP_URLS),
@@ -62,7 +62,7 @@ argument_config = {
 }
 
 mongo_config = {
-    'mongo_uri': os.getenv('MONGO_URI', '173.193.253.179:253'),
+    'mongo_uri': os.getenv('MONGO_URI', 'localhost:27017'),
     'ssl_required': os.getenv('MONGO_SSL_REQUIRED', False),
     'requires_auth': os.getenv('REQUIRES_AUTH', 'false'),
     'mongo_username': os.getenv('MONGO_USER', ''),
@@ -70,7 +70,7 @@ mongo_config = {
     'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'dbadmin'),
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
     # db_name needs to be same as consumer code, for checking duplicates.
-    'db_name': os.getenv('MONGO_DB_NAME', 'fin'),
+    'db_name': os.getenv('MONGO_DB_NAME', 'fin1'),
     'col_name': os.getenv('MONGO_COL_NAME', 'METADATA'),
     'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrt'),
 }

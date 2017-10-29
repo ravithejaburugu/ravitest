@@ -109,11 +109,11 @@ def main():
         getYahooStocks("yahoo_stocks", all_fin_symbols)
 
         logging.info(feed_count)
-                logging.info("Total time taken for extracting all Financial News Data "
+        logging.info("Total time taken for extracting all Financial News Data "
                      + ":: " + str(time.time() - t1))
         logging.info("This program is now in sleep mode. Will re-execute " +
                      "after 30 mins for latest news feeds.")
-        time.sleep(180)
+        time.sleep(1800)
 
 
 def scrapeFT(feedName, news_url, auth_id, auth_pwd, ft_api_key):

@@ -9,40 +9,40 @@ import os
 
 
 RSS_FEED_URLS = {
-        #"thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
+        "thomson_reuters": "http://feeds.reuters.com/reuters/INbusinessNews",
         "wall_street_journal": "http://www.wsj.com/xml/rss/3_7031.xml",
-        #"cnbc": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
-        #"cnn_money": "http://rss.cnn.com/rss/money_latest.rss",
-        #"morning_star": "http://feeds.feedburner.com/morningstar/glkd",
-        #"rtt_news": "http://www.rttnews.com/RSS/Todaystop.xml",
-        #"seeking_alpha": "https://seekingalpha.com/sector/financial.xml",
-        #"yahoo_finance": "https://finance.yahoo.com/rss/topstories",
-        #"motley_fool": "http://culture.fool.com/feed/",
-        #"zacks_investment": "http://feed.zacks.com/commentary/AllStories/rss",
+        "cnbc": "https://www.cnbc.com/id/10000664/device/rss/rss.html",
+        "cnn_money": "http://rss.cnn.com/rss/money_latest.rss",
+        "morning_star": "http://feeds.feedburner.com/morningstar/glkd",
+        "rtt_news": "http://www.rttnews.com/RSS/Todaystop.xml",
+        "seeking_alpha": "https://seekingalpha.com/sector/financial.xml",
+        "yahoo_finance": "https://finance.yahoo.com/rss/topstories",
+        "motley_fool": "http://culture.fool.com/feed/",
+        "zacks_investment": "http://feed.zacks.com/commentary/AllStories/rss",
         }
 
 SITE_MAP_URLS = {
-        #"bloomberg": "https://www.bloomberg.com/robots.txt",
-        #"market_watch": "http://www.marketwatch.com/robots.txt",
-        #"forbes": "https://www.forbes.com/robots.txt",
+        "bloomberg": "https://www.bloomberg.com/robots.txt",
+        "market_watch": "http://www.marketwatch.com/robots.txt",
+        "forbes": "https://www.forbes.com/robots.txt",
         "the_street": "https://www.thestreet.com/robots.txt",
-        #"msci_dataset": "https://www.msci.com/robots.txt",
-        #"ceic_dataset": "https://www.ceicdata.com/robots.txt",
+        "msci_dataset": "https://www.msci.com/robots.txt",
+        "ceic_dataset": "https://www.ceicdata.com/robots.txt",
         }
 
 HISTORICAL_SITEMAP_URLS = {
         "wall_street_journal": "https://www.wsj.com/robots.txt",
         "cnbc": "https://www.cnbc.com/robots.txt",
-        #"cnn_money": "http://money.cnn.com/robots.txt",
-        #"rtt_news": "http://www.rttnews.com/robots.txt",
-        #"seeking_alpha": "https://seekingalpha.com/robots.txt",
-        #"zacks_investment": "https://www.zacks.com/robots.txt",
+        "cnn_money": "http://money.cnn.com/robots.txt",
+        "rtt_news": "http://www.rttnews.com/robots.txt",
+        "seeking_alpha": "https://seekingalpha.com/robots.txt",
+        "zacks_investment": "https://www.zacks.com/robots.txt",
         
         #"motley_fool": "http://culture.fool.com/robots.txt",
         }
 
 SCRAPY_URLS = {
-        #"finviz": "https://finviz.com/news.ashx",
+        "finviz": "https://finviz.com/news.ashx",
         }
 
 
@@ -62,7 +62,7 @@ argument_config = {
 }
 
 mongo_config = {
-    'mongo_uri': os.getenv('MONGO_URI', 'localhost:27017'),
+    'mongo_uri': os.getenv('MONGO_URI', '173.193.253.179:253'),
     'ssl_required': os.getenv('MONGO_SSL_REQUIRED', False),
     'requires_auth': os.getenv('REQUIRES_AUTH', 'false'),
     'mongo_username': os.getenv('MONGO_USER', ''),
@@ -70,7 +70,7 @@ mongo_config = {
     'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'dbadmin'),
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
     # db_name needs to be same as consumer code, for checking duplicates.
-    'db_name': os.getenv('MONGO_DB_NAME', 'finnews_all0'),
+    'db_name': os.getenv('MONGO_DB_NAME', 'fin'),
     'col_name': os.getenv('MONGO_COL_NAME', 'METADATA'),
     'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrt'),
 }

@@ -9,7 +9,6 @@ import logging
 import json
 from config import argument_config
 from kafka import KafkaProducer
-from kafka.errors import KafkaError
 
 
 class finKafkaProducer():
@@ -33,7 +32,5 @@ class finKafkaProducer():
                                value=json.loads(json_data))
             self.producer.flush()
             logging.info("-- FEED :: " + feedName)
-        except KafkaError as ke:
-            logging.info("KafkaError in producer:: " + ke)
         except:
-            logging.info("KafkaTimeoutError in kafkaProducer for: " + feedName)
+            logging.info("KafkaError in producer:: " + feedName)

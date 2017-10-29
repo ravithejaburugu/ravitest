@@ -55,8 +55,8 @@ argument_config = {
     'historical_urls': os.getenv('HISTORICAL_URLS', HISTORICAL_SITEMAP_URLS),
 
     'ft_api_key': os.getenv('FT_API_KEY', '7hnme32uuvku4r9zp47kf5x9'),
-    'ft_auth_id': os.getenv('FT_AUTH_ID', 'vavasarala@randomtrees.com'),
-    'ft_auth_pwd': os.getenv('FT_AUTH_PWD', ''),
+    'ft_api_id': os.getenv('FT_AUTH_ID', 'vavasarala@randomtrees.com'),
+    'ft_api_pwd': os.getenv('FT_AUTH_PWD', 'welcome123'),
     'wsj_auth_id': os.getenv('WSJ_AUTH_ID', 'vavasarala@randomtrees.com'),
     'wsj_auth_pwd': os.getenv('WSJ_AUTH_PWD', 'welcome123'),
 }

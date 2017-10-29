@@ -81,7 +81,7 @@ def main():
                 crawlAndScrape(source, robots_url)
     
                 meta_mongo_colln = initialize_mongo("METADATA")
-                meta_feedObj = {"METADATA": source}
+                meta_feedObj = {"HISTORICAL": source}
                 insert_into_mongo(meta_mongo_colln, meta_feedObj)
     
             else:

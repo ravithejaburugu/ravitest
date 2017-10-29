@@ -9,6 +9,7 @@ import logging
 import json
 from config import argument_config
 from kafka import KafkaProducer
+from kafka.errors import KafkaError
 
 
 class finKafkaProducer():
@@ -25,12 +26,14 @@ class finKafkaProducer():
         """Sends the message to the given Kafka topic."""
         data = {part_url: response}
         json_data = json.dumps(data)
-        
+
         try:
             # Kafka producer writing Post/Webpage content to Kafka Topics.
             self.producer.send(feedName, key=feedName,  # value=response)
                                value=json.loads(json_data))
             self.producer.flush()
             logging.info("-- FEED :: " + feedName)
-        except ValueError:
-            logging.info("Issue in kafka Producer for: " + feedName)
+        except KafkaError as ke:
+            logging.info("KafkaError in producer:: " + ke)
+        except:
+            logging.info("KafkaTimeoutError in kafkaProducer for: " + feedName)

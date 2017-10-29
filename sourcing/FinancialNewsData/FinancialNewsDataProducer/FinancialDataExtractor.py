@@ -41,70 +41,83 @@ def main():
     rss_feed_urls = argument_config.get('rss_feed_urls')
     site_map_urls = argument_config.get('site_map_urls')
     scrapy_urls = argument_config.get('scrapy_urls')
-    auth_urls = argument_config.get('auth_urls')
+    historical_urls = argument_config.get('historical_urls')
+
     ft_api_key = argument_config.get('ft_api_key')
+    ft_api_id = argument_config.get('ft_api_id')
+    ft_api_pwd = argument_config.get('ft_api_pwd')
 
     # while True:
-    """ SitemapParsing begins. It fetches all sitmap urls from robots.txt and
-        filters the zip, xml urls.
-    for source in site_map_urls:
-        robots_url = site_map_urls[source]
-        logging.info("SiteMap for " + source + " from " + robots_url)
-        crawlAndScrape(source, robots_url)"""
-
     """ RSSFeedParsing begins."""
     for rss_feed_name in rss_feed_urls:
         rss_feed_url = rss_feed_urls[rss_feed_name]
         logging.info("RSSfeed " + rss_feed_name + "[" + rss_feed_url + "]")
         parseAndSave(rss_feed_name, rss_feed_url)
 
-    """ URLs with subscription using authentication.
-    for auth_item in auth_urls:
-        auth_credentials = auth_urls[auth_item]
-        auth_id = auth_credentials['auth_id']
-        auth_pwd = auth_credentials['auth_pwd']
+    """URLs with subscription using authentication."""
+    if ft_api_id and ft_api_pwd:
+        try:
+            news_url = "http://api.ft.com/content/search/v1"
+            scrapeFT("financial-times", news_url, ft_api_id, ft_api_pwd,
+                     ft_api_key)
+        except:
+            logging.warn("Problem while scraping Financial Times")
+    else:
+        logging.warn("Subscription not found for Financial Times")
 
-        if auth_id and auth_pwd:
-            try:
-                if auth_item == "financial-times":
-                    news_url = "http://api.ft.com/content/search/v1"
-                    scrapeFT(auth_item, news_url, auth_id, auth_pwd,
-                             ft_api_key)
-                elif auth_item == "the-wall-street-journal":
-                    news_url = "https://newsapi.org/v1/articles"
-                    ## scrapeWSJ(auth_item, news_url, auth_id, auth_pwd)
-            except:
-                logging.warn("Problem while scraping " + auth_item)
-                continue
-        else:
-            logging.warn("Subscription not found for: " + auth_item)"""
+    """if wsj_api_id and wsj_api_pwd:
+        try:
+            news_url = "https://newsapi.org/v1/articles"
+            ## scrapeWSJ(auth_item, news_url, auth_id, auth_pwd)
+        except:
+            logging.warn("Problem while scraping WSJ")
+    else:
+        logging.warn("Subscription not found for Wall Street Journal.")"""
 
-    """ Scraping begins.
+    """ Scraping begins."""
     for source in scrapy_urls:
         scrape_url = scrapy_urls[source]
         logging.info("RSS feed of " + source + "[" + scrape_url + "]")
         scrapeAndSave(source, scrape_url)
 
+    """ Historical data scraping using sitemap url. """
+    for source in historical_urls:
+        # Check if historical data is already downloaded.
+        metadata_cursor = mongo_colln.find({"HISTORICAL": source})
+        if metadata_cursor.count() == 0:
+            robots_url = historical_urls[source]
+            logging.info("SiteMap for " + source + " from " + robots_url)
+            crawlAndScrape(source, robots_url)
+        else:
+            logging.info("Historical data already downloaded for " + source)
+
+    """ SitemapParsing begins. It fetches all sitmap urls from robots.txt and
+        filters the zip, xml urls."""
+    for source in site_map_urls:
+        robots_url = site_map_urls[source]
+        logging.info("SiteMap for " + source + " from " + robots_url)
+        crawlAndScrape(source, robots_url)
+
     all_fin_symbols = get_sp500_symbols() + get_nyse_symbols() + get_amex_symbols() + get_nasdaq_symbols()
-    """
-    """ Google finance News extraction begins.
+
+    """ Google finance News extraction begins."""
     logging.info("Google Finance News...")
-    getGoogleNews("google_fin_news", all_fin_symbols)"""
+    getGoogleNews("google_fin_news", all_fin_symbols)
 
-    """ Google Stocks extraction begins.
+    """ Google Stocks extraction begins."""
     logging.info("Google Live Stocks...")
-    getGoogleQuotes("google_stocks", all_fin_symbols)"""
+    getGoogleQuotes("google_stocks", all_fin_symbols)
 
-    """Yahoo finance stock prices.
+    """Yahoo finance stock prices."""
     logging.info("Yahoo Finance Stocks...")
-    getYahooStocks("yahoo_stocks", all_fin_symbols)"""
+    getYahooStocks("yahoo_stocks", all_fin_symbols)
 
     logging.info(feed_count)
     logging.info("Total time taken for extracting all Financial News Data :: "
                  + str(time.time() - t1))
         #time.sleep(180)
-    
 
+"""
 def scrapeWSJ(feedName, news_url, auth_id, auth_pwd):
     querystring = {"source": feedName,
                    "sortBy": "top",
@@ -116,7 +129,7 @@ def scrapeWSJ(feedName, news_url, auth_id, auth_pwd):
         if metadata_cursor.count() == 0:
             sendToKafka(feedName, url['url'], auth_id, auth_pwd)
         else:
-            logging.info("Duplicate data Skipped")
+            logging.info("Duplicate data Skipped")"""
 
 
 def scrapeFT(feedName, news_url, auth_id, auth_pwd, ft_api_key):
@@ -222,26 +235,17 @@ def getGoogleQuotes(feedName, finsymbols):
     base_url = 'https://finance.google.com/finance?output=json&q='
     for symbol in finsymbols:
         final_url = base_url + symbol['symbol']
-        metadata_cursor = mongo_colln.find({feedName: final_url})
-        if metadata_cursor.count() == 0:
-            sendToKafka(feedName, final_url)
-        else:
-            logging.info("Duplicate data Skipped")
+        sendToKafka(feedName, final_url)
 
 
 def getYahooStocks(feedName, all_fin_symbols):
     for fin_symbol in all_fin_symbols:
         sym = fin_symbol['symbol']
         final_url = "https://finance.yahoo.com/quote/" + sym + "?p=" + sym
-        metadata_cursor = mongo_colln.find({feedName: final_url})
-        if metadata_cursor.count() == 0:
-            sendToKafka(feedName, final_url)
-        else:
-            logging.info("Duplicate data Skipped")
+        sendToKafka(feedName, final_url)
 
 
 def sendToKafka(source, final_url, auth_id='', auth_pwd=''):
-    session = requests.Session()
     logging.info("To KafkaProducer :: [" + source + "] " + final_url)
 
     if source in feed_count:
@@ -250,6 +254,7 @@ def sendToKafka(source, final_url, auth_id='', auth_pwd=''):
         feed_count[source] = 1
 
     try:
+        session = requests.Session()
         if auth_id and auth_pwd:
             final_response = session.get(final_url, allow_redirects=True,
                                          auth=HTTPBasicAuth(auth_id, auth_pwd))
@@ -266,11 +271,11 @@ def sendToKafka(source, final_url, auth_id='', auth_pwd=''):
                                         final_response.content)
             else:
                 logging.info(str(final_response.status_code))
+        time.sleep(3)
     except:
-        pass
-
-    time.sleep(3)
-    session.close()
+        logging.error("Error while request.get.")
+    finally:
+        session.close()
 
 
 if __name__ == '__main__':

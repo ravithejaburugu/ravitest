@@ -70,7 +70,7 @@ class SitemapParser():
                     # Creating new thread.
                     news_thread = ThreadClass(source + str(thread_count),
                                               source, index_loc)
-                    if thread_count < 2:
+                    if thread_count < 9:
                         thread_count += 1
                     else:
                         thread_count = 0
@@ -81,22 +81,6 @@ class SitemapParser():
                 else:
                     logging.info("Duplicate data Skipped")
         return url_count
-
-    def scrapingWSJ(self, source, final_response):
-        # if self.source == 'wall_street_journal':
-        auth_urls = argument_config.get('auth_urls')
-        auth_credentials = auth_urls['wall_street_journal']
-        auth_id = auth_credentials['auth_id']
-        auth_pwd = auth_credentials['auth_pwd']
-
-        soup = BeautifulSoup(final_response.content)
-        div_elements = soup.findAll('div', attrs={'class':
-                                                  'carousel-item locked'})
-        for div in div_elements:
-            final_url = div.find('a')['href']
-            final_response = requests.get(final_url,
-                                          auth=HTTPBasicAuth(auth_id,
-                                                             auth_pwd))
 
     def loopRootURLSet(self, source, rootURLSets):
         thread_count = 0
@@ -110,7 +94,7 @@ class SitemapParser():
                 # Creating new thread.
                 news_thread = ThreadClass(source + str(thread_count),
                                           source, final_url)
-                if thread_count < 2:
+                if thread_count < 9:
                     thread_count += 1
                 else:
                     thread_count = 0
@@ -127,11 +111,10 @@ class SitemapParser():
 
         # Process the zip url from robot.txt and store in mongo
         sitemap_xml = self.decompress_stream(sitemap_url)
-
         tree = etree.parse(sitemap_xml)
         root = tree.getroot()
-
         logging.info("The number of gz tags: " + str(len(root)))
+
         locs = []
         url_count = 0
         for sitemap in root:
@@ -148,13 +131,12 @@ class SitemapParser():
                 logging.info(str(i) + " The processing url: " + loc)
                 logging.info("Final URLs at " + loc.split("/")[-1] + " are "
                              + str(len(sub_root)))
-
                 url_count += self.loopRootURLSet(source, sub_root)
             elif loc.split(".")[-1] == "xml":
                 url_count += self.crawlSiteMap(source, loc)
-
             else:
                 logging.info("Its neither gz nor xml. Please check the format")
+
         return url_count
 
     def decompress_stream(self, sitemap_url):
@@ -185,18 +167,49 @@ class ThreadClass(threading.Thread):
         self.source_url = source_url
 
     def run(self):
-        # def sendToKafka(self, source, final_url):
-        session = requests.Session()
-        final_response = session.get(self.source_url, allow_redirects=True)
-
         logging.info(self.threadID + " to KafkaProducer :: [" +
                      self.source + "] " + self.source_url)
-
-        if final_response.content:
-            self.kafkaProducer.kafkaSend(self.source, self.source_url,
-                                         final_response.content)
+        if self.source == 'wall_street_journal':
+            self.scrapingWSJ(self.source, self.source_url)
         else:
-            logging.info(str(final_response.status_code))
+            try:
+                session = requests.Session()
+                final_response = session.get(self.source_url, allow_redirects=True)
+    
+                if final_response.content:
+                    self.kafkaProducer.kafkaSend(self.source, self.source_url,
+                                                 final_response.content)
+                else:
+                    logging.info(str(final_response.status_code))
+                time.sleep(3)
+            except:
+                logging.error("Error while request.get in Sitemap.")
+            finally:
+                session.close()
 
-        time.sleep(3)
-        session.close()
+    def scrapingWSJ(self, source, source_url):
+        auth_id = argument_config.get('wsj_api_id')
+        auth_pwd = argument_config.get('wsj_api_pwd')
+        try:
+            session = requests.Session()
+            wsj_response = session.get(self.source_url, allow_redirects=True)
+            soup = BeautifulSoup(wsj_response.content)
+            div_elements = soup.findAll('div',
+                                        attrs={'class': 'carousel-item locked'}
+                                        )
+            for div in div_elements:
+                final_url = div.find('a')['href']
+                session = requests.Session()
+                final_response = session.get(final_url, allow_redirects=True,
+                                             auth=HTTPBasicAuth(auth_id,
+                                                                auth_pwd))
+                if final_response.content:
+                    self.kafkaProducer.kafkaSend(self.source, self.source_url,
+                                                 final_response.content)
+                else:
+                    logging.info(str(final_response.status_code))
+                time.sleep(3)
+        except:
+            logging.error("Error while request.get in Sitemap.")
+        finally:
+            session.close()

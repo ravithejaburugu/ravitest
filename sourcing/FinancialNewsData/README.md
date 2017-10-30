@@ -15,7 +15,7 @@ Below are the list of arguments to be part of the execution.
 
 * **Agent**
 
-*	`KAFKA_BROKER_URI`: URI (including host name and port number, if applicable), where Kafka server is running.
+  *	`KAFKA_BROKER_URI`: URI (including host name and port number, if applicable), where Kafka server is running.
 *	`KAFKA_TOPIC_NAME`: A Topic to be used by Kafka Producer to write the message and Kafka Consumer to read from the same.
 
 *	`REQUIRES_AUTH`: Specify whether the MongoDB Instance needs authentication (default: false)

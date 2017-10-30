@@ -31,26 +31,19 @@ def main():
     try:
         consumer = KafkaConsumer(*kafka_topics,
                                  bootstrap_servers=[kafka_broker_uri],
-                                 # value_deserializer=lambda m:
-                                 #   json.loads(m.decode('ascii')),
                                  auto_offset_reset='earliest',
                                  enable_auto_commit=False)
         for message in consumer:
             try:
                 source = message.key
-                val_obj = message.value
 
-                json_val_obj = json.loads(val_obj)
+                json_val_obj = json.loads(message.value)
                 post_url = json_val_obj.keys()[0]
                 msg_val = json_val_obj[post_url]
-
-                # print msg_val
 
                 feedObject = {source: msg_val}
 
                 mongo_colln = initialize_mongo(source)
-                # part_url = "url-test"
-                # feedObject = {source: message.value}
                 try:
                     inserted = insert_into_mongo(mongo_colln, feedObject)
 

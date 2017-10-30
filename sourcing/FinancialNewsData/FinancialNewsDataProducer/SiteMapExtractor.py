@@ -15,6 +15,7 @@ from StringIO import StringIO
 from FinKafkaProducer import finKafkaProducer
 from mongoDBConnection import initialize_mongo
 from requests.auth import HTTPBasicAuth
+from bs4 import BeautifulSoup
 
 
 class SitemapParser():
@@ -36,7 +37,7 @@ class SitemapParser():
 
     def sitemapCrawler(self, sitemap_url):
         """Crawls through sitemap URLs, for webpage URLs. Their content
-        is downloaded to Mongo from the Topics written by Kafka Producer."""
+        is written to Kafka Topics by Kafka Producer."""
 
         if sitemap_url.split(".")[-1] == "gz":
             sitemap_xml = self.decompress_stream(sitemap_url)
@@ -62,13 +63,16 @@ class SitemapParser():
                 xlocs[loc] = self.sitemapCrawler(xlocs[loc])
 
         else:
+            # Check and hold from duplicate data capture.
             metadata_cursor = self.mongo_colln.find({self.source: sitemap_url})
             if metadata_cursor.count() == 0:
                 self.sendToKafka(self.source, sitemap_url)
             else:
                 logging.info("Duplicate data Skipped")
+        return self.url_count
 
     def decompress_stream(self, sitemap_url):
+        """Decompresses the zip files in .gz format."""
         zip_response = requests.get(sitemap_url, stream=True)
         rraw = zip_response.raw
 
@@ -86,22 +90,37 @@ class SitemapParser():
         return sitemap_xml
 
     def sendToKafka(self, source, source_url):
-        logging.info("To KafkaProducer :: [" + source + "] " + source_url)
+        """Interfaces Kafkaproducer to write messages into Kafka Topics."""
         try:
-            session = requests.Session()
 
             if self.auth_id and self.auth_pwd:
-                final_response = session.get(source_url, allow_redirects=True,
-                                             auth=HTTPBasicAuth(self.auth_id,
-                                                                self.auth_pwd))
-                if final_response.content:
-                    self.kafkaProducer.kafkaSend(source, source_url,
-                                                 final_response.content)
+                session = requests.Session()
+                wsj_response = session.get(source_url, allow_redirects=True)
+                soup = BeautifulSoup(wsj_response.content)
+                div_elements = soup.findAll('div',
+                                            attrs={'class': 'carousel-item locked'}
+                                            )
+                for div in div_elements:
+                    final_url = div.find('a')['href']
+                    session = requests.Session()
+    
+                    final_response = session.get(final_url,
+                                                 auth=HTTPBasicAuth(self.auth_id,
+                                                                    self.auth_pwd))
+                    if final_response.content:
+                        self.kafkaProducer.kafkaSend(source, source_url,
+                                                     final_response.content)
+                        logging.info("To KafkaProducer :: [" + source + "] "
+                                     + source_url)
             else:
+                session = requests.Session()
                 final_response = session.get(source_url, allow_redirects=True)
                 if final_response.content:
                     self.kafkaProducer.kafkaSend(source, source_url,
                                                  final_response.content)
+                    logging.info("To KafkaProducer :: [" + source + "] "
+                                 + source_url)
+
             self.url_count += 1
             time.sleep(3)
         except:

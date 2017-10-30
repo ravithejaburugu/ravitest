@@ -28,6 +28,7 @@ def make_mongo_connection(collection_name):
     # Instantiating MongoClient
     client = MongoClient(mongo_uri, ssl=ssl_required)
 
+    # Authenticate MongoDB (Optional)
     if requires_auth == 'true':
         client.the_database.authenticate(mongo_username,
                                          mongo_password,
@@ -35,31 +36,36 @@ def make_mongo_connection(collection_name):
                                          mechanism=mongo_auth_mechanism
                                          )
     db = client[db_name]
-    col = db[collection_name]
+    mongo_colln = db[collection_name]
 
+    # Testing Index with Unique element, to avoid failure of Index creation,
+    # in case of Collection doesnot exist.
     test_uuid = str(uuid1())
-    # try:
-    col.insert_one({'uuid': test_uuid})
-    col.delete_one({'uuid': test_uuid})
-    # except DuplicateKeyError:
-      #  logging.debug("Collection %s already exists" % collection_name)
+    try:
+        mongo_colln.insert_one({'uuid': test_uuid})
+        mongo_colln.delete_one({'uuid': test_uuid})
+    except:
+        logging.debug("Collection %s already exists" % collection_name)
 
-    return col
+    return mongo_colln
 
 
 def initialize_mongo():
     """Initializes MongoDB Connection and returns MongoCollection for the
     given Index."""
 
+    # Fetching config parameters.
     mongo_index_name = mongo_config.get('mongo_index_name')
     source = mongo_config.get('col_name')
 
-    # Creating Mongo Collection
-    mongo_colln = make_mongo_connection(source)
     try:
+        # Creating Mongo Collection
+        mongo_colln = make_mongo_connection(source)
+
         # Create index, if it is not available.
         if mongo_index_name not in mongo_colln.index_information():
             mongo_colln.create_index(mongo_index_name, unique=False)
+
     except IOError:
         logging.error("Could not connect to Mongo Server")
 
@@ -68,7 +74,6 @@ def initialize_mongo():
 
 def insert_into_mongo(mongo_colln, feed_object):
     """To insert a news feed/post, given in JSON format, into MongoDB."""
-
     try:
         mongo_colln.insert_one(feed_object)
         # mongo_colln.update(feed_object, upsert=True)

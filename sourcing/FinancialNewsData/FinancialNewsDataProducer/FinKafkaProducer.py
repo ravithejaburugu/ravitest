@@ -21,21 +21,22 @@ class finKafkaProducer():
                             %(module)s.%(funcName)s %(message)s',
                             level=logging.INFO)
         kafka_broker_uri = argument_config.get('kafka_broker_uri')
+
+        # initializing single Kafka producer instance.
         self.producer = KafkaProducer(bootstrap_servers=[kafka_broker_uri],
                                       value_serializer=lambda v:
                                           json.dumps(v).encode('utf-8'))
 
     def kafkaSend(self, feedName, part_url, response):
         """Sends the message to the given Kafka topic."""
-        data = {part_url: response}
-        json_data = json.dumps(data)
+        json_data = json.dumps({part_url: response})
 
         try:
             # Kafka producer writing Post/Webpage content to Kafka Topics.
-            self.producer.send(feedName, key=feedName,  # value=response)
+            self.producer.send(feedName, key=feedName,
                                value=json.loads(json_data))
             self.producer.flush()
-            logging.info("-- FEED :: " + feedName)
+            logging.info("Kafka sending FEED :: " + feedName)
         except KafkaError as ke:
             logging.info("KafkaError in producer:- " + ke)
         except:

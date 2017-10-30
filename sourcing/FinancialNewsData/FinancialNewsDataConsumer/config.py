@@ -27,14 +27,8 @@ SOURCES = [
         "ceic_dataset",
 
         "finviz",
-
         "google_fin_news",
-
         "financial-times",
-        # "the-wall-street-journal",
-
-        # "google_stocks",
-        # "yahoo_stocks",
         ]
 
 argument_config = {

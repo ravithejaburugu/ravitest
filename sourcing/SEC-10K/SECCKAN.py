@@ -5,11 +5,14 @@ Created on Thu Aug 31 13:03:13 2017
 @author: RAVITHEJA
 """
 
+import logging
 import json
 import urllib2
 import ckanapi
 import re
 from datetime import datetime
+from config import mongo_config
+from mongoDBConnection import initialize_mongo
 
 
 class SEC_CKAN():
@@ -23,13 +26,45 @@ class SEC_CKAN():
         self.publisher = publisher
         self.owner_org = owner_org  # "securities-exchange-commission"
 
+        logging.basicConfig(format='%(asctime)s %(levelname)s \
+                            %(module)s.%(funcName)s %(message)s',
+                            level=logging.INFO)
+
         # Establishing connection with CKAN
         self.ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
+        
+        dict_additional_fields = {
+                'Sourcing Date': datetime.now().strftime("%B %d, %Y, %H:%M"),
+                'Datastore': mongo_config.get('mongo_uri'),
+                'Database Name': mongo_config.get('db_name'),
+                'Collection': mongo_config.get('col_name'),
+                }
+        additional_fields = []
+        for k, v in dict_additional_fields.items():
+            additional_fields.append({'key': k, 'value': v})
+
+        # attempting to create a new package
+        try:
+            self.ckan_ckan.action.package_create(name="sec_data",
+                                                 title="SEC Data",
+                                                 owner_org=self.owner_org,
+                                                 notes="SEC 10-K filings",
+                                                 maintainer=self.publisher,
+                                                 tags=[{'name': "SEC"},
+                                                       {'name': "10K"}],
+                                                 extras=additional_fields,
+                                                 )
+        except:
+            pass
+        
+        # Establishing Mongo collection
+        self.mongo_colln = initialize_mongo()
 
 
     # To save the metadata of CIKs downloaded into Azure.
     def storeMetadata(self, cik, azure_urls, file_types, year,
                       license_azure_url):
+        
         # read all metadata information from 'metadata.json'
         with open('ticker_metadata.json') as json_file:
             json_data = json_file.read()
@@ -45,7 +80,6 @@ class SEC_CKAN():
             tickerInfo = True
             metadata = metadata[0]
 
-        package_name = "sec_" + cik
         current_date = datetime.now().strftime("%B %d, %Y, %H:%M")
         tags = []
         package_title = ''
@@ -63,8 +97,9 @@ class SEC_CKAN():
 
             # additional fields to be added in CKAN dataset
             dict_additional_fields = {
+                'Company name': metadata["Name"],
                 'Title': package_title,
-                'Sourcing_Date': current_date,
+                'Sourcing Date': current_date,
                 'SourceType': file_types,
                 'Source': metadata["Source"],
                 'Container': metadata["Container"],
@@ -75,11 +110,11 @@ class SEC_CKAN():
                 'cik': metadata["cik"],
                 'IRS Number': metadata["IRS Number"],
                 'Business': metadata["Business"],
-                'Incorporated': metadata["Incorporated"]
+                'Incorporated': metadata["Incorporated"],
             }
             description = metadata["Description"]
         else:
-            package_title = "SEC " + cik
+            package_title = "SEC Data"
             description = "SEC 10-K filings for " + package_title
             tags.append({'name': str(year)})
             tags.append({'name': str(cik)})
@@ -87,7 +122,7 @@ class SEC_CKAN():
             # additional fields to be added in CKAN dataset
             dict_additional_fields = {
                 'Title': package_title,
-                'Sourcing_Date': current_date,
+                'Sourcing Date': current_date,
                 'SourceType': file_types,
                 'Source': "SEC",
                 'Container': self.azure_container,
@@ -95,13 +130,32 @@ class SEC_CKAN():
                 'cik': cik
             }
 
-        # iterate the URLs of files stored in Azure to organize a dict of URLs.
-        multi_url_dict = {}
 
-        description += "\n\n" + year + "\n"
+        prev_years = ''
+        prev_json = {}
+        prev_urls = {}
+        toUpdate = False
+        
+        metadata_cursor = self.mongo_colln.find({})
+        for i in metadata_cursor:
+            if cik in i:
+                toUpdate = True
+                prev_json = json.loads(i[cik])
+                
+                if "Years" in prev_json:
+                    prev_years = prev_json["Years"]
+                    
+                for key in prev_json.keys():
+                    if key.startswith('url'):
+                        print key, prev_json[key]
+                        prev_urls[key] = prev_json[key]
+                        
+
+        # iterate the URLs of files stored in Azure to organize a dict of URLs.
+        multi_url_dict = prev_urls  # {}
+
         for i, url in enumerate(azure_urls):
-            multi_url_dict['url' + str(i + 1)] = url
-            description += '\r\n* %s\r\n' % url.replace('\\', '/')
+            multi_url_dict['url' + str(i + 1 + len(prev_urls))] = url
 
         # appending URLs to the additional fields
         dict_additional_fields.update(multi_url_dict)
@@ -111,122 +165,22 @@ class SEC_CKAN():
         for k, v in dict_additional_fields.items():
             additional_fields.append({'key': k, 'value': v})
 
-        try:
-            # attempting to create a new package
-            self.createPackage(description, package_name, package_title, year,
-                               tags, additional_fields)
-        except ckanapi.ValidationError as ve:
-            if(ve.error_dict['__type'] == 'Validation Error'):
-                if('name' in ve.error_dict
-                   and ve.error_dict['name'] == ['That URL is already in use.']):
-                    try:
-                        # Updating package if already existed,
-                        self.updatePackage(description, package_name,
-                                           package_title, cik, year, tags,
-                                           additional_fields)
-                    except ckanapi.ValidationError as ve2:
-                        if('tags' in ve2.error_dict
-                           and len(ve2.error_dict['tags']) > 0):
-                            # in case tags not supporting special characters,
-                            # rebuilding the tags and updating the package
-                            tags = self.rebuildTags(cik, year)
-                            self.updatePackage(description, package_name,
-                                               package_title, cik, year, tags,
-                                               additional_fields)
-                        else:
-                            raise
-                elif('tags' in ve.error_dict
-                     and len(ve.error_dict['tags']) > 0):
-                    for e in ve.error_dict['tags']:
-                        if "must be alphanumeric characters" in e:
-                            try:
-                                # if tags not supporting special characters,
-                                # rebuilding the tags and creating the package
-                                tags = self.rebuildTags(cik, year)
-                                self.createPackage(description, package_name,
-                                                   package_title, year, tags,
-                                                   additional_fields)
-                            except:
-                                # if tags not supporting special characters,
-                                # rebuilding the tags and updating the package
-                                tags = self.rebuildTags(cik, year)
-                                self.updatePackage(description, package_name,
-                                                   package_title, cik, year,
-                                                   tags, additional_fields)
-                else:
-                    raise
-            else:
-                raise
-        except:
-            raise
+        data = {}
+        data['cik'] = cik
+        data['title'] = package_title
+        data['owner'] = self.owner_org
+        data['notes'] = description
+        data['maintainer'] =  self.publisher
+        data['Years'] = str(year) + ',' + prev_years
+        
+        mongodict = dict(data.items() + dict_additional_fields.items())
 
-
-    # creating package in CKAN
-    def createPackage(self, description, package_name, package_title, year,
-                      tags, additional_fields):
-        try:
-            self.ckan_ckan.action.package_create(name=package_name,
-                                                 title=package_title,
-                                                 owner_org=self.owner_org,
-                                                 notes=description,
-                                                 maintainer=self.publisher,
-                                                 version=year,
-                                                 tags=tags,
-                                                 extras=additional_fields,
-                                                 )
-        except:
-            raise
-
-
-    # creating package in CKAN
-    def updatePackage(self, description, package_name, package_title, cik,
-                      year, tags, additional_fields):
-        try:
-            self.ckan_ckan.action.package_update(id=package_name,
-                                                 title=package_title,
-                                                 owner_org=self.owner_org,
-                                                 notes=description,
-                                                 maintainer=self.publisher,
-                                                 version=self.getVersions(cik,
-                                                                         year),
-                                                 tags=tags,
-                                                 extras=additional_fields,
-                                                 )
-        except:
-            raise
-
-
-    # Fetch the existing years from version,
-    # and append the currently executing year in sorted order.
-    def getVersions(self, cik, year):
-        request = urllib2.Request(self.ckan_host + "/api/rest/dataset/sec_"
-                                  + str(cik))
-        response = urllib2.urlopen(request)
-        resp_json = json.loads(response.read())
-
-        regex = re.compile(r'[1|2][0|9][0-9][0-9]')
-
-        ckan_version = resp_json["version"]
-        valid_version = []
-
-        if len(ckan_version) > 1:
-            version = set(ckan_version.split(","))
-            for yr in version:
-                if regex.findall(yr):
-                    valid_version.append(yr)
-            if year not in version:
-                valid_version.append(str(year))
+        if toUpdate:
+            logging.info("*** MONGO UPDATE ****")
+            self.mongo_colln.update({cik : prev_json},
+                                    {cik : json.dumps(mongodict)},
+                                    upsert=True)
         else:
-            valid_version.append(year)
-
-        return ",".join(sorted(valid_version))
-
-
-    # Rebuild the tags for dataset
-    def rebuildTags(self, cik, year):
-        tags = []
-        tags.append({'name': "SEC"})
-        tags.append({'name': str(cik)})
-        tags.append({'name': str(year)})
-        return tags
+            logging.info("*** MONGO INSERT ****")
+            self.mongo_colln.insert_one({cik : json.dumps(mongodict)})
 

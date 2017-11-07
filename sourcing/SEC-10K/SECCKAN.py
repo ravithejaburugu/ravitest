@@ -45,7 +45,8 @@ class SEC_CKAN():
 
         # attempting to create a new package
         try:
-            self.ckan_ckan.action.package_create(name="sec_data",
+            logging.info("Creating CKAN for SEC data")
+            self.ckan_ckan.action.package_create(name="sec_data1",
                                                  title="SEC Data",
                                                  owner_org=self.owner_org,
                                                  notes="SEC 10-K filings",
@@ -54,6 +55,7 @@ class SEC_CKAN():
                                                        {'name': "10K"}],
                                                  extras=additional_fields,
                                                  )
+            logging.info("Created CKAN for SEC data")
         except:
             pass
         

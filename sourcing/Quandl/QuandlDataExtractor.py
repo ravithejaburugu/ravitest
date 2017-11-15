@@ -28,13 +28,8 @@ def main():
     # Fetching URLs from CSV file.
     with open('Quandl_csv1.csv', 'r') as csv_file:
         csv_data = csv_file.readlines()
-        i = 4
-        for line in csv_data:
-            if i == 0:
-                break
-            else:
-                i = i - 1
 
+        for line in csv_data:
             last_ele = line.split(',')[-1]
             if last_ele.startswith('http'):
                 dataset_url = last_ele.replace('zWss8KsbxmzVojqwVr9E',

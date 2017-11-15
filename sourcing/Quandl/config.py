@@ -8,8 +8,9 @@ Created on Tue Nov 14 10:07:02 2017
 import os
 
 argument_config = {
+    'quandl_apikey': os.getenv('QUANDL_APIKEY', 'o7xFVwAfWTqCsY5mgMGh'),
     'ckan_host': os.getenv('CKAN_HOST', 'http://40.71.214.191:80'),
-    'api_key': os.getenv('CKAN_API_KEY', '3474fcd0-2ebc-4036-a60a-8bf77eea161f'),
+    'api_key': os.getenv('CKAN_API_KEY', '8613bf84-7b92-40f3-aa08-056c5f65421b'),
     'publisher': os.getenv('PUBLISHER', 'Randomtrees'),
     'owner_org': os.getenv('OWNER_ORG', 'securities-exchange-commission'),
 }

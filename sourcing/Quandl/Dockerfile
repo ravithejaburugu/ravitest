@@ -10,4 +10,4 @@ WORKDIR /QUANDLFINDATA
 
 RUN pip install -r requirements.txt
 
-CMD ["/bin/bash", "-c", "source arguments.env && python QuandlFinData.py"]
+CMD ["/bin/bash", "-c", "source arguments.env && python QuandlDataExtractor.py"]

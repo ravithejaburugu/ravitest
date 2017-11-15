@@ -27,8 +27,7 @@ def main():
     # Fetching URLs from CSV file.
     with open('Quandl_csv1.csv', 'r') as csv_file:
         for line in csv_file.readlines():
-            last_ele = [x for x in reversed(map(str.strip, line.split(',')))
-                        if x][0]
+            last_ele = filter(None, reversed(map(str.strip, line.split(','))))[0]
             if last_ele.startswith('http'):
                 dataset_url = last_ele + quandl_apikey
 

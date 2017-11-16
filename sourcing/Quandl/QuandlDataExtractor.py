@@ -40,7 +40,7 @@ def main():
                     logging.info(dataset_url)
                     resp_data = os.popen("curl " + dataset_url).read()
                     json_data = json.loads(resp_data)
-                    logging.info(json_data)
+                    # logging.info(json_data)
 
                     dataset_source = dataset_source.strip().replace(' ', '_')\
                                                            .replace('\"', '')

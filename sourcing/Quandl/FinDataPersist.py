@@ -27,6 +27,7 @@ def persistFinData(source, dataset_url, json_data):
 
     try:
         feedObject = {source: json_data}
+        logging.info("Initializing Mongo for :::::: " + source)
         mongo_colln = initialize_mongo(source)
         try:
             logging.info("Inserting into " + source)
@@ -43,21 +44,18 @@ def persistFinData(source, dataset_url, json_data):
                     logging.error("Error while adding to Metadata")
 
                 # Maintain CKAN information for each Web source.
-                """try:
+                try:
                     insert_into_ckan(ckan_host, api_key, publisher,
                                      mongo_uri, source, owner_org)
                     logging.info("Updated CKAN for " + source)
                 except:
-                    raise
-                    logging.error("Error while loading to CKAN.")"""
+                    logging.error("Error while loading to CKAN.")
             else:
                 logging.info(source + " data not saved in MongoDB")
         except:
-            raise
             logging.error("Error while loading to MongoDB.")
         finally:
             feedObject.clear
     except IOError:
-        raise
         logging.error("Error while Initializing Mongo.")
         pass

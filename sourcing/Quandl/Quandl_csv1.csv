@@ -1,5 +1,4 @@
 Source,description,API_Key_Url
-Wiki EOD Stock Prices,"End of day stock prices, dividends and splits for 3,000 US companies, curated by the Quandl community and released into the public domain.",https://www.quandl.com/api/v3/datatables/WIKI/PRICES?ticker=A&date=1999-11-18%2C1999-11-19%2C1999-11-22&api_key=,,
 BraveNewCoin Global Weighted Averages,"Updated daily, this database contains Brave New Coin's Global Weighted Averages.",https://www.quandl.com/api/v3/datasets/BNC3/GWA_BTC?api_key=
 London Metal Exchange,The London Metal Exchange is the world centre for industrial metals trading.,https://www.quandl.com/api/v3/datasets/LME/ST_CCG_ALL?api_key=
 Chicago Mercantile Exchange Futures Data,"Futures data for a wide range of commodities (metals, grains, energy) and financial instruments (equities, currencies, rates).",https://www.quandl.com/api/v3/datasets/CME/I5M2018?api_key=

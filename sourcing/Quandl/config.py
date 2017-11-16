@@ -26,6 +26,6 @@ mongo_config = {
     'mongo_auth_source': os.getenv('MONGO_AUTH_SOURCE', 'dbadmin'),
     'mongo_auth_mechanism': os.getenv('MONGO_AUTH_MECHANISM', 'MONGODB-CR'),
     'db_name': os.getenv('MONGO_DB_NAME', 'quan8'),
-    'mongo_index_name': os.getenv('MONGO_INDEX_NAME', '_hash'),
+    'mongo_index_name': os.getenv('MONGO_INDEX_NAME', 'csrt'),
     'col_name': os.getenv('MONGO_COL_NAME', 'METADATA'),
 }

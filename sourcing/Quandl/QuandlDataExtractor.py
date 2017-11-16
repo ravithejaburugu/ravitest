@@ -48,6 +48,7 @@ def main():
                         dataset_source = "others"
                     persistFinData(dataset_source, last_ele, json_data)
                 except:
+                    raise
                     continue
 
     logging.info("Total time taken to fetch data from Quandl : " + str(t1))

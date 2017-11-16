@@ -57,5 +57,6 @@ def persistFinData(source, dataset_url, json_data):
         finally:
             feedObject.clear
     except:
+        raise
         logging.error("Error while Initializing Mongo.")
         pass

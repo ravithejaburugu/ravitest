@@ -18,7 +18,6 @@ def main():
     """Initiates the Financial news extraction from Quandl using API calls."""
 
     t1 = time.time()
-
     logging.basicConfig(format='%(asctime)s %(levelname)s \
                         %(module)s.%(funcName)s :: %(message)s',
                         level=logging.INFO)

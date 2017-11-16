@@ -8,7 +8,7 @@ ADD . /QUANDLFINDATA
 
 WORKDIR /QUANDLFINDATA
 
-RUN apk add python-dev curl gcc musl-dev libgcc openssl-dev
+RUN apk add python-dev curl libxml2-dev libxslt-dev libffi-dev gcc musl-dev libgcc openssl-dev
 
 RUN pip install -r requirements.txt
 

@@ -8,7 +8,7 @@ Created on Tue Nov 14 10:07:02 2017
 import logging
 import ckanapi
 from datetime import datetime
-from config import mongo_config
+from config import argument_config, mongo_config
 
 
 def insert_into_ckan(ckan_host, api_key, publisher, mongo_uri, source,
@@ -20,6 +20,7 @@ def insert_into_ckan(ckan_host, api_key, publisher, mongo_uri, source,
                         level=logging.INFO)
 
     # Fetch config params.
+    ckan_private = argument_config.get('ckan_private')
     db_name = mongo_config.get('db_name')
 
     ckan_ckan = ckanapi.RemoteCKAN(ckan_host, apikey=api_key)
@@ -48,7 +49,7 @@ def insert_into_ckan(ckan_host, api_key, publisher, mongo_uri, source,
                                         maintainer=publisher,
                                         tags=tags,
                                         notes=description,
-                                        private='False',
+                                        private=ckan_private,
                                         owner_org=owner_org,
                                         extras=additional_fields,
                                         )
@@ -59,7 +60,7 @@ def insert_into_ckan(ckan_host, api_key, publisher, mongo_uri, source,
                                             maintainer=publisher,
                                             tags=tags,
                                             notes=description,
-                                            private='False',
+                                            private=ckan_private,
                                             owner_org=owner_org,
                                             extras=additional_fields,
                                             )

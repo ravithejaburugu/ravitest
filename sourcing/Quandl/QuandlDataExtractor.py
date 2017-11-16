@@ -36,7 +36,7 @@ def main():
                 logging.info("Fetching data of : " + dataset_source)
                 try:
                     time.sleep(3)
-                    resp_data = os.popen(dataset_url).read()
+                    resp_data = os.popen("curl " + dataset_url).read()
                     json_data = json.loads(resp_data)
 
                     dataset_source = dataset_source.strip().replace(' ', '_')\

@@ -16,7 +16,7 @@ argument_config = {
 }
 
 mongo_config = {
-    'mongo_uri': os.getenv('MONGO_URI', '192.168.1.17:27017'),
+    'mongo_uri': os.getenv('MONGO_URI', 'localhost:27017'),
 #    'mongo_uri': os.getenv('MONGO_URI', '172.25.64.1:27017'),
     'ssl_required': os.getenv('MONGO_SSL_REQUIRED', False),
     'requires_auth': os.getenv('REQUIRES_AUTH', 'false'),
